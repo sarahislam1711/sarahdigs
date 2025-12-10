@@ -386,6 +386,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public categories endpoint
+  app.get("/api/categories", async (req, res) => {
+    try {
+      const categories = await storage.getCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      res.status(500).json({ error: "Failed to fetch categories" });
+    }
+  });
+
   app.get("/api/admin/preview/:slug", isAuthenticated, async (req, res) => {
     try {
       const post = await storage.getBlogPostBySlug(req.params.slug);
