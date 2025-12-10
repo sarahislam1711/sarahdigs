@@ -1,8 +1,9 @@
+import React from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Wrench, Newspaper, FlaskConical, Lightbulb, FileText, ChevronRight, Loader2, Search, Layout, BarChart3, Users, Briefcase, Rocket, Target, Zap, Heart, Star, Globe, Code, Database, Settings, MessageSquare, BookOpen, PenTool, Camera, Video, Mail, Calendar, Tag, Award, TrendingUp, Cpu, Cloud, Layers } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Wrench, Newspaper, FlaskConical, Lightbulb, FileText, ChevronRight, Loader2, Search, Layout, BarChart3, Users, Briefcase, Rocket, Target, Zap, Heart, Star, Globe, Code, Database, Settings, MessageSquare, BookOpen, PenTool, Camera, Video, Mail, Calendar, Tag, Award, TrendingUp, Cpu, Cloud, Layers, Plane } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { BlogPost, Category } from "@shared/schema";
@@ -204,64 +205,63 @@ const SectionsGrid = () => {
     queryKey: ["/api/categories"],
   });
 
-  const iconMap: Record<string, any> = {
-    FileText, FlaskConical, Newspaper, Wrench, Lightbulb, Search, Layout, BarChart3,
-    Users, Briefcase, Rocket, Target, Zap, Heart, Star, Globe, Code, Database,
-    Settings, MessageSquare, BookOpen, PenTool, Camera, Video, Mail, Calendar,
-    Tag, Award, TrendingUp, Cpu, Cloud, Layers
+  // Icon mapping for category icons
+  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    FlaskConical,
+    Newspaper,
+    Wrench,
+    Lightbulb,
+    FileText,
+    Search,
+    Layout,
+    BarChart3,
+    Users,
+    Briefcase,
+    Rocket,
+    Target,
+    Zap,
+    Heart,
+    Star,
+    Globe,
+    Code,
+    Database,
+    Settings,
+    MessageSquare,
+    BookOpen,
+    PenTool,
+    Camera,
+    Video,
+    Mail,
+    Calendar,
+    Tag,
+    Award,
+    TrendingUp,
+    Cpu,
+    Cloud,
+    Layers,
+    Plane,
   };
-
-  const fallbackCategories = [
-    {
-      name: "Experiments",
-      description: "A space where you document: SEO experiments, Content tests, Growth experiments",
-      iconName: "FlaskConical",
-      bgColor: "#F4F2FF",
-      textColor: "#4D00FF",
-      slug: "experiments"
-    },
-    {
-      name: "Industry News", 
-      description: "Insights on industry changes, curated from my LinkedIn.",
-      iconName: "Newspaper",
-      bgColor: "#FBFCFE",
-      textColor: "#1B1B1B",
-      slug: "industry-news"
-    },
-    {
-      name: "Tools",
-      description: "My favorite tools I use every single day. The entire stack.",
-      iconName: "Wrench",
-      bgColor: "#F4F2FF",
-      textColor: "#4D00FF",
-      slug: "tools"
-    },
-    {
-      name: "Behind the Work",
-      description: "Debugging, client problem solving, and mid-process thoughts.",
-      iconName: "Lightbulb",
-      bgColor: "#FBFCFE",
-      textColor: "#1B1B1B",
-      slug: "behind-the-work"
-    },
-    {
-      name: "Personal Notes",
-      description: "Lessons on consulting, productivity, and mindset shifts.",
-      iconName: "FileText",
-      bgColor: "#F4F2FF",
-      textColor: "#4D00FF",
-      slug: "personal-notes"
-    }
-  ];
-
-  const displayCategories = categories && categories.length > 0 ? categories : fallbackCategories;
 
   if (isLoading) {
     return (
       <section className="py-24 bg-white border-t border-[#1B1B1B]/5">
         <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#4D00FF]">Category</span></h2>
           <div className="flex justify-center items-center py-20">
             <Loader2 className="w-8 h-8 animate-spin text-[#4D00FF]" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!categories || categories.length === 0) {
+    return (
+      <section className="py-24 bg-white border-t border-[#1B1B1B]/5">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#4D00FF]">Category</span></h2>
+          <div className="text-center py-12 text-[#1B1B1B]/50">
+            <p className="text-lg">No categories yet. Check back soon!</p>
           </div>
         </div>
       </section>
@@ -274,13 +274,13 @@ const SectionsGrid = () => {
         <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#4D00FF]">Category</span></h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayCategories.map((category: any, i: number) => {
-            const IconComponent = iconMap[category.iconName] || FileText;
-            const bgColor = category.bgColor || "#F4F2FF";
-            const textColor = category.textColor || "#4D00FF";
+          {categories.map((category, i) => {
+            const IconComponent = iconMap[category.iconName || 'FileText'] || FileText;
+            const bgColor = category.bgColor || '#F4F2FF';
+            const textColor = category.textColor || '#4D00FF';
             
             return (
-              <Link key={category.slug || i} href={`/journal/${category.slug}`} className="block h-full">
+              <Link key={category.id} href={`/journal/${category.slug}`} className="block h-full">
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
@@ -289,33 +289,19 @@ const SectionsGrid = () => {
                   className="group p-8 rounded-[2rem] border border-[#1B1B1B]/10 hover:border-[#4D00FF] shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[300px] h-full relative overflow-hidden"
                   style={{ backgroundColor: bgColor }}
                 >
-                  <div 
-                    className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -mr-10 -mt-10 transition-all duration-500 group-hover:scale-150"
-                    style={{ backgroundColor: bgColor === '#1B1B1B' ? 'rgba(255,255,255,0.05)' : 'rgba(77,0,255,0.05)' }}
-                  />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#4D00FF]/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all duration-500 group-hover:scale-150"></div>
                   
                   <div>
-                    <div 
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
-                      style={{ 
-                        backgroundColor: bgColor === '#1B1B1B' ? 'rgba(255,255,255,0.1)' : 'white',
-                        border: bgColor !== '#1B1B1B' ? '1px solid rgba(0,0,0,0.05)' : 'none'
-                      }}
-                    >
+                    <div className="w-12 h-12 rounded-xl bg-white border border-[#1B1B1B]/5 flex items-center justify-center mb-6">
                       <IconComponent className="w-6 h-6" style={{ color: textColor }} />
                     </div>
-                    <h3 className="text-2xl font-bold mb-3" style={{ color: textColor }}>
-                      {category.name}
-                    </h3>
+                    <h3 className="text-2xl font-bold mb-3" style={{ color: textColor }}>{category.name}</h3>
                     <p className="text-lg leading-relaxed opacity-70" style={{ color: textColor }}>
-                      {category.description}
+                      {category.description || ''}
                     </p>
                   </div>
                   
-                  <div 
-                    className="mt-8 flex items-center gap-2 text-sm font-bold uppercase tracking-widest group-hover:text-[#4D00FF] transition-colors"
-                    style={{ color: textColor }}
-                  >
+                  <div className="mt-8 flex items-center gap-2 text-sm font-bold uppercase tracking-widest group-hover:text-[#4D00FF] transition-colors" style={{ color: textColor }}>
                     Explore <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.div>
