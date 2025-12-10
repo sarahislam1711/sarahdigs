@@ -27,6 +27,8 @@ import AdminSettings from "@/pages/admin/settings";
 import AdminPreview from "@/pages/admin/preview";
 import AdminContent from "@/pages/admin/content";
 import AdminPages from "@/pages/admin/pages";
+import AdminServices from "@/pages/admin/services";
+import ServiceEditor from "@/pages/admin/service-editor";
 import { useEffect } from "react";
 
 function ScrollToTop() {
@@ -64,6 +66,9 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/content" component={AdminContent} />
       <Route path="/admin/pages" component={AdminPages} />
+      <Route path="/admin/services" component={AdminServices} />
+      <Route path="/admin/services/new" component={ServiceEditor} />
+      <Route path="/admin/services/:id" component={ServiceEditor} />
       <Route path="/admin/preview/:slug" component={AdminPreview} />
       <Route component={NotFound} />
     </Switch>

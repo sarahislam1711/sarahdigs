@@ -2,133 +2,74 @@ import AdminLayout from "@/components/layout/admin-layout";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
+import { useLocation, useRoute } from "wouter";
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Save, ArrowLeft, Search, BarChart3, Users, Layout, TrendingUp, Briefcase, Rocket, Target, Zap, Settings, Globe, Code } from "lucide-react";
+import { Save, ArrowLeft, Eye, Plus, Trash2, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Service } from "@shared/schema";
-import { Link, useParams, useLocation } from "wouter";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-const iconOptions = [
-  { name: "Search", icon: Search },
-  { name: "BarChart3", icon: BarChart3 },
-  { name: "Users", icon: Users },
-  { name: "Layout", icon: Layout },
-  { name: "TrendingUp", icon: TrendingUp },
-  { name: "Briefcase", icon: Briefcase },
-  { name: "Rocket", icon: Rocket },
-  { name: "Target", icon: Target },
-  { name: "Zap", icon: Zap },
-  { name: "Settings", icon: Settings },
-  { name: "Globe", icon: Globe },
-  { name: "Code", icon: Code },
-];
-
-const iconMap: Record<string, any> = {
-  Search, BarChart3, Users, Layout, TrendingUp, Briefcase, Rocket, Target, Zap, Settings, Globe, Code
-};
-
-interface ServiceFormData {
-  // Basic
-  title: string;
-  slug: string;
-  shortDescription: string;
-  iconName: string;
-  displayOrder: number;
-  isVisible: boolean;
-  // Hero
-  heroTitle: string;
-  heroSubtitle: string;
-  heroDescription: string;
-  ctaBookText: string;
-  ctaServiceText: string;
-  // Diagnostic
-  diagnosticTitle: string;
-  diagnosticItems: string[];
-  // Promise
-  promiseText: string;
-  // What You Get
-  whatYouGetTitle: string;
-  whatYouGetDescription: string;
-  whatYouGetItems: { title: string; desc: string }[];
-  // What to Expect
-  whatToExpectItems: string[];
-  // Proof
-  proofStat: string;
-  proofText: string;
-  proofProjectLink: string;
-  proofProjectTitle: string;
-  // Next Steps
-  nextSteps: { title: string; desc: string; bullets: string[] }[];
-  // Final CTA
-  finalCtaTitle: string;
-  finalCtaSubtitle: string;
-  finalCtaButtonText: string;
-  finalCtaMicroProof: string;
-}
-
-const defaultFormData: ServiceFormData = {
-  title: "",
-  slug: "",
-  shortDescription: "",
-  iconName: "Search",
-  displayOrder: 0,
-  isVisible: true,
-  heroTitle: "",
-  heroSubtitle: "",
-  heroDescription: "",
-  ctaBookText: "Book a Free Consultation",
-  ctaServiceText: "Start Digging",
-  diagnosticTitle: "Is this for you?",
-  diagnosticItems: [""],
-  promiseText: "",
-  whatYouGetTitle: "What you'll get",
-  whatYouGetDescription: "",
-  whatYouGetItems: [{ title: "", desc: "" }],
-  whatToExpectItems: [""],
-  proofStat: "",
-  proofText: "",
-  proofProjectLink: "",
-  proofProjectTitle: "",
-  nextSteps: [{ title: "", desc: "", bullets: [""] }],
-  finalCtaTitle: "",
-  finalCtaSubtitle: "",
-  finalCtaButtonText: "Book Your Strategy Call",
-  finalCtaMicroProof: "",
-};
-
-function generateSlug(name: string): string {
-  return name
+function generateSlug(title: string): string {
+  return title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
 
 export default function ServiceEditor() {
-  const { id } = useParams<{ id: string }>();
-  const [, setLocation] = useLocation();
+  const [, navigate] = useLocation();
+  const [match, params] = useRoute("/admin/services/:id");
+  const isNew = params?.id === "new";
+  const serviceId = isNew ? null : params?.id;
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const isEditing = id && id !== "new";
 
-  const [formData, setFormData] = useState<ServiceFormData>(defaultFormData);
-  const [activeTab, setActiveTab] = useState("basic");
+  const [formData, setFormData] = useState({
+    // Basic
+    title: "",
+    slug: "",
+    shortDescription: "",
+    iconName: "Briefcase",
+    displayOrder: 0,
+    isVisible: true,
+    // Hero
+    heroTitle: "",
+    heroSubtitle: "",
+    heroDescription: "",
+    ctaBookText: "Book a Call",
+    ctaServiceText: "Learn More",
+    // Diagnostic
+    diagnosticTitle: "",
+    diagnosticItems: [] as string[],
+    promiseText: "",
+    // What You Get
+    whatYouGetTitle: "",
+    whatYouGetDescription: "",
+    whatYouGetItems: [] as { title: string; description: string }[],
+    // What to Expect
+    whatToExpectItems: [] as string[],
+    // Proof
+    proofStat: "",
+    proofText: "",
+    proofProjectLink: "",
+    proofProjectTitle: "",
+    // Next Steps
+    nextSteps: [] as { title: string; description: string; bullets: string[] }[],
+    // Final CTA
+    finalCtaTitle: "",
+    finalCtaSubtitle: "",
+    finalCtaButtonText: "",
+    finalCtaMicroProof: "",
+  });
 
   const { data: service, isLoading } = useQuery<Service>({
-    queryKey: ["/api/admin/services", id],
-    enabled: isEditing,
+    queryKey: ["/api/admin/services", serviceId],
+    enabled: !!serviceId,
   });
 
   useEffect(() => {
@@ -137,41 +78,41 @@ export default function ServiceEditor() {
         title: service.title || "",
         slug: service.slug || "",
         shortDescription: service.shortDescription || "",
-        iconName: service.iconName || "Search",
+        iconName: service.iconName || "Briefcase",
         displayOrder: service.displayOrder || 0,
         isVisible: service.isVisible ?? true,
         heroTitle: service.heroTitle || "",
         heroSubtitle: service.heroSubtitle || "",
         heroDescription: service.heroDescription || "",
-        ctaBookText: service.ctaBookText || "Book a Free Consultation",
-        ctaServiceText: service.ctaServiceText || "Start Digging",
-        diagnosticTitle: service.diagnosticTitle || "Is this for you?",
-        diagnosticItems: service.diagnosticItems?.length ? service.diagnosticItems : [""],
+        ctaBookText: service.ctaBookText || "Book a Call",
+        ctaServiceText: service.ctaServiceText || "Learn More",
+        diagnosticTitle: service.diagnosticTitle || "",
+        diagnosticItems: service.diagnosticItems || [],
         promiseText: service.promiseText || "",
-        whatYouGetTitle: service.whatYouGetTitle || "What you'll get",
+        whatYouGetTitle: service.whatYouGetTitle || "",
         whatYouGetDescription: service.whatYouGetDescription || "",
-        whatYouGetItems: (service.whatYouGetItems as any)?.length ? service.whatYouGetItems as any : [{ title: "", desc: "" }],
-        whatToExpectItems: service.whatToExpectItems?.length ? service.whatToExpectItems : [""],
+        whatYouGetItems: service.whatYouGetItems || [],
+        whatToExpectItems: service.whatToExpectItems || [],
         proofStat: service.proofStat || "",
         proofText: service.proofText || "",
         proofProjectLink: service.proofProjectLink || "",
         proofProjectTitle: service.proofProjectTitle || "",
-        nextSteps: (service.nextSteps as any)?.length ? service.nextSteps as any : [{ title: "", desc: "", bullets: [""] }],
+        nextSteps: service.nextSteps || [],
         finalCtaTitle: service.finalCtaTitle || "",
         finalCtaSubtitle: service.finalCtaSubtitle || "",
-        finalCtaButtonText: service.finalCtaButtonText || "Book Your Strategy Call",
+        finalCtaButtonText: service.finalCtaButtonText || "",
         finalCtaMicroProof: service.finalCtaMicroProof || "",
       });
     }
   }, [service]);
 
   const saveMutation = useMutation({
-    mutationFn: async (data: ServiceFormData) => {
+    mutationFn: async (data: typeof formData) => {
       // Clean up empty items
       const cleanedData = {
         ...data,
         diagnosticItems: data.diagnosticItems.filter(item => item.trim() !== ""),
-        whatYouGetItems: data.whatYouGetItems.filter(item => item.title.trim() !== "" || item.desc.trim() !== ""),
+        whatYouGetItems: data.whatYouGetItems.filter(item => item.title.trim() !== ""),
         whatToExpectItems: data.whatToExpectItems.filter(item => item.trim() !== ""),
         nextSteps: data.nextSteps.filter(step => step.title.trim() !== "").map(step => ({
           ...step,
@@ -179,170 +120,84 @@ export default function ServiceEditor() {
         })),
       };
 
-      if (isEditing) {
-        return await apiRequest("PUT", `/api/admin/services/${id}`, cleanedData);
+      if (serviceId) {
+        return await apiRequest("PUT", `/api/admin/services/${serviceId}`, cleanedData);
       } else {
         return await apiRequest("POST", "/api/admin/services", cleanedData);
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/services"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/services"] });
-      toast({ title: isEditing ? "Service updated" : "Service created" });
-      setLocation("/admin/services");
+      toast({
+        title: isNew ? "Service created" : "Service updated",
+        description: "Your changes have been saved.",
+      });
+      if (isNew) {
+        navigate("/admin/services");
+      }
     },
     onError: () => {
-      toast({ title: "Failed to save service", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Failed to save service.",
+        variant: "destructive",
+      });
     },
   });
 
-  const handleSubmit = () => {
-    if (!formData.title || !formData.slug) {
-      toast({ title: "Title and slug are required", variant: "destructive" });
-      return;
-    }
-    saveMutation.mutate(formData);
-  };
-
   const handleTitleChange = (title: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       title,
-      slug: !isEditing ? generateSlug(title) : prev.slug,
-      heroTitle: !prev.heroTitle ? title : prev.heroTitle,
+      slug: prev.slug || generateSlug(title),
     }));
   };
 
-  // Array field helpers
-  const addDiagnosticItem = () => {
-    setFormData(prev => ({ ...prev, diagnosticItems: [...prev.diagnosticItems, ""] }));
-  };
-
-  const removeDiagnosticItem = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      diagnosticItems: prev.diagnosticItems.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateDiagnosticItem = (index: number, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      diagnosticItems: prev.diagnosticItems.map((item, i) => i === index ? value : item)
-    }));
-  };
-
-  const addWhatYouGetItem = () => {
-    setFormData(prev => ({ ...prev, whatYouGetItems: [...prev.whatYouGetItems, { title: "", desc: "" }] }));
-  };
-
-  const removeWhatYouGetItem = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      whatYouGetItems: prev.whatYouGetItems.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateWhatYouGetItem = (index: number, field: "title" | "desc", value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      whatYouGetItems: prev.whatYouGetItems.map((item, i) => i === index ? { ...item, [field]: value } : item)
-    }));
-  };
-
-  const addWhatToExpectItem = () => {
-    setFormData(prev => ({ ...prev, whatToExpectItems: [...prev.whatToExpectItems, ""] }));
-  };
-
-  const removeWhatToExpectItem = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      whatToExpectItems: prev.whatToExpectItems.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateWhatToExpectItem = (index: number, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      whatToExpectItems: prev.whatToExpectItems.map((item, i) => i === index ? value : item)
-    }));
-  };
-
-  const addNextStep = () => {
-    setFormData(prev => ({ ...prev, nextSteps: [...prev.nextSteps, { title: "", desc: "", bullets: [""] }] }));
-  };
-
-  const removeNextStep = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      nextSteps: prev.nextSteps.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateNextStep = (index: number, field: "title" | "desc", value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      nextSteps: prev.nextSteps.map((step, i) => i === index ? { ...step, [field]: value } : step)
-    }));
-  };
-
-  const addNextStepBullet = (stepIndex: number) => {
-    setFormData(prev => ({
-      ...prev,
-      nextSteps: prev.nextSteps.map((step, i) => i === stepIndex ? { ...step, bullets: [...step.bullets, ""] } : step)
-    }));
-  };
-
-  const removeNextStepBullet = (stepIndex: number, bulletIndex: number) => {
-    setFormData(prev => ({
-      ...prev,
-      nextSteps: prev.nextSteps.map((step, i) => i === stepIndex ? { ...step, bullets: step.bullets.filter((_, bi) => bi !== bulletIndex) } : step)
-    }));
-  };
-
-  const updateNextStepBullet = (stepIndex: number, bulletIndex: number, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      nextSteps: prev.nextSteps.map((step, i) => i === stepIndex ? { ...step, bullets: step.bullets.map((b, bi) => bi === bulletIndex ? value : b) } : step)
-    }));
-  };
-
-  if (isLoading && isEditing) {
+  if (isLoading && serviceId) {
     return (
       <AdminLayout title="Loading...">
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D00FF]"></div>
+        <div className="flex justify-center items-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-[#4D00FF]" />
         </div>
       </AdminLayout>
     );
   }
 
-  const IconComponent = iconMap[formData.iconName] || Search;
-
   return (
-    <AdminLayout title={isEditing ? `Edit: ${formData.title}` : "New Service"}>
-      <div className="mb-6 flex items-center justify-between">
-        <Link href="/admin/services" className="inline-flex items-center text-gray-400 hover:text-white transition-colors">
+    <AdminLayout title={isNew ? "New Service" : `Edit: ${formData.title}`}>
+      <div className="flex justify-between items-center mb-6">
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/admin/services")}
+          className="text-gray-400 hover:text-white"
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Services
-        </Link>
+        </Button>
         <div className="flex gap-2">
-          {isEditing && formData.slug && (
-            <Button variant="outline" asChild>
-              <a href={`/services/${formData.slug}`} target="_blank" rel="noopener noreferrer">
-                Preview
-              </a>
+          {formData.slug && !isNew && (
+            <Button
+              variant="outline"
+              onClick={() => window.open(`/services/${formData.slug}`, "_blank")}
+              className="border-gray-700 text-gray-400 hover:text-white"
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              Preview
             </Button>
           )}
-          <Button onClick={handleSubmit} disabled={saveMutation.isPending} className="bg-[#4D00FF] hover:bg-[#4D00FF]/80">
+          <Button
+            onClick={() => saveMutation.mutate(formData)}
+            disabled={saveMutation.isPending || !formData.title || !formData.slug}
+            className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+          >
             <Save className="w-4 h-4 mr-2" />
             {saveMutation.isPending ? "Saving..." : "Save Service"}
           </Button>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="bg-[#1a1a1a] border border-gray-800 p-1">
+      <Tabs defaultValue="basic" className="space-y-6">
+        <TabsList className="bg-[#0D0D0D] border border-gray-800 p-1">
           <TabsTrigger value="basic" className="data-[state=active]:bg-[#4D00FF]">Basic</TabsTrigger>
           <TabsTrigger value="hero" className="data-[state=active]:bg-[#4D00FF]">Hero</TabsTrigger>
           <TabsTrigger value="diagnostic" className="data-[state=active]:bg-[#4D00FF]">Diagnostic</TabsTrigger>
@@ -355,87 +210,53 @@ export default function ServiceEditor() {
 
         {/* Basic Tab */}
         <TabsContent value="basic">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
               <CardTitle className="text-white">Basic Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-gray-300">Service Title *</Label>
-                  <Input
-                    value={formData.title}
-                    onChange={(e) => handleTitleChange(e.target.value)}
-                    className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="SEO & Organic Growth"
-                  />
-                </div>
-                <div>
-                  <Label className="text-gray-300">URL Slug *</Label>
-                  <Input
-                    value={formData.slug}
-                    onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                    className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="seo"
-                  />
-                  <p className="text-gray-500 text-xs mt-1">/services/{formData.slug || "slug"}</p>
-                </div>
-              </div>
-
               <div>
-                <Label className="text-gray-300">Short Description (for cards on homepage)</Label>
-                <Textarea
-                  value={formData.shortDescription}
-                  onChange={(e) => setFormData(prev => ({ ...prev, shortDescription: e.target.value }))}
+                <Label className="text-gray-400">Title</Label>
+                <Input
+                  value={formData.title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  placeholder="Service title"
                   className="bg-gray-800 border-gray-700 text-white"
-                  placeholder="Comprehensive audit of your technical foundation, content gaps, and opportunity landscape."
-                  rows={2}
                 />
               </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <Label className="text-gray-300">Icon</Label>
-                  <Select value={formData.iconName} onValueChange={(v) => setFormData(prev => ({ ...prev, iconName: v }))}>
-                    <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
-                      <SelectValue>
-                        <div className="flex items-center gap-2">
-                          <IconComponent className="w-4 h-4" />
-                          {formData.iconName}
-                        </div>
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-700">
-                      {iconOptions.map((opt) => {
-                        const Icon = opt.icon;
-                        return (
-                          <SelectItem key={opt.name} value={opt.name} className="text-white">
-                            <div className="flex items-center gap-2">
-                              <Icon className="w-4 h-4" />
-                              {opt.name}
-                            </div>
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label className="text-gray-300">Display Order</Label>
-                  <Input
-                    type="number"
-                    value={formData.displayOrder}
-                    onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: parseInt(e.target.value) || 0 }))}
-                    className="bg-gray-800 border-gray-700 text-white"
-                  />
-                </div>
-                <div className="flex items-center gap-3 pt-6">
-                  <Switch
-                    checked={formData.isVisible}
-                    onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isVisible: checked }))}
-                  />
-                  <Label className="text-gray-300">Visible</Label>
-                </div>
+              <div>
+                <Label className="text-gray-400">Slug</Label>
+                <Input
+                  value={formData.slug}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
+                  placeholder="service-url-slug"
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+              <div>
+                <Label className="text-gray-400">Short Description</Label>
+                <Textarea
+                  value={formData.shortDescription}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, shortDescription: e.target.value }))}
+                  placeholder="Brief description for listings"
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+              <div>
+                <Label className="text-gray-400">Display Order</Label>
+                <Input
+                  type="number"
+                  value={formData.displayOrder}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, displayOrder: parseInt(e.target.value) || 0 }))}
+                  className="bg-gray-800 border-gray-700 text-white w-24"
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={formData.isVisible}
+                  onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isVisible: checked }))}
+                />
+                <Label className="text-gray-400">Visible on site</Label>
               </div>
             </CardContent>
           </Card>
@@ -443,56 +264,55 @@ export default function ServiceEditor() {
 
         {/* Hero Tab */}
         <TabsContent value="hero">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
               <CardTitle className="text-white">Hero Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-300">Hero Title</Label>
+                <Label className="text-gray-400">Hero Title</Label>
                 <Input
                   value={formData.heroTitle}
-                  onChange={(e) => setFormData(prev => ({ ...prev, heroTitle: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, heroTitle: e.target.value }))}
+                  placeholder="Main headline"
                   className="bg-gray-800 border-gray-700 text-white"
-                  placeholder="SEO & Organic Growth"
                 />
               </div>
               <div>
-                <Label className="text-gray-300">Hero Subtitle</Label>
+                <Label className="text-gray-400">Hero Subtitle</Label>
                 <Input
                   value={formData.heroSubtitle}
-                  onChange={(e) => setFormData(prev => ({ ...prev, heroSubtitle: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, heroSubtitle: e.target.value }))}
+                  placeholder="Subtitle text"
                   className="bg-gray-800 border-gray-700 text-white"
-                  placeholder="Get found. Get traffic. Get revenue."
                 />
               </div>
               <div>
-                <Label className="text-gray-300">Hero Description</Label>
+                <Label className="text-gray-400">Hero Description</Label>
                 <Textarea
                   value={formData.heroDescription}
-                  onChange={(e) => setFormData(prev => ({ ...prev, heroDescription: e.target.value }))}
-                  className="bg-gray-800 border-gray-700 text-white"
-                  rows={3}
-                  placeholder="I help brands build sustainable organic growth engines..."
+                  onChange={(e) => setFormData((prev) => ({ ...prev, heroDescription: e.target.value }))}
+                  placeholder="Detailed description"
+                  className="bg-gray-800 border-gray-700 text-white min-h-[100px]"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-gray-300">CTA Button 1 Text</Label>
+                  <Label className="text-gray-400">Book CTA Text</Label>
                   <Input
                     value={formData.ctaBookText}
-                    onChange={(e) => setFormData(prev => ({ ...prev, ctaBookText: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, ctaBookText: e.target.value }))}
+                    placeholder="Book a Call"
                     className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="Book a Free Consultation"
                   />
                 </div>
                 <div>
-                  <Label className="text-gray-300">CTA Button 2 Text</Label>
+                  <Label className="text-gray-400">Service CTA Text</Label>
                   <Input
                     value={formData.ctaServiceText}
-                    onChange={(e) => setFormData(prev => ({ ...prev, ctaServiceText: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, ctaServiceText: e.target.value }))}
+                    placeholder="Learn More"
                     className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="Start Digging"
                   />
                 </div>
               </div>
@@ -502,50 +322,63 @@ export default function ServiceEditor() {
 
         {/* Diagnostic Tab */}
         <TabsContent value="diagnostic">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                Diagnostic Section ("Is this for you?")
-                <Button size="sm" onClick={addDiagnosticItem}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Item
-                </Button>
-              </CardTitle>
+              <CardTitle className="text-white">Diagnostic Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-300">Section Title</Label>
+                <Label className="text-gray-400">Section Title</Label>
                 <Input
                   value={formData.diagnosticTitle}
-                  onChange={(e) => setFormData(prev => ({ ...prev, diagnosticTitle: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, diagnosticTitle: e.target.value }))}
+                  placeholder="e.g., Does this sound familiar?"
                   className="bg-gray-800 border-gray-700 text-white"
-                  placeholder="Is this for you?"
                 />
               </div>
               <div>
-                <Label className="text-gray-300 mb-2 block">Diagnostic Items (checkbox items)</Label>
+                <Label className="text-gray-400">Checkbox Items</Label>
                 {formData.diagnosticItems.map((item, index) => (
-                  <div key={index} className="flex gap-2 mb-2">
+                  <div key={index} className="flex gap-2 mt-2">
                     <Input
                       value={item}
-                      onChange={(e) => updateDiagnosticItem(index, e.target.value)}
-                      className="bg-gray-800 border-gray-700 text-white flex-1"
-                      placeholder="You're getting traffic but not conversions..."
+                      onChange={(e) => {
+                        const newItems = [...formData.diagnosticItems];
+                        newItems[index] = e.target.value;
+                        setFormData((prev) => ({ ...prev, diagnosticItems: newItems }));
+                      }}
+                      className="bg-gray-800 border-gray-700 text-white"
                     />
-                    <Button size="icon" variant="ghost" onClick={() => removeDiagnosticItem(index)}>
-                      <Trash2 className="w-4 h-4 text-red-500" />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const newItems = formData.diagnosticItems.filter((_, i) => i !== index);
+                        setFormData((prev) => ({ ...prev, diagnosticItems: newItems }));
+                      }}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setFormData((prev) => ({ ...prev, diagnosticItems: [...prev.diagnosticItems, ""] }))}
+                  className="mt-2 border-gray-700 text-gray-400"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Item
+                </Button>
               </div>
               <div>
-                <Label className="text-gray-300">Promise Text (after checkboxes)</Label>
+                <Label className="text-gray-400">Promise Text</Label>
                 <Textarea
                   value={formData.promiseText}
-                  onChange={(e) => setFormData(prev => ({ ...prev, promiseText: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, promiseText: e.target.value }))}
+                  placeholder="What you promise to deliver"
                   className="bg-gray-800 border-gray-700 text-white"
-                  rows={2}
-                  placeholder="If you checked even one of these, we should talk."
                 />
               </div>
             </CardContent>
@@ -554,67 +387,77 @@ export default function ServiceEditor() {
 
         {/* What You Get Tab */}
         <TabsContent value="whatyouget">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                What You Get Section
-                <Button size="sm" onClick={addWhatYouGetItem}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Item
-                </Button>
-              </CardTitle>
+              <CardTitle className="text-white">What You Get Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-300">Section Title</Label>
+                <Label className="text-gray-400">Section Title</Label>
                 <Input
                   value={formData.whatYouGetTitle}
-                  onChange={(e) => setFormData(prev => ({ ...prev, whatYouGetTitle: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, whatYouGetTitle: e.target.value }))}
                   className="bg-gray-800 border-gray-700 text-white"
-                  placeholder="What you'll get"
                 />
               </div>
               <div>
-                <Label className="text-gray-300">Section Description</Label>
+                <Label className="text-gray-400">Section Description</Label>
                 <Textarea
                   value={formData.whatYouGetDescription}
-                  onChange={(e) => setFormData(prev => ({ ...prev, whatYouGetDescription: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, whatYouGetDescription: e.target.value }))}
                   className="bg-gray-800 border-gray-700 text-white"
-                  rows={2}
-                  placeholder="A complete roadmap to organic growth..."
                 />
               </div>
               <div>
-                <Label className="text-gray-300 mb-2 block">Items</Label>
+                <Label className="text-gray-400">Items</Label>
                 {formData.whatYouGetItems.map((item, index) => (
-                  <div key={index} className="border border-gray-700 rounded-lg p-4 mb-3 space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400 text-sm">Item {index + 1}</span>
-                      <Button size="icon" variant="ghost" onClick={() => removeWhatYouGetItem(index)}>
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </Button>
-                    </div>
-                    <div>
-                      <Label className="text-gray-300">Title</Label>
-                      <Input
-                        value={item.title}
-                        onChange={(e) => updateWhatYouGetItem(index, "title", e.target.value)}
-                        className="bg-gray-800 border-gray-700 text-white"
-                        placeholder="Technical SEO Audit"
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-gray-300">Description</Label>
-                      <Textarea
-                        value={item.desc}
-                        onChange={(e) => updateWhatYouGetItem(index, "desc", e.target.value)}
-                        className="bg-gray-800 border-gray-700 text-white"
-                        rows={2}
-                        placeholder="Deep dive into your site's technical health..."
-                      />
-                    </div>
+                  <div key={index} className="border border-gray-700 rounded-lg p-4 mt-2 space-y-2">
+                    <Input
+                      value={item.title}
+                      onChange={(e) => {
+                        const newItems = [...formData.whatYouGetItems];
+                        newItems[index] = { ...newItems[index], title: e.target.value };
+                        setFormData((prev) => ({ ...prev, whatYouGetItems: newItems }));
+                      }}
+                      placeholder="Item title"
+                      className="bg-gray-800 border-gray-700 text-white"
+                    />
+                    <Textarea
+                      value={item.description}
+                      onChange={(e) => {
+                        const newItems = [...formData.whatYouGetItems];
+                        newItems[index] = { ...newItems[index], description: e.target.value };
+                        setFormData((prev) => ({ ...prev, whatYouGetItems: newItems }));
+                      }}
+                      placeholder="Item description"
+                      className="bg-gray-800 border-gray-700 text-white"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        const newItems = formData.whatYouGetItems.filter((_, i) => i !== index);
+                        setFormData((prev) => ({ ...prev, whatYouGetItems: newItems }));
+                      }}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Remove
+                    </Button>
                   </div>
                 ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setFormData((prev) => ({ 
+                    ...prev, 
+                    whatYouGetItems: [...prev.whatYouGetItems, { title: "", description: "" }] 
+                  }))}
+                  className="mt-2 border-gray-700 text-gray-400"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Item
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -622,32 +465,47 @@ export default function ServiceEditor() {
 
         {/* What to Expect Tab */}
         <TabsContent value="expect">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                What to Expect Section
-                <Button size="sm" onClick={addWhatToExpectItem}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Item
-                </Button>
-              </CardTitle>
+              <CardTitle className="text-white">What to Expect Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-300 mb-2 block">Expectation Items (timeline/process items)</Label>
+                <Label className="text-gray-400">Timeline/Process Items</Label>
                 {formData.whatToExpectItems.map((item, index) => (
-                  <div key={index} className="flex gap-2 mb-2">
+                  <div key={index} className="flex gap-2 mt-2">
                     <Input
                       value={item}
-                      onChange={(e) => updateWhatToExpectItem(index, e.target.value)}
-                      className="bg-gray-800 border-gray-700 text-white flex-1"
-                      placeholder="Week 1-2: Discovery & Audit"
+                      onChange={(e) => {
+                        const newItems = [...formData.whatToExpectItems];
+                        newItems[index] = e.target.value;
+                        setFormData((prev) => ({ ...prev, whatToExpectItems: newItems }));
+                      }}
+                      placeholder={`Step ${index + 1}`}
+                      className="bg-gray-800 border-gray-700 text-white"
                     />
-                    <Button size="icon" variant="ghost" onClick={() => removeWhatToExpectItem(index)}>
-                      <Trash2 className="w-4 h-4 text-red-500" />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const newItems = formData.whatToExpectItems.filter((_, i) => i !== index);
+                        setFormData((prev) => ({ ...prev, whatToExpectItems: newItems }));
+                      }}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setFormData((prev) => ({ ...prev, whatToExpectItems: [...prev.whatToExpectItems, ""] }))}
+                  className="mt-2 border-gray-700 text-gray-400"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Step
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -655,50 +513,48 @@ export default function ServiceEditor() {
 
         {/* Proof Tab */}
         <TabsContent value="proof">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
               <CardTitle className="text-white">Proof Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-gray-300">Stat (e.g., "400%")</Label>
+                  <Label className="text-gray-400">Stat Number</Label>
                   <Input
                     value={formData.proofStat}
-                    onChange={(e) => setFormData(prev => ({ ...prev, proofStat: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, proofStat: e.target.value }))}
+                    placeholder="e.g., 150%"
                     className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="400%"
                   />
                 </div>
                 <div>
-                  <Label className="text-gray-300">Stat Description</Label>
+                  <Label className="text-gray-400">Stat Text</Label>
                   <Input
                     value={formData.proofText}
-                    onChange={(e) => setFormData(prev => ({ ...prev, proofText: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, proofText: e.target.value }))}
+                    placeholder="e.g., increase in conversions"
                     className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="average traffic increase"
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-gray-300">Case Study Project Link</Label>
-                  <Input
-                    value={formData.proofProjectLink}
-                    onChange={(e) => setFormData(prev => ({ ...prev, proofProjectLink: e.target.value }))}
-                    className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="/projects/project-slug"
-                  />
-                </div>
-                <div>
-                  <Label className="text-gray-300">Case Study Title</Label>
-                  <Input
-                    value={formData.proofProjectTitle}
-                    onChange={(e) => setFormData(prev => ({ ...prev, proofProjectTitle: e.target.value }))}
-                    className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="View Case Study: TravelEgypt"
-                  />
-                </div>
+              <div>
+                <Label className="text-gray-400">Case Study Link</Label>
+                <Input
+                  value={formData.proofProjectLink}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, proofProjectLink: e.target.value }))}
+                  placeholder="/projects/case-study-slug"
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+              <div>
+                <Label className="text-gray-400">Case Study Title</Label>
+                <Input
+                  value={formData.proofProjectTitle}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, proofProjectTitle: e.target.value }))}
+                  placeholder="Read the full case study"
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
               </div>
             </CardContent>
           </Card>
@@ -706,117 +562,152 @@ export default function ServiceEditor() {
 
         {/* Next Steps Tab */}
         <TabsContent value="nextsteps">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                Next Steps Section
-                <Button size="sm" onClick={addNextStep}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Step
-                </Button>
-              </CardTitle>
+              <CardTitle className="text-white">Next Steps Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {formData.nextSteps.map((step, stepIndex) => (
                 <div key={stepIndex} className="border border-gray-700 rounded-lg p-4 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-white font-medium">Step {stepIndex + 1}</span>
-                    <Button size="icon" variant="ghost" onClick={() => removeNextStep(stepIndex)}>
-                      <Trash2 className="w-4 h-4 text-red-500" />
+                    <Label className="text-white font-medium">Step {stepIndex + 1}</Label>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        const newSteps = formData.nextSteps.filter((_, i) => i !== stepIndex);
+                        setFormData((prev) => ({ ...prev, nextSteps: newSteps }));
+                      }}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
+                  <Input
+                    value={step.title}
+                    onChange={(e) => {
+                      const newSteps = [...formData.nextSteps];
+                      newSteps[stepIndex] = { ...newSteps[stepIndex], title: e.target.value };
+                      setFormData((prev) => ({ ...prev, nextSteps: newSteps }));
+                    }}
+                    placeholder="Step title"
+                    className="bg-gray-800 border-gray-700 text-white"
+                  />
+                  <Textarea
+                    value={step.description}
+                    onChange={(e) => {
+                      const newSteps = [...formData.nextSteps];
+                      newSteps[stepIndex] = { ...newSteps[stepIndex], description: e.target.value };
+                      setFormData((prev) => ({ ...prev, nextSteps: newSteps }));
+                    }}
+                    placeholder="Step description"
+                    className="bg-gray-800 border-gray-700 text-white"
+                  />
                   <div>
-                    <Label className="text-gray-300">Title</Label>
-                    <Input
-                      value={step.title}
-                      onChange={(e) => updateNextStep(stepIndex, "title", e.target.value)}
-                      className="bg-gray-800 border-gray-700 text-white"
-                      placeholder="Book a Discovery Call"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-gray-300">Description</Label>
-                    <Textarea
-                      value={step.desc}
-                      onChange={(e) => updateNextStep(stepIndex, "desc", e.target.value)}
-                      className="bg-gray-800 border-gray-700 text-white"
-                      rows={2}
-                      placeholder="We'll discuss your goals and challenges..."
-                    />
-                  </div>
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <Label className="text-gray-300">Bullet Points</Label>
-                      <Button size="sm" variant="outline" onClick={() => addNextStepBullet(stepIndex)}>
-                        <Plus className="w-3 h-3 mr-1" />
-                        Add Bullet
-                      </Button>
-                    </div>
+                    <Label className="text-gray-400 text-sm">Bullet Points</Label>
                     {step.bullets.map((bullet, bulletIndex) => (
-                      <div key={bulletIndex} className="flex gap-2 mb-2">
+                      <div key={bulletIndex} className="flex gap-2 mt-1">
                         <Input
                           value={bullet}
-                          onChange={(e) => updateNextStepBullet(stepIndex, bulletIndex, e.target.value)}
-                          className="bg-gray-800 border-gray-700 text-white flex-1"
-                          placeholder="15-minute intro call"
+                          onChange={(e) => {
+                            const newSteps = [...formData.nextSteps];
+                            const newBullets = [...newSteps[stepIndex].bullets];
+                            newBullets[bulletIndex] = e.target.value;
+                            newSteps[stepIndex] = { ...newSteps[stepIndex], bullets: newBullets };
+                            setFormData((prev) => ({ ...prev, nextSteps: newSteps }));
+                          }}
+                          className="bg-gray-800 border-gray-700 text-white text-sm"
                         />
-                        <Button size="icon" variant="ghost" onClick={() => removeNextStepBullet(stepIndex, bulletIndex)}>
-                          <Trash2 className="w-4 h-4 text-red-500" />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            const newSteps = [...formData.nextSteps];
+                            const newBullets = step.bullets.filter((_, i) => i !== bulletIndex);
+                            newSteps[stepIndex] = { ...newSteps[stepIndex], bullets: newBullets };
+                            setFormData((prev) => ({ ...prev, nextSteps: newSteps }));
+                          }}
+                          className="text-red-400 hover:text-red-300 h-8 w-8"
+                        >
+                          <Trash2 className="w-3 h-3" />
                         </Button>
                       </div>
                     ))}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        const newSteps = [...formData.nextSteps];
+                        newSteps[stepIndex] = { 
+                          ...newSteps[stepIndex], 
+                          bullets: [...newSteps[stepIndex].bullets, ""] 
+                        };
+                        setFormData((prev) => ({ ...prev, nextSteps: newSteps }));
+                      }}
+                      className="mt-1 text-gray-400 text-xs"
+                    >
+                      <Plus className="w-3 h-3 mr-1" />
+                      Add Bullet
+                    </Button>
                   </div>
                 </div>
               ))}
+              <Button
+                variant="outline"
+                onClick={() => setFormData((prev) => ({ 
+                  ...prev, 
+                  nextSteps: [...prev.nextSteps, { title: "", description: "", bullets: [] }] 
+                }))}
+                className="border-gray-700 text-gray-400"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Step
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Final CTA Tab */}
         <TabsContent value="finalcta">
-          <Card className="bg-[#1a1a1a] border-gray-800">
+          <Card className="bg-[#0D0D0D] border-gray-800">
             <CardHeader>
-              <CardTitle className="text-white">Final Call to Action</CardTitle>
+              <CardTitle className="text-white">Final CTA Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-300">CTA Title</Label>
+                <Label className="text-gray-400">Title</Label>
                 <Input
                   value={formData.finalCtaTitle}
-                  onChange={(e) => setFormData(prev => ({ ...prev, finalCtaTitle: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, finalCtaTitle: e.target.value }))}
+                  placeholder="Ready to get started?"
                   className="bg-gray-800 border-gray-700 text-white"
-                  placeholder="Ready to grow your organic traffic?"
                 />
               </div>
               <div>
-                <Label className="text-gray-300">CTA Subtitle</Label>
-                <Textarea
+                <Label className="text-gray-400">Subtitle</Label>
+                <Input
                   value={formData.finalCtaSubtitle}
-                  onChange={(e) => setFormData(prev => ({ ...prev, finalCtaSubtitle: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, finalCtaSubtitle: e.target.value }))}
                   className="bg-gray-800 border-gray-700 text-white"
-                  rows={2}
-                  placeholder="Let's build your organic growth engine together."
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-gray-300">Button Text</Label>
-                  <Input
-                    value={formData.finalCtaButtonText}
-                    onChange={(e) => setFormData(prev => ({ ...prev, finalCtaButtonText: e.target.value }))}
-                    className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="Book Your Strategy Call"
-                  />
-                </div>
-                <div>
-                  <Label className="text-gray-300">Micro Proof Text</Label>
-                  <Input
-                    value={formData.finalCtaMicroProof}
-                    onChange={(e) => setFormData(prev => ({ ...prev, finalCtaMicroProof: e.target.value }))}
-                    className="bg-gray-800 border-gray-700 text-white"
-                    placeholder="Join 50+ brands already growing"
-                  />
-                </div>
+              <div>
+                <Label className="text-gray-400">Button Text</Label>
+                <Input
+                  value={formData.finalCtaButtonText}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, finalCtaButtonText: e.target.value }))}
+                  placeholder="Book a Call"
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+              <div>
+                <Label className="text-gray-400">Micro-proof Text</Label>
+                <Input
+                  value={formData.finalCtaMicroProof}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, finalCtaMicroProof: e.target.value }))}
+                  placeholder="e.g., Join 50+ happy clients"
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
               </div>
             </CardContent>
           </Card>

@@ -13,7 +13,6 @@ import {
   Folder,
   FileEdit,
   Layers,
-  Quote,
   Briefcase
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -31,7 +30,6 @@ const navItems = [
   { href: "/admin/tags", label: "Tags", icon: Tags },
   { href: "/admin/media", label: "Media Library", icon: Image },
   { href: "/admin/content", label: "Site Content", icon: Layers },
-  { href: "/admin/testimonials", label: "Testimonials", icon: Quote },
   { href: "/admin/pages", label: "Pages", icon: FileEdit },
   { href: "/admin/settings", label: "Site Settings", icon: Settings },
   { href: "/admin/services", label: "Services", icon: Briefcase },
