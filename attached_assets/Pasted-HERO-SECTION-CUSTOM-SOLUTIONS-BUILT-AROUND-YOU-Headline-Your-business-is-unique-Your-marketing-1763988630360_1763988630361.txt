@@ -1,0 +1,163 @@
+HERO SECTION — “CUSTOM SOLUTIONS BUILT AROUND YOU”
+Headline
+
+Your business is unique.
+Your marketing solution should be too.
+
+Subline
+
+Custom-built brand, strategy, and SEO packages tailored to your exact stage, challenge, and goals.
+
+Visual
+
+A soft animated “modular blocks” visual showing pieces snapping together → representing custom combinations.
+
+Or a simple carousel that shows different types of founders (product, service, tech, DTC).
+
+Primary CTA
+
+Start Your Custom Plan → scrolls to form or intake quiz.
+
+2. “WHAT YOU GET WHEN YOU WORK WITH ME” SECTION (Your Core Ask)
+
+This replaces traditional “What I offer” / “Packages” sections.
+
+Design Approach
+
+Large, clean, 3-column (desktop) or scrollable interactive cards (mobile).
+
+Section Title
+
+What to Expect When We Build Your Custom Strategy
+
+3–5 Cards Only — short, punchy, easy to skim
+Card 1 — Deep Discovery
+
+Mini-audit + insights to understand brand, audience, gaps, and growth levers.
+
+Card 2 — Tailored Strategy
+
+A modular plan covering exactly what you need: brand, positioning, SEO, CRO, content, funnels, etc.
+
+Card 3 — Fast Implementation Support
+
+Action steps, frameworks, and direction you can activate immediately.
+
+Card 4 — Founder-Friendly Collaboration
+
+Clear communication, async support, and a no-fluff, structured workflow.
+
+Card 5 (Optional) — Data-Driven Decisions
+
+Everything backed by research, market analysis, and performance signals.
+
+Interaction idea:
+Hover = micro animation / card “pops up”.
+Tap on mobile = expands to show one-sentence explanation.
+
+3. INTERACTIVE MODULE SECTION — “BUILD YOUR OWN PACKAGE”
+
+Think of this like a “visual menu” of all the things you could include in a custom plan — without turning it into a long services list.
+
+Design
+
+A grid of rounded tags or tiles that users can click.
+When clicked → they highlight or “add to cart” style (but no cart needed).
+
+Section Title
+
+Choose the Areas You Want to Focus On
+
+Module Tags (non-exhaustive)
+
+Brand & Positioning
+
+Messaging
+
+Brand Identity Direction
+
+Website Review
+
+SEO Strategy
+
+Content Strategy
+
+Social Growth Plan
+
+Funnel Strategy
+
+Audience Research
+
+Competitor Analysis
+
+Keyword Discovery
+
+Email Strategy
+
+Product & Feature GTM
+
+Analytics Review
+
+Note: They’re not choosing services — they’re signaling pain points.
+The end CTA → “Based on your selection, I’ll create a custom plan.”
+
+4. “HOW CUSTOM PROJECTS WORK” — TIMELINE OR 3-STEP PROCESS
+
+Because founders want clarity & confidence.
+
+Simple 3-step structure
+
+1. Tell me what you need
+Quick form or intake quiz.
+
+2. I design a custom plan
+A tailored package that aligns with your goals, budget, and urgency.
+
+3. We execute together
+Hands-on support, frameworks, and direction.
+
+Design
+
+A horizontal 1–2–3 timeline with seamless animations.
+
+5. SOCIAL PROOF SECTION — SUCCESS INDICATORS
+
+Keep it minimal.
+Instead of long testimonials → use short, punchy credibility markers.
+
+Options
+
+3 short client quotes (one sentence each)
+
+Logos of brands you’ve worked with
+
+A stat or transformation snippet (only if it feels natural)
+
+Design:
+Soft, quiet, non-salesy.
+
+6. THE CONVERSION SECTION — CUSTOM PROJECT FORM
+Title
+
+Let’s Build Your Custom Marketing Plan
+
+Subline
+
+Tell me your goals, challenges, and what you want to improve — I’ll create a custom strategy just for you.
+
+Form
+
+Short, intuitive, conversational:
+
+What's your business about?
+
+What’s your main challenge right now?
+
+What areas do you need help with? (Auto-filled from the interactive tiles)
+
+What’s your timeline?
+
+What’s your budget?
+
+CTA:
+Create My Custom Plan

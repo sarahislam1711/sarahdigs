@@ -1,0 +1,283 @@
+1. Hero Section
+Layout
+
+Full-width hero
+
+Left-aligned text
+
+Right side: simple visual (abstract shape, gradient, product mockup, or SEO-themed illustration)
+
+Visual Elements
+
+Headline: Large, bold, 48–64px
+
+Subheading: Medium weight, 18–22px
+
+CTA Buttons:
+
+Primary: solid, high-contrast
+
+Secondary: outlined or ghost
+
+Micro-proof strip (optional):
+
+Small logos in grayscale
+
+or one metric in a pill-shaped badge
+
+Design Style
+
+Soft gradient background OR minimal off-white
+
+Subtle motion: headline text fade-up, CTAs slide-in
+
+24–32px padding top + bottom
+
+2. What I Offer
+Layout
+
+2–3 column grid depending on amount of content
+
+Each item as a card or checklist row
+
+Visual Elements
+
+Icon for each service item (outline style)
+
+Title + 1–2 sentence description
+
+Use cards with:
+
+Rounded corners
+
+Soft shadow
+
+Light hover lift
+
+Design Style
+
+White cards on light background (grey 50 or subtle tint)
+
+Icons in a muted brand color
+
+Enough spacing (40–60px section padding)
+
+3. Who This Is For
+Layout
+
+Two-column layout
+
+Left side: Short intro text
+
+Right side: Vertical checklist with bullets or ticks
+
+Visual Elements
+
+Checkmark icons (soft, rounded—not corporate)
+
+Each line spaced generously (line height 1.5–1.7)
+
+Section heading with small accent line or graphic for personality
+
+Design Style
+
+Clean, minimal
+
+Background stays white to maintain clarity
+
+Slight fade-in animation from bottom
+
+4. The Problems
+
+(3 × cards)
+
+Layout
+
+3 horizontally aligned cards (desktop)
+
+Vertical stack (mobile)
+
+Each card is visually distinct with a bold title
+
+Visual Elements
+
+Card style:
+
+Slight border
+
+Light shadow
+
+Very soft colored background (pale nude, grey-blue, sage)
+
+Icon representing the problem (broken link, search icon, warning triangle, etc.)
+
+Title (short, punchy) + one-line description
+
+Design Style
+
+Cards should feel editorial/modern
+
+Hover effect: slight shadow or micro-scale
+
+Subtle staggered animation on scroll (one card at a time)
+
+5. Proof / Data Stories
+Layout
+
+3–4 data blocks in a horizontal “stat bar”
+
+Each block is a mini-story
+
+Visual Elements
+
+Each block contains:
+
+Big metric (e.g., +123%) in oversized bold font
+
+Under it: short caption
+
+Small icon or upward arrow motif
+
+Design Style
+
+Use bold typography
+
+Use a strong accent color for the metric
+
+Use thin divider lines between blocks
+
+Feels crisp, sharp, credible
+
+Animation:
+
+Numbers count-up animation when visible in viewport
+
+6. The Fit Test
+Layout
+
+Split layout with two columns:
+Left: “You’ll thrive with this if…”
+Right: “Not a match if…”
+
+Visual Elements
+
+Clean checklist icons (✓ for fit, ✗ for not a match)
+
+Use contrasting background sections:
+
+Fit: soft, positive color (light green or brand tint)
+
+Not fit: very light grey or soft blush
+
+Design Style
+
+Cards with slightly different background colors help distinguish sides
+
+Rounded corners + light shadow
+
+Vertical divider down the center (thin line)
+
+Animation:
+
+Slight slide-in for each bullet as user scrolls
+
+7. CTA Form
+Layout
+
+Centered form inside a highlighted block
+
+Full-width but content capped at 600–700px width
+
+Visual Elements
+
+Fields:
+
+Name
+
+Email
+
+Company website
+
+Key issue (textarea)
+
+Large, rounded input fields with soft borders
+
+Buttons:
+
+Full-width on mobile
+
+Two options (primary + secondary)
+
+Design Style
+
+Background: subtle gradient or light brand color
+
+Box shadow around the form container
+
+Trust badge or micro-copy under button:
+“No spam. No pressure.”
+
+Animation:
+
+Form fades in with slight upward motion
+
+🌈 EXTRA VISUAL GUIDELINES (for the whole page)
+Typography
+
+Headlines: clean, modern sans-serif
+
+Body: readable, friendly sans-serif (16–18px)
+
+Strong hierarchy
+
+Generous line height (1.4–1.7)
+
+Spacing
+
+Each section: 80–120px vertical padding
+
+Lots of white space to feel premium
+
+Avoid clutter — content should breathe
+
+Components
+
+Rounded corners (12–20px)
+
+Soft shadows
+
+Muted color palette with 1 strong accent color
+
+Motion
+
+Use micro-animations, not heavy parallax
+
+Fade-up, slide-in, hover elevation
+
+Slow, smooth transitions (200–300ms)
+
+Imagery
+
+SEO-themed illustration OR geometric shapes
+
+Clean line icons
+
+Optional: screenshots of dashboards (blurred where needed)
+
+⭐ Summary (for designer handoff)
+
+Here’s the exact file-ready version you can send:
+
+Hero: bold typography, split layout, CTA buttons, subtle gradient
+
+What I Offer: card grid with icons, soft shadows
+
+Who This Is For: 2-column checklist, minimal style
+
+Problems: 3 visually distinct cards, pastel backgrounds
+
+Proof: stat bar with bold numbers + captions
+
+Fit Test: dual-column cards with ✓ and ✗ lists
+
+CTA Form: centered, rounded fields, highlighted background

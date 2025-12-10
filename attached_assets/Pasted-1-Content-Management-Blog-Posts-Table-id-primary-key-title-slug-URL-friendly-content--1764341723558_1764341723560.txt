@@ -1,0 +1,242 @@
+1. Content Management
+Blog Posts Table:
+- id (primary key)
+- title
+- slug (URL-friendly)
+- content (rich text/HTML)
+- excerpt
+- featured_image_url
+- author_id (foreign key to users)
+- status (draft/published/scheduled)
+- published_at
+- created_at
+- updated_at
+- meta_title
+- meta_description
+- meta_keywords
+
+Categories Table:
+- id
+- name
+- slug
+- description
+- parent_id (for nested categories)
+
+Tags Table:
+- id
+- name
+- slug
+
+Post_Categories (junction table):
+- post_id
+- category_id
+
+Post_Tags (junction table):
+- post_id
+- tag_id
+
+
+2. Media Management
+Media Table:
+- id
+- filename
+- original_filename
+- file_type (image/video/document)
+- file_size
+- url
+- thumbnail_url (for videos)
+- alt_text
+- caption
+- uploaded_by (foreign key to users)
+- created_at
+
+3. Lead Management
+Leads Table:
+- id
+- form_type (contact/lead_magnet/newsletter)
+- first_name
+- last_name
+- email
+- phone
+- company_name
+- company_size
+- industry
+- message
+- lead_magnet_id (if applicable)
+- utm_source
+- utm_medium
+- utm_campaign
+- ip_address
+- user_agent
+- status (new/contacted/qualified/converted)
+- created_at
+
+Lead_Magnets Table:
+- id
+- title
+- description
+- file_url
+- download_count
+- active (boolean)
+
+4. Calendar/Booking
+Booking_Slots Table:
+- id
+- consultant_id
+- date
+- start_time
+- end_time
+- duration_minutes
+- is_available (boolean)
+
+Appointments Table:
+- id
+- booking_slot_id
+- client_name
+- client_email
+- client_phone
+- consultation_type
+- notes
+- status (pending/confirmed/completed/cancelled)
+- meeting_link (Google Meet)
+- created_at
+
+5. User Management
+
+Users Table:
+- id
+- email
+- password_hash
+- role (admin/editor/author)
+- first_name
+- last_name
+- avatar_url
+- created_at
+
+
+Case Studies / Portfolio Management
+
+
+Case_Studies Table:
+- id
+- title
+- slug
+- client_name
+- client_logo_url
+- industry
+- challenge_description
+- solution_description
+- results (key metrics/outcomes)
+- testimonial_quote
+- testimonial_author
+- featured_image
+- gallery_images (JSON array)
+- tags
+- status
+- featured (boolean)
+- published_at
+
+
+4. Service Pages Management
+
+
+Services Table:
+- id
+- title
+- slug
+- short_description
+- full_description
+- icon_url
+- featured_image
+- pricing_model
+- deliverables (JSON)
+- process_steps (JSON)
+- call_to_action_text
+
+
+5. Testimonials/Reviews System
+Testimonials Table:
+- id
+- client_name
+- client_title
+- client_company
+- client_photo
+- testimonial_text
+- rating (1-5)
+- service_related_to
+- video_url (optional)
+- is_featured
+- approved (boolean)
+- created_at
+
+
+7. FAQ Management
+FAQs Table:
+- id
+- question
+- answer
+- category
+- display_order
+- helpful_count
+- page_assignment (where to show)
+
+10. Site Settings/Configuration
+
+
+Settings Table:
+- id
+- setting_key
+- setting_value
+- setting_type (text/image/json)
+
+Examples:
+- site_logo
+- favicon
+- contact_info (address, phone, email)
+- social_media_links
+- google_analytics_id
+- google_tag_manager_id
+- facebook_pixel_id
+- footer_text
+- cookie_consent_text
+- email_signatures
+
+——
+
+
+Backend Features
+1. File Upload System
+* Support for images (JPEG, PNG, WebP, GIF)
+* Support for videos (MP4, WebM)
+* Support for documents (PDF)
+* Image resizing/optimization on upload
+* Generate thumbnails for videos
+* Cloud storage integration (AWS S3, Cloudinary, or similar)
+* Maximum file size limits
+* Virus scanning
+
+2. Email Integration
+* SMTP configuration for transactional emails
+* Email service integration (SendGrid, Mailgun, or AWS SES)
+* Templates for:
+    * Lead notification to admin
+    * Lead confirmation to user
+    * Appointment confirmation
+    * Appointment reminders
+    * Lead magnet delivery
+* Email queue system for reliability
+
+4. SEO Features
+* Automatic XML sitemap generation
+* Robots.txt management
+* Canonical URL handling
+* Open Graph metadata support
+* Schema.org structured data
+* Automatic slug generation from titles
+
+6. Search & Filtering
+* Full-text search for blog posts
+* Filter posts by category, tag, date, author
+* Filter leads by date, status, form type
+* Search leads by email, name, company
+

@@ -1,0 +1,14 @@
+# Database - Neon PostgreSQL connection string
+DATABASE_URL=postgresql://neondb_owner:npg_vDl54EUwpeRJ@ep-plain-surf-a4tfdkqg-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require
+
+# Session secret
+SESSION_SECRET=QNoowtbUscS5yMVN3iFkrNb7EyP8KRPjjy+D3mv3TYM=
+
+# Admin password for CMS login
+ADMIN_PASSWORD=ar753GrIAmP+AFhXdjsLew==
+
+# Node environment
+NODE_ENV=production
+
+# Port (Railway sets this automatically)
+PORT=3000
