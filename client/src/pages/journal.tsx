@@ -35,7 +35,9 @@ const FeaturedPieces = () => {
     queryKey: ["/api/blog/posts"],
   });
 
-  const featured = posts?.slice(0, 3) || [];
+  // Get posts marked as featured, or fall back to first 3 posts
+  const featuredPosts = posts?.filter((p: any) => p.isFeatured) || [];
+  const featured = featuredPosts.length > 0 ? featuredPosts.slice(0, 3) : posts?.slice(0, 3) || [];
 
   const getReadTime = (content: string | null) => {
     if (!content) return "3 min read";
@@ -135,7 +137,13 @@ const AllPosts = () => {
     queryKey: ["/api/blog/posts"],
   });
 
-  const allPosts = posts?.slice(3) || [];
+  // Get posts that are not featured
+  const featuredPosts = posts?.filter((p: any) => p.isFeatured) || [];
+  // If there are featured posts, show non-featured in All Posts
+  // Otherwise, skip first 3 (which are shown in Featured) from All Posts
+  const allPosts = featuredPosts.length > 0 
+    ? posts?.filter((p: any) => !p.isFeatured) || []
+    : posts?.slice(3) || [];
 
   const getReadTime = (content: string | null) => {
     if (!content) return "3 min read";

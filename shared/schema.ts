@@ -34,6 +34,7 @@ export const blogPosts = pgTable("blog_posts", {
   content: text("content"),
   excerpt: text("excerpt"),
   featuredImageUrl: text("featured_image_url"),
+  isFeatured: boolean("is_featured").default(false),
   authorId: varchar("author_id").references(() => users.id),
   status: varchar("status").default("draft"),
   publishedAt: timestamp("published_at"),
@@ -51,10 +52,6 @@ export const categories = pgTable("categories", {
   slug: varchar("slug").unique().notNull(),
   description: text("description"),
   parentId: varchar("parent_id"),
-  iconName: varchar("icon_name").default("FileText"),
-  bgColor: varchar("bg_color").default("#F4F2FF"),
-  textColor: varchar("text_color").default("#4D00FF"),
-  displayOrder: integer("display_order").default(0),
 });
 
 // Tags table

@@ -43,6 +43,7 @@ export default function PostEditor() {
     content: "",
     excerpt: "",
     featuredImageUrl: "",
+    isFeatured: false,
     status: "draft",
     metaTitle: "",
     metaDescription: "",
@@ -72,6 +73,7 @@ export default function PostEditor() {
         content: post.content || "",
         excerpt: post.excerpt || "",
         featuredImageUrl: post.featuredImageUrl || "",
+        isFeatured: post.isFeatured || false,
         status: post.status || "draft",
         metaTitle: post.metaTitle || "",
         metaDescription: post.metaDescription || "",
@@ -319,6 +321,17 @@ export default function PostEditor() {
                     <SelectItem value="published" className="text-white">Published</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="flex items-center space-x-2 pt-2">
+                <Checkbox
+                  id="isFeatured"
+                  checked={formData.isFeatured}
+                  onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isFeatured: checked === true }))}
+                  className="border-gray-600 data-[state=checked]:bg-[#4D00FF] data-[state=checked]:border-[#4D00FF]"
+                />
+                <Label htmlFor="isFeatured" className="text-gray-400 cursor-pointer">
+                  Feature this post
+                </Label>
               </div>
             </CardContent>
           </Card>
