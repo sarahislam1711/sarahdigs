@@ -112,8 +112,10 @@ export const contactInquiries = pgTable("contact_inquiries", {
 });
 
 // Custom plan inquiries (existing)
-export const customPlanInquiries = pgTable("custom_plan_inquiries", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  export const customPlanInquiries = pgTable("custom_plan_inquiries", {
+  id: varchar("id").primaryKey().default(sq`gen_random_uuid()`),
+  name: varchar("name").notNull(),
+  email: varchar("email").notNull(),
   businessDescription: text("business_description").notNull(),
   mainChallenge: text("main_challenge").notNull(),
   selectedModules: text("selected_modules").array(),
