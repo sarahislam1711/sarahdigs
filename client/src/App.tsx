@@ -30,6 +30,7 @@ import AdminPages from "@/pages/admin/pages";
 import AdminServices from "@/pages/admin/services";
 import ServiceEditor from "@/pages/admin/service-editor";
 import AdminProjects from "@/pages/admin/projects";
+import ProjectEditor from "@/pages/admin/project-editor";
 import { useEffect } from "react";
 
 function ScrollToTop() {
@@ -65,6 +66,8 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/content" component={AdminContent} />
       <Route path="/admin/pages" component={AdminPages} />
+      <Route path="/admin/projects/new" component={ProjectEditor} />
+      <Route path="/admin/projects/:id" component={ProjectEditor} />
       <Route path="/admin/projects" component={AdminProjects} />
       <Route path="/admin/services" component={AdminServices} />
       <Route path="/admin/services/new" component={ServiceEditor} />
