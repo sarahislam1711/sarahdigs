@@ -154,20 +154,20 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
           {standaloneItems.map((item) => {
             const isActive = isItemActive(item.href);
             return (
-              <Link key={item.href} href={item.href}>
-                <a
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
-                    isActive
-                      ? "bg-[#4D00FF] text-white"
-                      : "text-gray-400 hover:text-white hover:bg-gray-800"
-                  )}
-                  data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                  {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
-                </a>
+              <Link 
+                key={item.href} 
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  isActive
+                    ? "bg-[#4D00FF] text-white"
+                    : "text-gray-400 hover:text-white hover:bg-gray-800"
+                )}
+                data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="font-medium">{item.label}</span>
+                {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
               </Link>
             );
           })}
@@ -209,19 +209,19 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
                     {group.items.map((item) => {
                       const isActive = isItemActive(item.href);
                       return (
-                        <Link key={item.href} href={item.href}>
-                          <a
-                            className={cn(
-                              "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm",
-                              isActive
-                                ? "bg-[#4D00FF] text-white"
-                                : "text-gray-400 hover:text-white hover:bg-gray-800"
-                            )}
-                          >
-                            <item.icon className="w-4 h-4" />
-                            <span>{item.label}</span>
-                            {isActive && <ChevronRight className="w-3 h-3 ml-auto" />}
-                          </a>
+                        <Link 
+                          key={item.href} 
+                          href={item.href}
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm",
+                            isActive
+                              ? "bg-[#4D00FF] text-white"
+                              : "text-gray-400 hover:text-white hover:bg-gray-800"
+                          )}
+                        >
+                          <item.icon className="w-4 h-4" />
+                          <span>{item.label}</span>
+                          {isActive && <ChevronRight className="w-3 h-3 ml-auto" />}
                         </Link>
                       );
                     })}
@@ -238,20 +238,20 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
           {bottomItems.map((item) => {
             const isActive = isItemActive(item.href);
             return (
-              <Link key={item.href} href={item.href}>
-                <a
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
-                    isActive
-                      ? "bg-[#4D00FF] text-white"
-                      : "text-gray-400 hover:text-white hover:bg-gray-800"
-                  )}
-                  data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                  {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
-                </a>
+              <Link 
+                key={item.href} 
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  isActive
+                    ? "bg-[#4D00FF] text-white"
+                    : "text-gray-400 hover:text-white hover:bg-gray-800"
+                )}
+                data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="font-medium">{item.label}</span>
+                {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
               </Link>
             );
           })}

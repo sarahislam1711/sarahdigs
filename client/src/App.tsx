@@ -29,6 +29,7 @@ import AdminContent from "@/pages/admin/content";
 import AdminPages from "@/pages/admin/pages";
 import AdminServices from "@/pages/admin/services";
 import ServiceEditor from "@/pages/admin/service-editor";
+import AdminProjects from "@/pages/admin/projects";
 import { useEffect } from "react";
 
 function ScrollToTop() {
@@ -49,13 +50,11 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/projects" component={Projects} />
       <Route path="/projects/:slug" component={ProjectDetail} />
-      <Route path="/services/dig-on-demand" component={DigOnDemand} />
-      <Route path="/services/consultations" component={DigInConsultations} />
-      <Route path="/services/consultations/:slug" component={ConsultationDetail} />
-      <Route path="/services/:slug" component={ServiceDynamic} />
       <Route path="/journal" component={Journal} />
       <Route path="/journal/post/:slug" component={BlogPostPage} />
       <Route path="/journal/:category" component={JournalCategory} />
+      
+      {/* Admin routes - MUST come before /services/:slug */}
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/posts" component={AdminPosts} />
@@ -66,10 +65,18 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/content" component={AdminContent} />
       <Route path="/admin/pages" component={AdminPages} />
+      <Route path="/admin/projects" component={AdminProjects} />
       <Route path="/admin/services" component={AdminServices} />
       <Route path="/admin/services/new" component={ServiceEditor} />
       <Route path="/admin/services/:id" component={ServiceEditor} />
       <Route path="/admin/preview/:slug" component={AdminPreview} />
+      
+      {/* Public service routes - after admin */}
+      <Route path="/services/dig-on-demand" component={DigOnDemand} />
+      <Route path="/services/consultations" component={DigInConsultations} />
+      <Route path="/services/consultations/:slug" component={ConsultationDetail} />
+      <Route path="/services/:slug" component={ServiceDynamic} />
+      
       <Route component={NotFound} />
     </Switch>
   );
