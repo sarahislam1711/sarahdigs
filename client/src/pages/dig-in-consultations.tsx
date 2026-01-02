@@ -75,6 +75,59 @@ const defaultConsultations: ConsultationType[] = [
   { title: "Custom Growth Roadmap", slug: "custom-growth-roadmap", desc: "Developing a bespoke step-by-step plan to achieve your specific business objectives.", iconName: "BookOpen", color: "bg-[#4D00FF]" },
 ];
 
+// Flip Card Component with proper 3D animation
+const FlipCard = ({ card, index }: { card: PainPoint; index: number }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div 
+      className="h-52 cursor-pointer"
+      style={{ perspective: "1000px" }}
+      onClick={() => setIsFlipped(!isFlipped)}
+      onMouseEnter={() => setIsFlipped(true)}
+      onMouseLeave={() => setIsFlipped(false)}
+    >
+      <motion.div
+        className="relative w-full h-full"
+        initial={false}
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        {/* Front Side */}
+        <div 
+          className="absolute inset-0 w-full h-full bg-white rounded-3xl shadow-lg border border-[#1B1B1B]/5 p-6 flex flex-col justify-between"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <div className="w-10 h-10 rounded-full bg-[#F4F2FF] flex items-center justify-center text-[#4D00FF]">
+            <span className="font-bold text-lg">{index + 1}</span>
+          </div>
+          <h3 className="text-xl font-bold text-[#1B1B1B] leading-tight">
+            {card.front}
+          </h3>
+          <div className="w-8 h-8 rounded-full border border-[#1B1B1B]/10 flex items-center justify-center self-end text-[#1B1B1B]/40">
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </div>
+
+        {/* Back Side */}
+        <div 
+          className="absolute inset-0 w-full h-full bg-[#4D00FF] rounded-3xl shadow-xl p-6 flex flex-col justify-center text-white"
+          style={{ 
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)"
+          }}
+        >
+          <h3 className="text-lg font-bold mb-4">How I guide you:</h3>
+          <p className="text-white/90 leading-relaxed">
+            {card.back}
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 const Hero = ({ content, painPoints }: { content: HeroContent; painPoints: PainPoint[] }) => {
   const [index, setIndex] = useState(0);
 
@@ -134,28 +187,7 @@ const Hero = ({ content, painPoints }: { content: HeroContent; painPoints: PainP
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {painPoints.map((card, i) => (
-            <div key={i} className="h-52 perspective-1000 group cursor-pointer">
-              <div className="relative w-full h-full transition-all duration-500 transform style-preserve-3d group-hover:rotate-y-180">
-                <div className="absolute inset-0 w-full h-full bg-white rounded-3xl shadow-lg border border-[#1B1B1B]/5 p-6 flex flex-col justify-between backface-hidden">
-                  <div className="w-10 h-10 rounded-full bg-[#F4F2FF] flex items-center justify-center text-[#4D00FF]">
-                    <span className="font-bold text-lg">{i + 1}</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1B1B1B] leading-tight">
-                    {card.front}
-                  </h3>
-                  <div className="w-8 h-8 rounded-full border border-[#1B1B1B]/10 flex items-center justify-center self-end text-[#1B1B1B]/40">
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
-                </div>
-
-                <div className="absolute inset-0 w-full h-full bg-[#4D00FF] rounded-3xl shadow-xl p-6 flex flex-col justify-center backface-hidden rotate-y-180 text-white">
-                  <h3 className="text-lg font-bold mb-4">How I guide you:</h3>
-                  <p className="text-white/90 leading-relaxed">
-                    {card.back}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <FlipCard key={i} card={card} index={i} />
           ))}
         </div>
       </div>
