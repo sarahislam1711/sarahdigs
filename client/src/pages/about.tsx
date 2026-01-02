@@ -4,7 +4,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Briefcase, Calendar, Layers, Search, LineChart, Globe, FileText, Terminal, BarChart4, Tags, MessageSquare, MessageCircle, Mic, CheckSquare } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Briefcase, Calendar, Layers, Search, LineChart, Globe, FileText, Terminal, BarChart4, Tags, MessageSquare, MessageCircle, Mic, CheckSquare, Building2, Landmark } from "lucide-react";
 
 import stockImage from '@assets/sarah-portrait.jpeg';
 
@@ -310,22 +310,36 @@ const Timeline = () => {
     { year: "2019", title: "Started in digital marketing", desc: "Cut my teeth in paid ads and social." },
     { year: "2020", title: "Specialized in SEO & Content", desc: "Discovered the power of organic growth." },
     { year: "2021", title: "Agency Life", desc: "Worked with SaaS, e-commerce, and diverse clients." },
-    { year: "2023", title: "Head of Growth", desc: "Led organic growth for a major fintech brand." },
+    { year: "2023", title: "Head of Growth", desc: "Led organic growth for multiple 7-figure brands." },
     { year: "2025", title: "Launched SarahDigs", desc: "Bringing my excavation method to the world." }
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-[#F0EEFF]">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">My Journey</h2>
+        <h2 className="text-4xl font-bold tracking-tighter text-center mb-16 font-serif italic">My Journey</h2>
         <div className="relative">
-          <div className="hidden md:block absolute top-6 left-0 right-0 h-0.5 bg-[#1B1B1B]/10"></div>
-          <div className="flex flex-col md:flex-row gap-8 justify-between">
+          {/* Timeline line */}
+          <div className="absolute top-3 left-0 right-0 h-[2px] bg-[#1B1B1B]/20"></div>
+          
+          {/* Milestones */}
+          <div className="flex justify-between relative">
             {milestones.map((m, i) => (
-              <div key={i} className="flex flex-col items-center text-center flex-1">
-                <div className="w-12 h-12 bg-[#4D00FF] text-white rounded-full flex items-center justify-center font-bold mb-4 z-10">{m.year}</div>
-                <h3 className="font-bold mb-1">{m.title}</h3>
-                <p className="text-sm text-[#1B1B1B]/60">{m.desc}</p>
+              <div key={i} className="flex flex-col items-center text-center flex-1 px-2">
+                {/* Dot with shadow pill */}
+                <div className="relative mb-6">
+                  <div className="absolute -top-1 -left-3 -right-3 h-4 bg-white rounded-full shadow-sm"></div>
+                  <div className="w-3 h-3 bg-[#4D00FF] rounded-full relative z-10"></div>
+                </div>
+                
+                {/* Year */}
+                <span className="text-[#4D00FF] font-bold text-lg mb-2">{m.year}</span>
+                
+                {/* Title */}
+                <h3 className="font-bold text-[#1B1B1B] mb-1 text-sm md:text-base">{m.title}</h3>
+                
+                {/* Description */}
+                <p className="text-xs md:text-sm text-[#1B1B1B]/60 max-w-[150px]">{m.desc}</p>
               </div>
             ))}
           </div>
@@ -337,28 +351,56 @@ const Timeline = () => {
 
 const Tools = () => {
   const tools = [
-    { name: "Ahrefs", icon: <Search className="w-6 h-6" /> },
-    { name: "SEMRush", icon: <BarChart4 className="w-6 h-6" /> },
-    { name: "Tag Manager", icon: <Tags className="w-6 h-6" /> },
-    { name: "Webflow", icon: <Globe className="w-6 h-6" /> },
-    { name: "WordPress", icon: <FileText className="w-6 h-6" /> },
-    { name: "Screaming Frog", icon: <Terminal className="w-6 h-6" /> },
-    { name: "ChatGPT", icon: <MessageSquare className="w-6 h-6" /> },
-    { name: "Claude", icon: <MessageCircle className="w-6 h-6" /> },
-    { name: "Notion", icon: <Layers className="w-6 h-6" /> },
+    { name: "Ahrefs", icon: <Search className="w-8 h-8" /> },
+    { name: "SEMRush", icon: <BarChart4 className="w-8 h-8" /> },
+    { name: "Tag Manager", icon: <Tags className="w-8 h-8" /> },
+    { name: "Webflow", icon: <Globe className="w-8 h-8" /> },
+    { name: "WordPress", icon: <Landmark className="w-8 h-8" /> },
+    { name: "Screaming Frog", icon: <Terminal className="w-8 h-8" /> },
+    { name: "ChatGPT", icon: <MessageSquare className="w-8 h-8" /> },
+    { name: "Claude", icon: <MessageCircle className="w-8 h-8" /> },
+    { name: "Elevenlabs", icon: <Mic className="w-8 h-8" /> },
+    { name: "Notion", icon: <FileText className="w-8 h-8" /> },
   ];
+
+  // Duplicate for seamless loop
+  const allTools = [...tools, ...tools];
+
   return (
-    <section className="py-24 bg-[#FBFCFE] border-t border-[#1B1B1B]/10">
+    <section className="py-24 bg-[#FBFCFE] border-t border-[#1B1B1B]/10 overflow-hidden">
        <div className="container mx-auto px-6">
-         <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">Tools of the trade</h2>
-         <div className="flex flex-wrap justify-center gap-8">
-            {tools.map((tool, i) => (
-              <div key={i} className="flex flex-col items-center gap-3 text-[#1B1B1B]/70 hover:text-[#4D00FF] transition-colors">
-                {tool.icon}
-                <span className="text-sm font-medium">{tool.name}</span>
-              </div>
-            ))}
-         </div>
+         <h2 className="text-4xl font-bold tracking-tighter text-center mb-16 font-serif italic">Tools of the trade</h2>
+       </div>
+       
+       {/* Marquee container */}
+       <div className="relative w-full overflow-hidden">
+         <motion.div
+           className="flex gap-8"
+           animate={{
+             x: [0, -50 * tools.length * 2],
+           }}
+           transition={{
+             x: {
+               repeat: Infinity,
+               repeatType: "loop",
+               duration: 30,
+               ease: "linear",
+             },
+           }}
+           style={{ width: "fit-content" }}
+         >
+           {allTools.map((tool, i) => (
+             <div 
+               key={i} 
+               className="flex flex-col items-center gap-4 min-w-[120px]"
+             >
+               <div className="w-20 h-20 bg-[#F5F5F5] rounded-2xl flex items-center justify-center text-[#1B1B1B]/50 hover:text-[#4D00FF] transition-colors shadow-sm">
+                 {tool.icon}
+               </div>
+               <span className="text-sm text-[#1B1B1B]/60 font-medium whitespace-nowrap">{tool.name}</span>
+             </div>
+           ))}
+         </motion.div>
        </div>
     </section>
   );
