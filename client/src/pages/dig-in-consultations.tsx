@@ -237,7 +237,7 @@ const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationT
               const isLightBg = consultation.color.includes('bg-[#F4F2FF]');
               
               return (
-                <div key={i} className="flex-[0_0_85%] md:flex-[0_0_40%] lg:flex-[0_0_30%] pl-6 min-w-0">
+                <div key={i} className="flex-[0_0_85%] md:flex-[0_0_48%] lg:flex-[0_0_33.4%] pl-6 min-w-0">
                   <div className={`h-full rounded-[2rem] p-8 flex flex-col justify-between min-h-[320px] transition-transform hover:-translate-y-2 hover:shadow-2xl ${consultation.color} ${consultation.color.includes('border') ? 'border' : ''}`}>
                     <div>
                       <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${isLightBg ? 'bg-white text-[#1B1B1B]' : 'bg-white/10 text-white'}`}>
@@ -268,60 +268,93 @@ const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationT
   );
 };
 
-const FreeValue = () => {
-  const resources = [
+interface FreeValueContent {
+  badge: string;
+  title: string;
+  highlightWord: string;
+  subtitle: string;
+  resources: {
+    title: string;
+    desc: string;
+    iconName: string;
+    cta: string;
+    tag: string;
+  }[];
+}
+
+const defaultFreeValueContent: FreeValueContent = {
+  badge: "Consulting Samples",
+  title: "Steal My",
+  highlightWord: "Brain.",
+  subtitle: "Get a feel for my approach and the value I deliver before committing.",
+  resources: [
     {
       title: "Strategy Briefing",
       desc: "A quick overview of how I approach strategic planning and analysis.",
-      icon: <Mail className="w-6 h-6" />,
+      iconName: "Mail",
       cta: "Read Briefing",
       tag: "Overview"
     },
     {
       title: "Consulting Process Guide",
       desc: "Understand the steps we take to diagnose and solve your business challenges.",
-      icon: <FileText className="w-6 h-6" />,
+      iconName: "FileText",
       cta: "Download Guide",
       tag: "Process"
     },
     {
       title: "Sample Audit Report",
       desc: "See a sanitized example of the depth and actionable insights provided in an audit.",
-      icon: <Sparkles className="w-6 h-6" />,
+      iconName: "Sparkles",
       cta: "View Sample",
       tag: "Example"
     },
     {
       title: "Strategic Frameworks",
       desc: "Key mental models and frameworks I use to make decisions.",
-      icon: <MessageSquare className="w-6 h-6" />,
+      iconName: "MessageSquare",
       cta: "Explore Frameworks",
       tag: "Tools"
     }
-  ];
+  ]
+};
 
+const FreeValue = ({ content }: { content: FreeValueContent }) => {
   return (
-    <section className="py-24 bg-[#FBFCFE]">
+    <section className="py-24 bg-[#0A0A0A]">
       <div className="container mx-auto px-6">
-        <div className="mb-12">
-          <span className="text-[#4D00FF] font-bold uppercase tracking-widest text-sm">Free Resources</span>
-          <h2 className="text-4xl font-bold tracking-tighter mt-2">Start with Clarity.</h2>
+        <div className="mb-12 text-center">
+          <span className="inline-block bg-[#4D00FF] text-white font-bold uppercase tracking-widest text-xs px-4 py-2 rounded-full mb-6">
+            {content.badge}
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white">
+            {content.title} <span className="text-[#4D00FF]">{content.highlightWord}</span>
+          </h2>
+          <p className="text-white/60 text-lg mt-4 max-w-2xl mx-auto">{content.subtitle}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {resources.map((resource, i) => (
-            <div key={i} className="group relative bg-white p-8 rounded-3xl border border-[#1B1B1B]/5 hover:border-[#4D00FF]/30 transition-all hover:shadow-lg">
-              <span className="absolute top-4 right-4 bg-[#F4F2FF] text-[#4D00FF] text-xs font-bold px-3 py-1 rounded-full">{resource.tag}</span>
-              <div className="w-12 h-12 rounded-2xl bg-[#F4F2FF] flex items-center justify-center text-[#4D00FF] mb-6">
-                {resource.icon}
+          {content.resources.map((resource, i) => {
+            const IconComponent = getIconComponent(resource.iconName);
+            return (
+              <div key={i} className="group relative bg-[#1B1B1B] p-8 rounded-3xl border border-white/10 hover:border-[#4D00FF]/50 transition-all hover:shadow-lg hover:shadow-[#4D00FF]/10">
+                <span className="absolute top-4 right-4 bg-white/10 text-white/70 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  {resource.tag}
+                </span>
+                <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white mb-6">
+                  <IconComponent className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-white">{resource.title}</h3>
+                <p className="text-white/60 leading-relaxed mb-6">{resource.desc}</p>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-white/20 text-white hover:bg-white hover:text-[#1B1B1B] transition-all rounded-full"
+                >
+                  {resource.cta}
+                </Button>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-[#1B1B1B]">{resource.title}</h3>
-              <p className="text-[#1B1B1B]/60 leading-relaxed mb-6">{resource.desc}</p>
-              <Button variant="link" className="p-0 text-[#4D00FF] font-semibold group-hover:underline">
-                {resource.cta} <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -416,6 +449,7 @@ interface PageContentMap {
   hero?: HeroContent;
   painPoints?: PainPoint[];
   consultations?: ConsultationType[];
+  freeValue?: FreeValueContent;
 }
 
 export default function DigInConsultations() {
@@ -431,13 +465,14 @@ export default function DigInConsultations() {
   const heroContent = (pageContent.hero as HeroContent) || defaultHeroContent;
   const painPoints = (pageContent.painPoints as PainPoint[]) || defaultPainPoints;
   const consultations = (pageContent.consultations as ConsultationType[]) || defaultConsultations;
+  const freeValueContent = (pageContent.freeValue as FreeValueContent) || defaultFreeValueContent;
 
   return (
     <div className="min-h-screen bg-white text-[#1B1B1B]">
       <Navbar />
       <Hero content={heroContent} painPoints={painPoints} />
       <ConsultationsCarousel consultations={consultations} />
-      <FreeValue />
+      <FreeValue content={freeValueContent} />
       <FAQ />
       <CTA />
       <Footer />
