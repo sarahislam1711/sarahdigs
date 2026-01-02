@@ -7,6 +7,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
+import { sendCustomPlanEmail, sendContactEmail } from "./email";
 import { 
   insertContactInquirySchema, 
   insertCustomPlanInquirySchema,
@@ -462,6 +463,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertContactInquirySchema.parse(req.body);
       const inquiry = await storage.createContactInquiry(validatedData);
+      
+      // Send email notification
+      try {
+        await sendContactEmail(validatedData);
+      } catch (emailError) {
+        console.error("Failed to send contact email:", emailError);
+        // Don't fail the request if email fails
+      }
+      
       res.status(201).json(inquiry);
     } catch (error) {
       console.error("Error creating contact inquiry:", error);
@@ -473,6 +483,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertCustomPlanInquirySchema.parse(req.body);
       const inquiry = await storage.createCustomPlanInquiry(validatedData);
+      
+      // Send email notification
+      try {
+        await sendCustomPlanEmail(req.body);
+      } catch (emailError) {
+        console.error("Failed to send custom plan email:", emailError);
+        // Don't fail the request if email fails
+      }
+      
       res.status(201).json(inquiry);
     } catch (error) {
       console.error("Error creating custom plan inquiry:", error);

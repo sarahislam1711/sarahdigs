@@ -317,7 +317,7 @@ const Timeline = () => {
   return (
     <section className="py-24 bg-[#F0EEFF]">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold tracking-tighter text-center mb-16 font-serif italic">My Journey</h2>
+        <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">My Journey</h2>
         <div className="relative">
           {/* Timeline line */}
           <div className="absolute top-3 left-0 right-0 h-[2px] bg-[#1B1B1B]/20"></div>
@@ -351,16 +351,16 @@ const Timeline = () => {
 
 const Tools = () => {
   const tools = [
-    { name: "Ahrefs", icon: <Search className="w-8 h-8" /> },
-    { name: "SEMRush", icon: <BarChart4 className="w-8 h-8" /> },
-    { name: "Tag Manager", icon: <Tags className="w-8 h-8" /> },
-    { name: "Webflow", icon: <Globe className="w-8 h-8" /> },
-    { name: "WordPress", icon: <Landmark className="w-8 h-8" /> },
-    { name: "Screaming Frog", icon: <Terminal className="w-8 h-8" /> },
-    { name: "ChatGPT", icon: <MessageSquare className="w-8 h-8" /> },
-    { name: "Claude", icon: <MessageCircle className="w-8 h-8" /> },
-    { name: "Elevenlabs", icon: <Mic className="w-8 h-8" /> },
-    { name: "Notion", icon: <FileText className="w-8 h-8" /> },
+    { name: "Ahrefs", icon: <Search className="w-8 h-8" />, url: "https://ahrefs.com" },
+    { name: "SEMRush", icon: <BarChart4 className="w-8 h-8" />, url: "https://semrush.com" },
+    { name: "Tag Manager", icon: <Tags className="w-8 h-8" />, url: "https://tagmanager.google.com" },
+    { name: "Webflow", icon: <Globe className="w-8 h-8" />, url: "https://webflow.com" },
+    { name: "WordPress", icon: <Landmark className="w-8 h-8" />, url: "https://wordpress.org" },
+    { name: "Screaming Frog", icon: <Terminal className="w-8 h-8" />, url: "https://screamingfrog.co.uk" },
+    { name: "ChatGPT", icon: <MessageSquare className="w-8 h-8" />, url: "https://chat.openai.com" },
+    { name: "Claude", icon: <MessageCircle className="w-8 h-8" />, url: "https://claude.ai" },
+    { name: "Elevenlabs", icon: <Mic className="w-8 h-8" />, url: "https://elevenlabs.io" },
+    { name: "Notion", icon: <FileText className="w-8 h-8" />, url: "https://notion.so" },
   ];
 
   // Duplicate for seamless loop
@@ -369,7 +369,7 @@ const Tools = () => {
   return (
     <section className="py-24 bg-[#FBFCFE] border-t border-[#1B1B1B]/10 overflow-hidden">
        <div className="container mx-auto px-6">
-         <h2 className="text-4xl font-bold tracking-tighter text-center mb-16 font-serif italic">Tools of the trade</h2>
+         <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">Tools of the trade</h2>
        </div>
        
        {/* Marquee container */}
@@ -390,15 +390,18 @@ const Tools = () => {
            style={{ width: "fit-content" }}
          >
            {allTools.map((tool, i) => (
-             <div 
-               key={i} 
-               className="flex flex-col items-center gap-4 min-w-[120px]"
+             <a 
+               key={i}
+               href={tool.url}
+               target="_blank"
+               rel="noopener noreferrer"
+               className="flex flex-col items-center gap-4 min-w-[120px] group"
              >
-               <div className="w-20 h-20 bg-[#F5F5F5] rounded-2xl flex items-center justify-center text-[#1B1B1B]/50 hover:text-[#4D00FF] transition-colors shadow-sm">
+               <div className="w-20 h-20 bg-[#F5F5F5] rounded-2xl flex items-center justify-center text-[#1B1B1B]/50 group-hover:text-[#4D00FF] group-hover:bg-[#F4F2FF] transition-all shadow-sm">
                  {tool.icon}
                </div>
-               <span className="text-sm text-[#1B1B1B]/60 font-medium whitespace-nowrap">{tool.name}</span>
-             </div>
+               <span className="text-sm text-[#1B1B1B]/60 group-hover:text-[#4D00FF] font-medium whitespace-nowrap transition-colors">{tool.name}</span>
+             </a>
            ))}
          </motion.div>
        </div>

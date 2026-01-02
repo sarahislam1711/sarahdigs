@@ -225,13 +225,15 @@ const Timeline = () => {
 const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
+    name: "",
+    email: "",
     businessDescription: "",
     mainChallenge: "",
     budgetRange: "",
   });
 
   const customPlanMutation = useMutation({
-    mutationFn: async (data: { businessDescription: string; mainChallenge: string; selectedModules: string[]; budgetRange: string }) => {
+    mutationFn: async (data: { name: string; email: string; businessDescription: string; mainChallenge: string; selectedModules: string[]; budgetRange: string }) => {
       const response = await fetch("/api/custom-plan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -246,6 +248,8 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
         description: "I'll review your needs and get back to you soon.",
       });
       setFormData({
+        name: "",
+        email: "",
         businessDescription: "",
         mainChallenge: "",
         budgetRange: "",
@@ -278,6 +282,31 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
 
         <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-[#1B1B1B]/10">
            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                   <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">Your Name</label>
+                   <input 
+                     type="text"
+                     required
+                     value={formData.name}
+                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                     className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF]" 
+                     placeholder="John Doe"
+                   />
+                </div>
+                <div className="space-y-2">
+                   <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">Your Email</label>
+                   <input 
+                     type="email"
+                     required
+                     value={formData.email}
+                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                     className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF]" 
+                     placeholder="john@company.com"
+                   />
+                </div>
+              </div>
+
               <div className="space-y-2">
                  <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">What's your business about?</label>
                  <textarea 
@@ -341,23 +370,14 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                    size="lg" 
                    className="w-full h-16 text-lg bg-[#4D00FF] hover:bg-[#1B1B1B] text-white rounded-full"
                  >
-                   {customPlanMutation.isPending ? "Sending..." : "Let's Plan Your Next Move"}
-                 </Button>
-                 <Button 
-                   type="submit"
-                   disabled={customPlanMutation.isPending}
-                   size="lg" 
-                   className="w-full h-16 text-lg bg-[#4D00FF] hover:bg-[#1B1B1B] text-white rounded-full"
-                 >
-                   {customPlanMutation.isPending ? "Sending..." : "Let's Plan Your Next Move"}
-                 </Button>
-                 <Button 
-                   type="submit"
-                   disabled={customPlanMutation.isPending}
-                   size="lg" 
-                   className="w-full h-16 text-lg bg-[#4D00FF] hover:bg-[#1B1B1B] text-white rounded-full"
-                 >
-                   {customPlanMutation.isPending ? "Sending..." : "Let's Plan Your Next Move"}
+                   {customPlanMutation.isPending ? (
+                     <>
+                       <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                       Sending...
+                     </>
+                   ) : (
+                     "Let's Plan Your Next Move"
+                   )}
                  </Button>
               </div>
            </form>
