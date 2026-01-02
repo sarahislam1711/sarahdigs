@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { useLocation, useRoute } from "wouter";
 import { useState, useEffect } from "react";
-import { Save, ArrowLeft, Eye, Plus, Trash2, Loader2 } from "lucide-react";
+import { Save, ArrowLeft, Eye, Plus, Trash2, Loader2, Image } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Service } from "@shared/schema";
@@ -51,6 +51,7 @@ export default function ServiceEditor() {
     whatYouGetTitle: "",
     whatYouGetDescription: "",
     whatYouGetItems: [] as { title: string; description: string }[],
+    whatYouGetImages: [] as string[],
     // What to Expect
     whatToExpectItems: [] as string[],
     // Proof
@@ -58,6 +59,8 @@ export default function ServiceEditor() {
     proofText: "",
     proofProjectLink: "",
     proofProjectTitle: "",
+    proofBeforeImage: "",
+    proofAfterImage: "",
     // Next Steps
     nextSteps: [] as { title: string; description: string; bullets: string[] }[],
     // Final CTA
@@ -92,11 +95,14 @@ export default function ServiceEditor() {
         whatYouGetTitle: service.whatYouGetTitle || "",
         whatYouGetDescription: service.whatYouGetDescription || "",
         whatYouGetItems: service.whatYouGetItems || [],
+        whatYouGetImages: (service as any).whatYouGetImages || [],
         whatToExpectItems: service.whatToExpectItems || [],
         proofStat: service.proofStat || "",
         proofText: service.proofText || "",
         proofProjectLink: service.proofProjectLink || "",
         proofProjectTitle: service.proofProjectTitle || "",
+        proofBeforeImage: (service as any).proofBeforeImage || "",
+        proofAfterImage: (service as any).proofAfterImage || "",
         nextSteps: service.nextSteps || [],
         finalCtaTitle: service.finalCtaTitle || "",
         finalCtaSubtitle: service.finalCtaSubtitle || "",
@@ -113,6 +119,7 @@ export default function ServiceEditor() {
         ...data,
         diagnosticItems: data.diagnosticItems.filter(item => item.trim() !== ""),
         whatYouGetItems: data.whatYouGetItems.filter(item => item.title.trim() !== ""),
+        whatYouGetImages: data.whatYouGetImages.filter(url => url.trim() !== ""),
         whatToExpectItems: data.whatToExpectItems.filter(item => item.trim() !== ""),
         nextSteps: data.nextSteps.filter(step => step.title.trim() !== "").map(step => ({
           ...step,
@@ -391,7 +398,7 @@ export default function ServiceEditor() {
             <CardHeader>
               <CardTitle className="text-white">What You Get Section</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div>
                 <Label className="text-gray-400">Section Title</Label>
                 <Input
@@ -459,6 +466,63 @@ export default function ServiceEditor() {
                   Add Item
                 </Button>
               </div>
+
+              {/* Image Grid Section */}
+              <div className="border-t border-gray-700 pt-6">
+                <Label className="text-gray-400 flex items-center gap-2 mb-3">
+                  <Image className="w-4 h-4" />
+                  Image Grid (Screenshots/Visuals)
+                </Label>
+                <p className="text-gray-500 text-sm mb-4">
+                  Upload images to Media Library first, then paste URLs here.
+                </p>
+                {formData.whatYouGetImages.map((url, index) => (
+                  <div key={index} className="flex gap-2 mt-2 items-start">
+                    <div className="flex-1">
+                      <Input
+                        value={url}
+                        onChange={(e) => {
+                          const newImages = [...formData.whatYouGetImages];
+                          newImages[index] = e.target.value;
+                          setFormData((prev) => ({ ...prev, whatYouGetImages: newImages }));
+                        }}
+                        placeholder="https://res.cloudinary.com/..."
+                        className="bg-gray-800 border-gray-700 text-white"
+                      />
+                      {url && (
+                        <img 
+                          src={url} 
+                          alt={`Preview ${index + 1}`} 
+                          className="mt-2 w-32 h-20 object-cover rounded border border-gray-700"
+                        />
+                      )}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const newImages = formData.whatYouGetImages.filter((_, i) => i !== index);
+                        setFormData((prev) => ({ ...prev, whatYouGetImages: newImages }));
+                      }}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setFormData((prev) => ({ 
+                    ...prev, 
+                    whatYouGetImages: [...prev.whatYouGetImages, ""] 
+                  }))}
+                  className="mt-2 border-gray-700 text-gray-400"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Image
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -524,7 +588,7 @@ export default function ServiceEditor() {
                   <Input
                     value={formData.proofStat}
                     onChange={(e) => setFormData((prev) => ({ ...prev, proofStat: e.target.value }))}
-                    placeholder="e.g., 150%"
+                    placeholder="e.g., +450%"
                     className="bg-gray-800 border-gray-700 text-white"
                   />
                 </div>
@@ -533,7 +597,7 @@ export default function ServiceEditor() {
                   <Input
                     value={formData.proofText}
                     onChange={(e) => setFormData((prev) => ({ ...prev, proofText: e.target.value }))}
-                    placeholder="e.g., increase in conversions"
+                    placeholder="e.g., Traffic"
                     className="bg-gray-800 border-gray-700 text-white"
                   />
                 </div>
@@ -552,9 +616,54 @@ export default function ServiceEditor() {
                 <Input
                   value={formData.proofProjectTitle}
                   onChange={(e) => setFormData((prev) => ({ ...prev, proofProjectTitle: e.target.value }))}
-                  placeholder="Read the full case study"
+                  placeholder="View Case Study: TechFlow SaaS"
                   className="bg-gray-800 border-gray-700 text-white"
                 />
+              </div>
+
+              {/* Before/After Images Section */}
+              <div className="border-t border-gray-700 pt-4 mt-4">
+                <Label className="text-gray-400 flex items-center gap-2 mb-3">
+                  <Image className="w-4 h-4" />
+                  Before/After Comparison Images
+                </Label>
+                <p className="text-gray-500 text-sm mb-4">
+                  Upload images to Media Library first, then paste URLs here.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-gray-500 text-sm">Before Image URL</Label>
+                    <Input
+                      value={formData.proofBeforeImage}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, proofBeforeImage: e.target.value }))}
+                      placeholder="https://res.cloudinary.com/..."
+                      className="bg-gray-800 border-gray-700 text-white"
+                    />
+                    {formData.proofBeforeImage && (
+                      <img 
+                        src={formData.proofBeforeImage} 
+                        alt="Before preview" 
+                        className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <Label className="text-gray-500 text-sm">After Image URL</Label>
+                    <Input
+                      value={formData.proofAfterImage}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, proofAfterImage: e.target.value }))}
+                      placeholder="https://res.cloudinary.com/..."
+                      className="bg-gray-800 border-gray-700 text-white"
+                    />
+                    {formData.proofAfterImage && (
+                      <img 
+                        src={formData.proofAfterImage} 
+                        alt="After preview" 
+                        className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -705,7 +814,7 @@ export default function ServiceEditor() {
                 <Input
                   value={formData.finalCtaMicroProof}
                   onChange={(e) => setFormData((prev) => ({ ...prev, finalCtaMicroProof: e.target.value }))}
-                  placeholder="e.g., Join 50+ happy clients"
+                  placeholder="e.g., Join 50+ founders scaling with organic search"
                   className="bg-gray-800 border-gray-700 text-white"
                 />
               </div>

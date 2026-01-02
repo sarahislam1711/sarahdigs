@@ -247,6 +247,7 @@ const Hero = () => {
     rotatingWords: ["goals", "users", "data", "market", "product"],
     description: "I help brands find the hidden gold in their analytics, content, and user journeys. No fluff, just deep excavation for growth.",
     ctaText: "Start Digging",
+    backgroundImage: "",
   };
   
   const words = heroData.rotatingWords || ["goals", "users", "data", "market", "product"];
@@ -260,8 +261,20 @@ const Hero = () => {
   }, [words.length]);
 
   return (
-    <section className="flex flex-col justify-center py-[130px] relative overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section 
+      className="flex flex-col justify-center py-[130px] relative overflow-hidden"
+      style={heroData.backgroundImage ? {
+        backgroundImage: `url(${heroData.backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      } : {}}
+    >
+      {/* Overlay for background image */}
+      {heroData.backgroundImage && (
+        <div className="absolute inset-0 bg-[#FBFCFE]/85 backdrop-blur-sm"></div>
+      )}
+      
+      <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-fit">
           <motion.h1
             initial={{ opacity: 0, y: 50 }}

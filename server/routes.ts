@@ -6,6 +6,7 @@ import { setupAuth, isAuthenticated } from "./auth";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { v2 as cloudinary } from "cloudinary";
 import { 
   insertContactInquirySchema, 
   insertCustomPlanInquirySchema,
@@ -22,24 +23,23 @@ import {
   insertTestimonialSchema
 } from "@shared/schema";
 
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 const uploadsDir = path.join(process.cwd(), "public", "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+// Use memory storage for Cloudinary uploads
 const multerUpload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, uploadsDir);
-    },
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      const ext = path.extname(file.originalname);
-      cb(null, `${uniqueSuffix}${ext}`);
-    },
-  }),
+  storage: multer.memoryStorage(),
   limits: {
-    fileSize: 10 * 1024 * 1024,
+    fileSize: 10 * 1024 * 1024, // 10MB limit
   },
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp|svg/;
@@ -277,11 +277,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/media", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = 'admin'; // Simple auth uses admin user
-      const validatedData = insertMediaSchema.parse({
-        ...req.body,
-        uploadedBy: userId,
-      });
+      // Don't include uploadedBy since we use simple password auth without users table
+      const validatedData = insertMediaSchema.parse(req.body);
       const mediaItem = await storage.createMedia(validatedData);
       res.status(201).json(mediaItem);
     } catch (error) {
@@ -321,14 +318,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!req.file) {
         return res.status(400).json({ error: "No file uploaded" });
       }
-      const fileUrl = `/uploads/${req.file.filename}`;
-      res.json({ 
-        url: fileUrl, 
-        filename: req.file.filename,
-        originalFilename: req.file.originalname,
-        fileType: req.file.mimetype,
-        fileSize: req.file.size
-      });
+
+      // Check if Cloudinary is configured
+      if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+        // Upload to Cloudinary
+        const result = await new Promise<any>((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: "sarahdigs",
+              resource_type: "image",
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          uploadStream.end(req.file.buffer);
+        });
+
+        res.json({ 
+          url: result.secure_url, 
+          filename: result.public_id,
+          originalFilename: req.file.originalname,
+          fileType: req.file.mimetype,
+          fileSize: req.file.size
+        });
+      } else {
+        // Fallback to local storage (for development)
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const ext = path.extname(req.file.originalname);
+        const filename = `${uniqueSuffix}${ext}`;
+        const filePath = path.join(uploadsDir, filename);
+        
+        fs.writeFileSync(filePath, req.file.buffer);
+        
+        const fileUrl = `/uploads/${filename}`;
+        res.json({ 
+          url: fileUrl, 
+          filename: filename,
+          originalFilename: req.file.originalname,
+          fileType: req.file.mimetype,
+          fileSize: req.file.size
+        });
+      }
     } catch (error) {
       console.error("Error uploading file:", error);
       res.status(500).json({ error: "Failed to upload file" });

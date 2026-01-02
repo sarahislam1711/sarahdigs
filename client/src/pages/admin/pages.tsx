@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Save, Plus, Trash2, FileText, Sparkles, Brain, LineChart, Mail, Zap, BookOpen, MessageSquare, AlertCircle, Home, LayoutList, CheckCircle, HelpCircle, ListOrdered, Briefcase, User} from "lucide-react";
+import { Save, Plus, Trash2, FileText, Sparkles, Brain, LineChart, Mail, Zap, BookOpen, MessageSquare, AlertCircle, Home, LayoutList, CheckCircle, HelpCircle, ListOrdered, Briefcase, User, Image } from "lucide-react";
 import type { PageContent } from "@shared/schema";
 
 const VALID_ICONS = ["Sparkles", "Brain", "LineChart", "Mail", "Zap", "BookOpen", "MessageSquare", "FileText"] as const;
@@ -22,6 +22,7 @@ interface HomeHeroContent {
   rotatingWords: string[];
   description: string;
   ctaText: string;
+  backgroundImage?: string;
 }
 
 interface HomeProblemsContent {
@@ -80,6 +81,7 @@ function HomePageEditor() {
     rotatingWords: ["goals", "users", "data", "market", "product"],
     description: "I help brands find the hidden gold in their analytics, content, and user journeys. No fluff, just deep excavation for growth.",
     ctaText: "Start Digging",
+    backgroundImage: "",
   });
 
   const [problemsContent, setProblemsContent] = useState<HomeProblemsContent>({
@@ -218,6 +220,29 @@ function HomePageEditor() {
               className="bg-gray-800 border-gray-700 text-white"
             />
           </div>
+          
+          {/* Hero Background Image */}
+          <div className="border-t border-gray-700 pt-4 mt-4">
+            <Label className="text-gray-300 flex items-center gap-2 mb-2">
+              <Image className="w-4 h-4" />
+              Hero Background Image
+            </Label>
+            <Input
+              value={heroContent.backgroundImage || ""}
+              onChange={(e) => setHeroContent({ ...heroContent, backgroundImage: e.target.value })}
+              placeholder="https://res.cloudinary.com/..."
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+            {heroContent.backgroundImage && (
+              <img 
+                src={heroContent.backgroundImage} 
+                alt="Hero background preview" 
+                className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+              />
+            )}
+            <p className="text-gray-500 text-xs mt-1">Upload to Media Library first, then paste URL here</p>
+          </div>
+          
           <Button onClick={saveHero} disabled={saveMutation.isPending}>
             <Save className="w-4 h-4 mr-2" />
             Save Hero
@@ -563,6 +588,7 @@ function AboutPageEditor() {
     tagline2: "Data over Guesswork",
     tagline3: "Clarity over Jargon",
     imageUrl: "",
+    backgroundImage: "",
   });
 
   const [storyContent, setStoryContent] = useState({
@@ -693,6 +719,29 @@ function AboutPageEditor() {
             )}
             <p className="text-xs text-gray-500 mt-1">Upload image to Media Library first, then paste the URL here</p>
           </div>
+          
+          {/* Hero Background Image */}
+          <div className="border-t border-gray-700 pt-4 mt-4">
+            <Label className="text-gray-300 flex items-center gap-2 mb-2">
+              <Image className="w-4 h-4" />
+              Hero Background Image
+            </Label>
+            <Input
+              value={heroContent.backgroundImage || ""}
+              onChange={(e) => setHeroContent({ ...heroContent, backgroundImage: e.target.value })}
+              placeholder="https://res.cloudinary.com/..."
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+            {heroContent.backgroundImage && (
+              <img 
+                src={heroContent.backgroundImage} 
+                alt="Hero background preview" 
+                className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+              />
+            )}
+            <p className="text-gray-500 text-xs mt-1">Upload to Media Library first, then paste URL here</p>
+          </div>
+          
           <Button onClick={saveHero} disabled={saveMutation.isPending}>
             <Save className="w-4 h-4 mr-2" />
             Save Hero

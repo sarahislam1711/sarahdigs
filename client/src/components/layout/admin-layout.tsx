@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Link, useLocation } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   LayoutDashboard, 
@@ -9,11 +9,13 @@ import {
   Settings, 
   LogOut, 
   ChevronRight,
+  ChevronDown,
   Tags,
   Folder,
   FileEdit,
   Layers,
-  Briefcase
+  Briefcase,
+  Presentation
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User } from "@shared/schema";
@@ -23,22 +25,85 @@ interface AdminLayoutProps {
   title?: string;
 }
 
-const navItems = [
+interface NavItem {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+interface NavGroup {
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  items: NavItem[];
+}
+
+// Standalone nav items at top
+const standaloneItems: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/posts", label: "Blog Posts", icon: FileText },
-  { href: "/admin/categories", label: "Categories", icon: Folder },
-  { href: "/admin/tags", label: "Tags", icon: Tags },
+];
+
+// Grouped nav items with collapsible menus
+const navGroups: NavGroup[] = [
+  {
+    label: "Blog",
+    icon: FileText,
+    items: [
+      { href: "/admin/posts", label: "All Posts", icon: FileText },
+      { href: "/admin/categories", label: "Categories", icon: Folder },
+      { href: "/admin/tags", label: "Tags", icon: Tags },
+    ],
+  },
+  {
+    label: "Services & Projects",
+    icon: Briefcase,
+    items: [
+      { href: "/admin/services", label: "Services", icon: Briefcase },
+      { href: "/admin/projects", label: "Projects", icon: Presentation },
+    ],
+  },
+];
+
+// Bottom standalone items
+const bottomItems: NavItem[] = [
   { href: "/admin/media", label: "Media Library", icon: Image },
   { href: "/admin/content", label: "Site Content", icon: Layers },
   { href: "/admin/pages", label: "Pages", icon: FileEdit },
   { href: "/admin/settings", label: "Site Settings", icon: Settings },
-  { href: "/admin/services", label: "Services", icon: Briefcase },
 ];
 
 export default function AdminLayout({ children, title }: AdminLayoutProps) {
   const { user, isLoading, isAuthenticated } = useAuth() as { user: User | null, isLoading: boolean, isAuthenticated: boolean };
   const { toast } = useToast();
   const [location] = useLocation();
+  
+  // Track which groups are expanded
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(() => {
+    // Auto-expand groups based on current location
+    const initial: Record<string, boolean> = {};
+    navGroups.forEach(group => {
+      const isInGroup = group.items.some(item => 
+        location === item.href || location.startsWith(item.href + "/")
+      );
+      initial[group.label] = isInGroup;
+    });
+    return initial;
+  });
+
+  // Update expanded state when location changes
+  useEffect(() => {
+    navGroups.forEach(group => {
+      const isInGroup = group.items.some(item => 
+        location === item.href || location.startsWith(item.href + "/")
+      );
+      if (isInGroup) {
+        setExpandedGroups(prev => ({ ...prev, [group.label]: true }));
+      }
+    });
+  }, [location]);
+
+  const toggleGroup = (label: string) => {
+    setExpandedGroups(prev => ({ ...prev, [label]: !prev[label] }));
+  };
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -65,6 +130,15 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
     return null;
   }
 
+  const isItemActive = (href: string) => {
+    if (href === "/admin") return location === "/admin";
+    return location === href || location.startsWith(href + "/");
+  };
+
+  const isGroupActive = (group: NavGroup) => {
+    return group.items.some(item => isItemActive(item.href));
+  };
+
   return (
     <div className="min-h-screen bg-[#1B1B1B] flex" data-testid="admin-layout">
       <aside className="w-64 bg-[#0D0D0D] border-r border-gray-800 flex flex-col">
@@ -75,10 +149,94 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
           <span className="text-sm text-gray-500 mt-1 block">Admin Dashboard</span>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => {
-            const isActive = location === item.href || 
-              (item.href !== "/admin" && location.startsWith(item.href));
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {/* Dashboard - standalone */}
+          {standaloneItems.map((item) => {
+            const isActive = isItemActive(item.href);
+            return (
+              <Link key={item.href} href={item.href}>
+                <a
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                    isActive
+                      ? "bg-[#4D00FF] text-white"
+                      : "text-gray-400 hover:text-white hover:bg-gray-800"
+                  )}
+                  data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                  {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
+                </a>
+              </Link>
+            );
+          })}
+
+          {/* Grouped items with collapsible menus */}
+          {navGroups.map((group) => {
+            const isExpanded = expandedGroups[group.label];
+            const groupActive = isGroupActive(group);
+            
+            return (
+              <div key={group.label} className="pt-2">
+                <button
+                  onClick={() => toggleGroup(group.label)}
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full text-left",
+                    groupActive
+                      ? "text-white bg-gray-800/50"
+                      : "text-gray-400 hover:text-white hover:bg-gray-800"
+                  )}
+                >
+                  <group.icon className="w-5 h-5" />
+                  <span className="font-medium flex-1">{group.label}</span>
+                  <ChevronDown 
+                    className={cn(
+                      "w-4 h-4 transition-transform duration-200",
+                      isExpanded ? "rotate-180" : ""
+                    )} 
+                  />
+                </button>
+                
+                {/* Submenu */}
+                <div 
+                  className={cn(
+                    "overflow-hidden transition-all duration-200 ease-in-out",
+                    isExpanded ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+                  )}
+                >
+                  <div className="ml-4 pl-4 border-l border-gray-700 mt-1 space-y-1">
+                    {group.items.map((item) => {
+                      const isActive = isItemActive(item.href);
+                      return (
+                        <Link key={item.href} href={item.href}>
+                          <a
+                            className={cn(
+                              "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm",
+                              isActive
+                                ? "bg-[#4D00FF] text-white"
+                                : "text-gray-400 hover:text-white hover:bg-gray-800"
+                            )}
+                          >
+                            <item.icon className="w-4 h-4" />
+                            <span>{item.label}</span>
+                            {isActive && <ChevronRight className="w-3 h-3 ml-auto" />}
+                          </a>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Divider */}
+          <div className="my-4 border-t border-gray-800" />
+
+          {/* Bottom standalone items */}
+          {bottomItems.map((item) => {
+            const isActive = isItemActive(item.href);
             return (
               <Link key={item.href} href={item.href}>
                 <a

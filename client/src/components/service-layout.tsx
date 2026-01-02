@@ -22,7 +22,7 @@ interface ServiceLayoutProps {
     title: string;
     description: string;
     items: { title: string; desc?: string }[];
-    image?: string;
+    images?: string[];
   };
   whatToExpect: {
     items: string[];
@@ -47,6 +47,9 @@ interface ServiceLayoutProps {
 }
 
 export const ServiceLayout = ({ content }: { content: ServiceLayoutProps }) => {
+  const hasImages = content.whatYouGet.images && content.whatYouGet.images.length > 0;
+  const hasProofImages = content.proof.beforeImage || content.proof.afterImage;
+
   return (
     <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
       <Navbar />
@@ -164,15 +167,38 @@ export const ServiceLayout = ({ content }: { content: ServiceLayoutProps }) => {
                   ))}
                </div>
                
-               {/* Visual Representation */}
-               <div className="aspect-square bg-white rounded-[2.5rem] shadow-xl border border-[#1B1B1B]/5 p-8 flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[#F4F2FF] opacity-50"></div>
-                  {/* Simple abstract visual */}
-                  <div className="relative z-10 grid grid-cols-2 gap-4 w-full h-full">
-                     <div className="bg-white rounded-2xl shadow-sm"></div>
-                     <div className="bg-[#4D00FF]/10 rounded-2xl shadow-sm"></div>
-                     <div className="bg-[#1B1B1B] rounded-2xl shadow-sm col-span-2"></div>
-                  </div>
+               {/* Visual Representation - Show uploaded images or fallback */}
+               <div className="aspect-square bg-white rounded-[2.5rem] shadow-xl border border-[#1B1B1B]/5 p-4 flex items-center justify-center relative overflow-hidden">
+                  {hasImages ? (
+                    <div className="relative z-10 grid grid-cols-2 gap-3 w-full h-full">
+                      {content.whatYouGet.images!.slice(0, 4).map((imgUrl, i) => (
+                        <motion.div 
+                          key={i} 
+                          className={`rounded-2xl overflow-hidden shadow-sm ${i === 2 && content.whatYouGet.images!.length === 3 ? 'col-span-2' : ''}`}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: i * 0.1 }}
+                          viewport={{ once: true }}
+                        >
+                          <img 
+                            src={imgUrl} 
+                            alt={`Service visual ${i + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 bg-[#F4F2FF] opacity-50"></div>
+                      {/* Default abstract visual */}
+                      <div className="relative z-10 grid grid-cols-2 gap-4 w-full h-full">
+                         <div className="bg-white rounded-2xl shadow-sm"></div>
+                         <div className="bg-[#4D00FF]/10 rounded-2xl shadow-sm"></div>
+                         <div className="bg-[#1B1B1B] rounded-2xl shadow-sm col-span-2"></div>
+                      </div>
+                    </>
+                  )}
                </div>
             </div>
          </div>
@@ -219,17 +245,56 @@ export const ServiceLayout = ({ content }: { content: ServiceLayoutProps }) => {
                         Before vs After
                      </div>
                      <div className="grid grid-cols-2 gap-4 mt-4 h-64">
-                        <div className="bg-red-50 rounded-xl flex items-center justify-center flex-col gap-2 border border-red-100">
-                           <div className="text-red-400 font-bold">Before</div>
-                           <div className="h-2 w-20 bg-red-200 rounded-full"></div>
-                           <div className="h-2 w-12 bg-red-200 rounded-full"></div>
-                        </div>
-                        <div className="bg-green-50 rounded-xl flex items-center justify-center flex-col gap-2 border border-green-100">
-                           <div className="text-green-600 font-bold">After</div>
-                           <div className="h-2 w-24 bg-green-200 rounded-full"></div>
-                           <div className="h-2 w-20 bg-green-200 rounded-full"></div>
-                           <div className="h-2 w-16 bg-green-200 rounded-full"></div>
-                        </div>
+                        {hasProofImages ? (
+                          <>
+                            <div className="rounded-xl overflow-hidden border border-red-100 relative">
+                              {content.proof.beforeImage ? (
+                                <img 
+                                  src={content.proof.beforeImage} 
+                                  alt="Before" 
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-red-50 flex items-center justify-center">
+                                  <span className="text-red-400 font-bold">Before</span>
+                                </div>
+                              )}
+                              <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                                Before
+                              </div>
+                            </div>
+                            <div className="rounded-xl overflow-hidden border border-green-100 relative">
+                              {content.proof.afterImage ? (
+                                <img 
+                                  src={content.proof.afterImage} 
+                                  alt="After" 
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-green-50 flex items-center justify-center">
+                                  <span className="text-green-600 font-bold">After</span>
+                                </div>
+                              )}
+                              <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">
+                                After
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="bg-red-50 rounded-xl flex items-center justify-center flex-col gap-2 border border-red-100">
+                               <div className="text-red-400 font-bold">Before</div>
+                               <div className="h-2 w-20 bg-red-200 rounded-full"></div>
+                               <div className="h-2 w-12 bg-red-200 rounded-full"></div>
+                            </div>
+                            <div className="bg-green-50 rounded-xl flex items-center justify-center flex-col gap-2 border border-green-100">
+                               <div className="text-green-600 font-bold">After</div>
+                               <div className="h-2 w-24 bg-green-200 rounded-full"></div>
+                               <div className="h-2 w-20 bg-green-200 rounded-full"></div>
+                               <div className="h-2 w-16 bg-green-200 rounded-full"></div>
+                            </div>
+                          </>
+                        )}
                      </div>
                   </div>
                </div>

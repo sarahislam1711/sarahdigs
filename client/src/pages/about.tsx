@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -7,10 +8,68 @@ import { ArrowRight, ArrowUpRight, Briefcase, Calendar, Layers, Search, LineChar
 
 import stockImage from '@assets/sarah-portrait.jpeg';
 
-const AboutHero = () => {
+interface HeroContent {
+  title: string;
+  name: string;
+  intro: string;
+  tagline1: string;
+  tagline2: string;
+  tagline3: string;
+  imageUrl?: string;
+  backgroundImage?: string;
+}
+
+interface StoryContent {
+  paragraph1: string;
+  paragraph2: string;
+  paragraph3: string;
+}
+
+interface CtaContent {
+  title: string;
+  subtitle: string;
+  buttonText: string;
+}
+
+const defaultHero: HeroContent = {
+  title: "Meet",
+  name: "Sarah!",
+  intro: "I'm Sarah, a marketing consultant who digs deep into search, data, and user behavior to help brands grow organically. I keep things simple, strategic, and rooted in what actually works.",
+  tagline1: "Depth over Speed",
+  tagline2: "Data over Guesswork",
+  tagline3: "Clarity over Jargon",
+};
+
+const defaultStory: StoryContent = {
+  paragraph1: "I didn't start as a consultant. I started in the trenches of digital marketing, managing campaigns for fast-paced startups where every dollar spent needed to show a return.",
+  paragraph2: "Over the last 8 years, I've worked with everything from scrappy SaaS startups to established e-commerce giants. I noticed a pattern: most companies were sitting on a goldmine of data but were too busy chasing the shiny \"hack\" to notice it.",
+  paragraph3: "That's why I started SarahDigs. I wanted to offer a different kind of partnership—one that values depth, honesty, and excavation. I don't just hand you a report and walk away. I dig in with you to build a foundation that lasts.",
+};
+
+const defaultCta: CtaContent = {
+  title: "Ready to Dig Deep?",
+  subtitle: "Let's uncover the opportunities hidden in your data. No fluff, just growth.",
+  buttonText: "Book a Free Consultation",
+};
+
+const AboutHero = ({ content }: { content: HeroContent }) => {
+  const heroImage = content.imageUrl || stockImage;
+  
   return (
-    <section className="pt-40 pb-20 bg-[#FBFCFE]">
-      <div className="container mx-auto px-6">
+    <section 
+      className="pt-40 pb-20 bg-[#FBFCFE] relative overflow-hidden"
+      style={content.backgroundImage ? {
+        backgroundImage: `url(${content.backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      } : {}}
+    >
+      {/* Overlay for background image */}
+      {content.backgroundImage && (
+        <div className="absolute inset-0 bg-[#FBFCFE]/85 backdrop-blur-sm"></div>
+      )}
+      
+      <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <div className="lg:w-1/2">
             <motion.h1 
@@ -19,7 +78,7 @@ const AboutHero = () => {
               transition={{ duration: 0.6 }}
               className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] flex items-center gap-6"
             >
-              Meet <br/>Sarah!
+              {content.title} <br/>{content.name}
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
@@ -27,7 +86,7 @@ const AboutHero = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl md:text-2xl font-light text-[#1B1B1B]/80 leading-relaxed max-w-lg relative"
             >
-              I'm Sarah, a marketing consultant who digs deep into search, data, and user behavior to help brands grow organically. I keep things simple, strategic, and rooted in what actually works.
+              {content.intro}
 
               {/* Mobile Layout - Horizontal Stack below text */}
               <div className="flex flex-wrap gap-2 mt-6 md:hidden">
@@ -36,21 +95,21 @@ const AboutHero = () => {
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   className="bg-[#4D00FF] text-white px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
-                   Depth over Speed
+                   {content.tagline1}
                 </motion.div>
                 <motion.div 
                   animate={{ y: [0, 5, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
                   className="bg-[#1B1B1B] text-white px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
-                   Data over Guesswork
+                   {content.tagline2}
                 </motion.div>
                 <motion.div 
                   animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
                   className="bg-white border border-[#1B1B1B]/10 text-[#4D00FF] px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
-                   Clarity over Jargon
+                   {content.tagline3}
                 </motion.div>
               </div>
             </motion.p>
@@ -63,7 +122,7 @@ const AboutHero = () => {
               className="relative z-10"
             >
                <div className="relative h-[600px] w-full rounded-[2.5rem] overflow-hidden">
-                 <img src={stockImage} alt="Sarah Portrait" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                 <img src={heroImage} alt="Sarah Portrait" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                  <div className="absolute inset-0 bg-gradient-to-t from-[#1B1B1B]/50 to-transparent opacity-50"></div>
                </div>
 
@@ -74,7 +133,7 @@ const AboutHero = () => {
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   className="bg-[#4D00FF] text-white px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start"
                 >
-                   Depth over Speed
+                   {content.tagline1}
                 </motion.div>
 
                 <motion.div 
@@ -82,7 +141,7 @@ const AboutHero = () => {
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                   className="bg-[#1B1B1B] text-white px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap ml-6"
                 >
-                   Data over Guesswork
+                   {content.tagline2}
                 </motion.div>
 
                 <motion.div 
@@ -90,7 +149,7 @@ const AboutHero = () => {
                   transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                   className="bg-white border border-[#1B1B1B]/10 text-[#4D00FF] px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start ml-2"
                 >
-                   Clarity over Jargon
+                   {content.tagline3}
                 </motion.div>
               </div>
             </motion.div>
@@ -103,14 +162,14 @@ const AboutHero = () => {
 
 const WhyTrustMe = () => {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-white border-b border-[#1B1B1B]/10">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <span className="text-[#4D00FF] font-bold uppercase tracking-widest text-lg mb-4 block">Why Trust Me?</span>
-          <h2 className="text-3xl md:text-4xl font-bold leading-snug mb-8">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#4D00FF]">Why Trust Me?</span>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mt-4 mb-8">
             I bridge the gap between technical complexity and human connection.
           </h2>
-          <p className="text-xl text-[#1B1B1B]/70 leading-relaxed">
+          <p className="text-lg text-[#1B1B1B]/70 leading-relaxed">
             I help ambitious brands who are tired of surface-level tactics. My method works because I don't just look at the "what" (metrics), I uncover the "why" (behavior). By combining technical SEO precision with deep user empathy, I build growth engines that are sustainable, scalable, and surprisingly simple.
           </p>
         </div>
@@ -119,28 +178,25 @@ const WhyTrustMe = () => {
   );
 };
 
-const MyStory = () => {
+const MyStory = ({ content }: { content: StoryContent }) => {
   return (
-    <section className="py-24 bg-[#F4F2FF]">
+    <section className="py-24 bg-[#FBFCFE]">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row gap-16 items-start">
-           <div className="lg:w-1/3 sticky top-32">
-              <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6">My Story</h2>
-              <div className="w-20 h-1 bg-[#4D00FF]"></div>
-           </div>
-           <div className="lg:w-2/3 space-y-8 text-lg leading-relaxed text-[#1B1B1B]/80">
-              <p>
-                I didn't start as a consultant. I started in the trenches of digital marketing, managing campaigns for fast-paced startups where every dollar spent needed to show a return.
-              </p>
-              <p>
-                Over the last 6 years, I've worked with everything from scrappy SaaS startups to established e-commerce giants. I noticed a pattern: most companies were sitting on a goldmine of data but were too busy chasing the latest "hack" to notice it.
-              </p>
-              <p>
-                They were creating content blindly, hoping something would stick. They were ignoring technical debt that was silently killing their growth.
-              </p>
-              <p>
-                That's why I started SarahDigs. I wanted to offer a different kind of partnership—one that values depth, honesty, and excavation. I don't just hand you a report and walk away. I dig in with you to build a foundation that lasts.
-              </p>
+        <div className="flex flex-col lg:flex-row items-start gap-16">
+          <div className="lg:w-1/3 lg:sticky lg:top-32">
+            <motion.h2 
+               initial={{ opacity: 0 }}
+               whileInView={{ opacity: 1 }}
+               viewport={{ once: true }}
+               className="text-7xl md:text-8xl font-black tracking-tighter leading-[0.85]"
+            >
+              My<br/>Story
+            </motion.h2>
+          </div>
+           <div className="lg:w-2/3 text-lg text-[#1B1B1B]/80 leading-relaxed space-y-6">
+              <p>{content.paragraph1}</p>
+              <p>{content.paragraph2}</p>
+              <p>{content.paragraph3}</p>
            </div>
         </div>
       </div>
@@ -203,94 +259,73 @@ const ClientStories = () => {
 };
 
 const Expertise = () => {
-   return (
-     <section className="py-24 bg-white">
-       <div className="container mx-auto px-6">
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-           <div>
-             <span className="text-[#4D00FF] font-bold uppercase tracking-widest text-lg mb-4 block">Expertise</span>
-             <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-8">
-               Specific expertise, <br/>concrete results.
-             </h2>
-             <p className="text-lg text-[#1B1B1B]/70 max-w-md">
-               I don't do "general marketing". I specialize in the channels and strategies that drive sustainable, long-term growth.
-             </p>
-           </div>
-           <div className="grid grid-cols-1 gap-8">
-              <div className="flex gap-6 items-start">
-                 <div className="w-16 h-16 bg-[#F4F2FF] rounded-2xl flex items-center justify-center shrink-0">
-                    <LineChart className="w-8 h-8 text-[#4D00FF]" />
-                 </div>
-                 <div>
-                   <h3 className="text-xl font-bold mb-2">Conversion Rate Optimization</h3>
-                   <p className="text-[#1B1B1B]/70 leading-relaxed">
-                     Helped 15+ SaaS companies increase conversion rates by an average of 40% through data-driven A/B testing and user journey mapping.
-                   </p>
-                 </div>
+  const areas = [
+    {
+      icon: <Search className="w-6 h-6" />,
+      title: "Conversion Rate Optimization",
+      desc: "Helped 30+ SaaS companies increase conversion rates by an average of 40% through data-driven A/B testing and user journey mapping."
+    },
+    {
+      icon: <Layers className="w-6 h-6" />,
+      title: "Technical SEO Recovery",
+      desc: "Recovered a major brand from years' worth of penalties, restoring and surpassing previous traffic levels within 6 months."
+    },
+    {
+      icon: <FileText className="w-6 h-6" />,
+      title: "Content Strategy",
+      desc: "Designed content engines for 50+ startups that reduced CAC by 30% while doubling organic lead volume."
+    }
+  ];
+
+  return (
+    <section className="py-24 bg-[#FBFCFE] border-b border-[#1B1B1B]/10">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col lg:flex-row gap-16">
+          <div className="lg:w-1/3">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#4D00FF]">Expertise</span>
+            <h2 className="text-4xl font-bold tracking-tighter mt-4 mb-6">Specific expertise, concrete results.</h2>
+            <p className="text-[#1B1B1B]/70 leading-relaxed">
+              I don't do "general marketing". I specialize in the channels and strategies that drive sustainable, long-term growth.
+            </p>
+          </div>
+          <div className="lg:w-2/3 space-y-8">
+            {areas.map((area, i) => (
+              <div key={i} className="flex gap-6 items-start p-6 bg-white rounded-2xl border border-[#1B1B1B]/5">
+                <div className="bg-[#F4F2FF] text-[#4D00FF] p-3 rounded-xl">{area.icon}</div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">{area.title}</h3>
+                  <p className="text-[#1B1B1B]/70 leading-relaxed">{area.desc}</p>
+                </div>
               </div>
-              <div className="flex gap-6 items-start">
-                 <div className="w-16 h-16 bg-[#F4F2FF] rounded-2xl flex items-center justify-center shrink-0">
-                    <Search className="w-8 h-8 text-[#4D00FF]" />
-                 </div>
-                 <div>
-                   <h3 className="text-xl font-bold mb-2">Technical SEO Recovery</h3>
-                   <p className="text-[#1B1B1B]/70 leading-relaxed">
-                     Recovered 3 major brands from algorithmic penalties, restoring and surpassing previous traffic levels within 6 months.
-                   </p>
-                 </div>
-              </div>
-              <div className="flex gap-6 items-start">
-                 <div className="w-16 h-16 bg-[#F4F2FF] rounded-2xl flex items-center justify-center shrink-0">
-                    <FileText className="w-8 h-8 text-[#4D00FF]" />
-                 </div>
-                 <div>
-                   <h3 className="text-xl font-bold mb-2">Content Strategy</h3>
-                   <p className="text-[#1B1B1B]/70 leading-relaxed">
-                     Designed content engines for B2B startups that reduced CAC by 30% while doubling organic lead volume.
-                   </p>
-                 </div>
-              </div>
-           </div>
-         </div>
-       </div>
-     </section>
-   );
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const Timeline = () => {
-  const events = [
+  const milestones = [
     { year: "2019", title: "Started in digital marketing", desc: "Cut my teeth in paid ads and social." },
     { year: "2020", title: "Specialized in SEO & Content", desc: "Discovered the power of organic growth." },
     { year: "2021", title: "Agency Life", desc: "Worked with SaaS, e-commerce, and diverse clients." },
-    { year: "2023", title: "Head of Growth", desc: "Led organic growth for multiple 7-figure brands." },
+    { year: "2023", title: "Head of Growth", desc: "Led organic growth for a major fintech brand." },
     { year: "2025", title: "Launched SarahDigs", desc: "Bringing my excavation method to the world." }
   ];
 
   return (
-    <section className="py-24 bg-[#F4F2FF] overflow-x-hidden">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold tracking-tighter mb-24 text-center">My Journey</h2>
-        
+        <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">My Journey</h2>
         <div className="relative">
-          {/* Horizontal Line (Desktop) */}
-          <div className="hidden md:block absolute top-[7px] left-0 right-0 h-[2px] bg-[#1B1B1B]/10"></div>
-          
-          {/* Vertical Line (Mobile) */}
-          <div className="md:hidden absolute left-[15px] top-0 bottom-0 w-[2px] bg-[#1B1B1B]/10"></div>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-4">
-            {events.map((event, i) => (
-              <div key={i} className="flex md:flex-col gap-6 md:gap-8 relative">
-                 {/* Dot */}
-                 <div className="shrink-0 w-8 h-8 rounded-full bg-white border-4 border-[#F4F2FF] shadow-lg flex items-center justify-center z-10 relative md:mx-auto">
-                    <div className="w-3 h-3 bg-[#4D00FF] rounded-full"></div>
-                 </div>
-                 
-                 <div className="md:text-center pt-1">
-                   <span className="text-sm font-bold uppercase tracking-widest text-[#4D00FF] mb-2 block">{event.year}</span>
-                   <h3 className="text-lg font-bold mb-2 leading-tight">{event.title}</h3>
-                   <p className="text-sm text-[#1B1B1B]/70 leading-relaxed">{event.desc}</p>
-                 </div>
+          <div className="hidden md:block absolute top-6 left-0 right-0 h-0.5 bg-[#1B1B1B]/10"></div>
+          <div className="flex flex-col md:flex-row gap-8 justify-between">
+            {milestones.map((m, i) => (
+              <div key={i} className="flex flex-col items-center text-center flex-1">
+                <div className="w-12 h-12 bg-[#4D00FF] text-white rounded-full flex items-center justify-center font-bold mb-4 z-10">{m.year}</div>
+                <h3 className="font-bold mb-1">{m.title}</h3>
+                <p className="text-sm text-[#1B1B1B]/60">{m.desc}</p>
               </div>
             ))}
           </div>
@@ -302,81 +337,74 @@ const Timeline = () => {
 
 const Tools = () => {
   const tools = [
-    { name: "Search Console", icon: Search },
-    { name: "GA4", icon: LineChart },
-    { name: "Ahrefs", icon: Layers },
-    { name: "SEMRush", icon: BarChart4 },
-    { name: "Tag Manager", icon: Tags },
-    { name: "Webflow", icon: Globe },
-    { name: "WordPress", icon: Briefcase },
-    { name: "Screaming Frog", icon: Terminal },
-    { name: "ChatGPT", icon: MessageSquare },
-    { name: "Claude", icon: MessageCircle },
-    { name: "Elevenlabs", icon: Mic },
-    { name: "Notion", icon: FileText },
-    { name: "ClickUp", icon: CheckSquare }
+    { name: "Ahrefs", icon: <Search className="w-6 h-6" /> },
+    { name: "SEMRush", icon: <BarChart4 className="w-6 h-6" /> },
+    { name: "Tag Manager", icon: <Tags className="w-6 h-6" /> },
+    { name: "Webflow", icon: <Globe className="w-6 h-6" /> },
+    { name: "WordPress", icon: <FileText className="w-6 h-6" /> },
+    { name: "Screaming Frog", icon: <Terminal className="w-6 h-6" /> },
+    { name: "ChatGPT", icon: <MessageSquare className="w-6 h-6" /> },
+    { name: "Claude", icon: <MessageCircle className="w-6 h-6" /> },
+    { name: "Notion", icon: <Layers className="w-6 h-6" /> },
   ];
-
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-6 text-center mb-16">
-        <h2 className="text-3xl font-bold tracking-tighter">Tools of the trade</h2>
-      </div>
-      
-      <div className="relative w-full">
-        {/* Gradient Masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-32 bg-gradient-to-r from-white to-transparent z-10"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
-        
-        <div className="flex overflow-hidden">
-          <motion.div 
-            className="flex gap-12 md:gap-20 items-center px-10"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-          >
-            {[...tools, ...tools].map((tool, i) => (
-              <div key={i} className="flex flex-col items-center gap-4 group shrink-0 opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-default">
-                 <div className="w-20 h-20 bg-[#FBFCFE] rounded-2xl border border-[#1B1B1B]/10 flex items-center justify-center group-hover:border-[#4D00FF] group-hover:shadow-lg transition-all duration-300">
-                    <tool.icon className="w-8 h-8 text-[#1B1B1B] group-hover:text-[#4D00FF] transition-colors" />
-                 </div>
-                 <span className="font-medium text-sm whitespace-nowrap">{tool.name}</span>
+    <section className="py-24 bg-[#FBFCFE] border-t border-[#1B1B1B]/10">
+       <div className="container mx-auto px-6">
+         <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">Tools of the trade</h2>
+         <div className="flex flex-wrap justify-center gap-8">
+            {tools.map((tool, i) => (
+              <div key={i} className="flex flex-col items-center gap-3 text-[#1B1B1B]/70 hover:text-[#4D00FF] transition-colors">
+                {tool.icon}
+                <span className="text-sm font-medium">{tool.name}</span>
               </div>
             ))}
-          </motion.div>
-        </div>
-      </div>
+         </div>
+       </div>
     </section>
   );
 };
 
-const FinalCTA = () => {
+const FinalCTA = ({ content }: { content: CtaContent }) => {
   return (
     <section className="py-32 bg-[#1B1B1B] text-white text-center">
        <div className="container mx-auto px-6">
-          <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8">Ready to Dig Deep?</h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto mb-12">
-            Let's uncover the opportunities hidden in your data. No fluff, just growth.
-          </p>
-          <Button size="lg" className="text-lg h-16 px-10 bg-[#4D00FF] hover:bg-white hover:text-[#4D00FF] transition-all rounded-full">
-            Book a Free Consultation
-          </Button>
+          <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-6">{content.title}</h2>
+          <p className="text-xl text-white/70 max-w-xl mx-auto mb-10">{content.subtitle}</p>
+          <Link href="/contact">
+            <Button size="lg" className="text-lg h-16 px-10 bg-[#4D00FF] hover:bg-white hover:text-[#4D00FF] transition-all rounded-full">
+              {content.buttonText}
+            </Button>
+          </Link>
        </div>
     </section>
   );
 };
 
 export default function About() {
+  const { data: pageContent } = useQuery<Record<string, any>>({
+    queryKey: ["/api/page-content", "about"],
+    queryFn: async () => {
+      const res = await fetch("/api/page-content/about");
+      if (!res.ok) return {};
+      return res.json();
+    },
+  });
+
+  const heroContent = (pageContent?.hero as HeroContent) || defaultHero;
+  const storyContent = (pageContent?.story as StoryContent) || defaultStory;
+  const ctaContent = (pageContent?.cta as CtaContent) || defaultCta;
+
   return (
     <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
       <Navbar />
-      <AboutHero />
+      <AboutHero content={heroContent} />
       <WhyTrustMe />
-      <MyStory />
+      <MyStory content={storyContent} />
       <ClientStories />
       <Expertise />
       <Timeline />
       <Tools />
-      <FinalCTA />
+      <FinalCTA content={ctaContent} />
       <Footer />
     </div>
   );
