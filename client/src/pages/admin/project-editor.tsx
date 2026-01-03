@@ -14,9 +14,19 @@ import {
   Loader2,
   Image as ImageIcon,
   X,
-  Plus
+  Plus,
+  GripVertical,
+  Calendar,
+  Flag
 } from "lucide-react";
 import { Link } from "wouter";
+
+interface TimelineItem {
+  phase: string;
+  title: string;
+  description: string;
+  date?: string;
+}
 
 interface Project {
   id?: string;
@@ -39,6 +49,7 @@ interface Project {
   isVisible: boolean;
   isFeatured: boolean;
   displayOrder: number;
+  timeline: TimelineItem[];
 }
 
 const defaultProject: Project = {
@@ -61,6 +72,7 @@ const defaultProject: Project = {
   isVisible: true,
   isFeatured: false,
   displayOrder: 0,
+  timeline: [],
 };
 
 export default function ProjectEditor() {
@@ -95,6 +107,7 @@ export default function ProjectEditor() {
         results: existingProject.results || [],
         testimonial: existingProject.testimonial || { quote: "", author: "", role: "" },
         tags: existingProject.tags || [],
+        timeline: existingProject.timeline || [],
       });
     }
   }, [existingProject]);
@@ -143,6 +156,7 @@ export default function ProjectEditor() {
     setProject((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Results functions
   const addResult = () => {
     setProject((prev) => ({
       ...prev,
@@ -166,6 +180,7 @@ export default function ProjectEditor() {
     }));
   };
 
+  // Gallery functions
   const addGalleryImage = () => {
     const url = prompt("Enter image URL:");
     if (url) {
@@ -183,6 +198,57 @@ export default function ProjectEditor() {
     }));
   };
 
+  // Timeline functions
+  const addTimelineItem = () => {
+    const nextPhase = String(project.timeline.length + 1).padStart(2, "0");
+    setProject((prev) => ({
+      ...prev,
+      timeline: [
+        ...prev.timeline,
+        { phase: nextPhase, title: "", description: "", date: "" },
+      ],
+    }));
+  };
+
+  const updateTimelineItem = (
+    index: number,
+    field: keyof TimelineItem,
+    value: string
+  ) => {
+    setProject((prev) => ({
+      ...prev,
+      timeline: prev.timeline.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
+      ),
+    }));
+  };
+
+  const removeTimelineItem = (index: number) => {
+    setProject((prev) => ({
+      ...prev,
+      timeline: prev.timeline.filter((_, i) => i !== index),
+    }));
+  };
+
+  const moveTimelineItem = (index: number, direction: "up" | "down") => {
+    const newTimeline = [...project.timeline];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= newTimeline.length) return;
+    
+    [newTimeline[index], newTimeline[targetIndex]] = [
+      newTimeline[targetIndex],
+      newTimeline[index],
+    ];
+    
+    // Update phase numbers
+    newTimeline.forEach((item, i) => {
+      item.phase = String(i + 1).padStart(2, "0");
+    });
+    
+    setProject((prev) => ({ ...prev, timeline: newTimeline }));
+  };
+
   if (isLoading) {
     return (
       <AdminLayout title="Loading...">
@@ -198,6 +264,7 @@ export default function ProjectEditor() {
     { id: "content", label: "Content" },
     { id: "media", label: "Media" },
     { id: "results", label: "Results" },
+    { id: "timeline", label: "Timeline" },
     { id: "settings", label: "Settings" },
   ];
 
@@ -227,7 +294,7 @@ export default function ProjectEditor() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-gray-800 pb-2">
+        <div className="flex gap-2 border-b border-gray-800 pb-2 flex-wrap">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -507,6 +574,145 @@ export default function ProjectEditor() {
                   </p>
                 )}
               </div>
+            </div>
+          )}
+
+          {activeTab === "timeline" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="text-white text-lg">Project Timeline</Label>
+                  <p className="text-gray-500 text-sm mt-1">
+                    Add phases or milestones to show the project progression
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={addTimelineItem}
+                  className="border-gray-700 text-gray-400 hover:text-white"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add Phase
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {project.timeline.map((item, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-700 rounded-lg p-4 bg-gray-900/50"
+                  >
+                    <div className="flex items-start gap-4">
+                      {/* Phase number indicator */}
+                      <div className="flex flex-col items-center gap-1">
+                        <div className="w-10 h-10 rounded-full bg-[#4D00FF] flex items-center justify-center text-white font-bold">
+                          {item.phase}
+                        </div>
+                        <div className="flex flex-col gap-1 mt-2">
+                          <button
+                            onClick={() => moveTimelineItem(index, "up")}
+                            disabled={index === 0}
+                            className="p-1 text-gray-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                            title="Move up"
+                          >
+                            ▲
+                          </button>
+                          <button
+                            onClick={() => moveTimelineItem(index, "down")}
+                            disabled={index === project.timeline.length - 1}
+                            className="p-1 text-gray-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                            title="Move down"
+                          >
+                            ▼
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Content fields */}
+                      <div className="flex-1 space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-gray-300">Phase Title *</Label>
+                            <Input
+                              value={item.title}
+                              onChange={(e) =>
+                                updateTimelineItem(index, "title", e.target.value)
+                              }
+                              placeholder="e.g., Discovery & Research"
+                              className="bg-gray-800 border-gray-700 text-white"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-gray-300 flex items-center gap-2">
+                              <Calendar className="w-4 h-4" />
+                              Date / Duration (optional)
+                            </Label>
+                            <Input
+                              value={item.date || ""}
+                              onChange={(e) =>
+                                updateTimelineItem(index, "date", e.target.value)
+                              }
+                              placeholder="e.g., Week 1-2 or Jan 2024"
+                              className="bg-gray-800 border-gray-700 text-white"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-gray-300">Description</Label>
+                          <Textarea
+                            value={item.description}
+                            onChange={(e) =>
+                              updateTimelineItem(index, "description", e.target.value)
+                            }
+                            placeholder="What happened during this phase? What was delivered?"
+                            className="bg-gray-800 border-gray-700 text-white"
+                            rows={2}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Delete button */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeTimelineItem(index)}
+                        className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+
+                {project.timeline.length === 0 && (
+                  <div className="text-center py-12 border border-dashed border-gray-700 rounded-lg">
+                    <Flag className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                    <p className="text-gray-500 mb-2">No timeline phases added yet</p>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Add phases to showcase your project process and milestones
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={addTimelineItem}
+                      className="border-gray-700 text-gray-400 hover:text-white"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add First Phase
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {project.timeline.length > 0 && (
+                <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
+                  <p className="text-gray-400 text-sm">
+                    <strong className="text-white">Tip:</strong> A good project timeline typically includes 
+                    3-5 phases such as: Discovery, Strategy, Design, Development, Launch & Results.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

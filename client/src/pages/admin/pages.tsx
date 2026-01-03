@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Save, Plus, Trash2, FileText, Sparkles, Brain, LineChart, Mail, Zap, BookOpen, MessageSquare, AlertCircle, Home, LayoutList, CheckCircle, HelpCircle, ListOrdered, Briefcase, User, Image } from "lucide-react";
+import { Save, Plus, Trash2, FileText, Sparkles, Brain, LineChart, Mail, Zap, BookOpen, MessageSquare, AlertCircle, Home, LayoutList, CheckCircle, HelpCircle, ListOrdered, Briefcase, User, Image, Phone, MapPin, Clock, Target } from "lucide-react";
 import type { PageContent } from "@shared/schema";
 
 const VALID_ICONS = ["Sparkles", "Brain", "LineChart", "Mail", "Zap", "BookOpen", "MessageSquare", "FileText"] as const;
@@ -1163,12 +1163,667 @@ function ConsultationsPageEditor() {
   );
 }
 
+// ============ CONTACT PAGE EDITOR ============
+
+interface ContactHeroContent {
+  title: string;
+  subtitle: string;
+  description: string;
+}
+
+interface ContactInfoContent {
+  email: string;
+  phone: string;
+  location: string;
+  availability: string;
+}
+
+interface ContactFormContent {
+  formTitle: string;
+  formSubtitle: string;
+  submitButtonText: string;
+  successMessage: string;
+}
+
+function ContactPageEditor() {
+  const { toast } = useToast();
+  
+  const { data: pageContent = [], isLoading } = useQuery<PageContent[]>({
+    queryKey: ["/api/admin/page-content", "contact"],
+    queryFn: async () => {
+      const res = await fetch("/api/admin/page-content/contact", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch");
+      return res.json();
+    },
+  });
+
+  const getSection = (key: string) => {
+    const section = pageContent.find(p => p.sectionKey === key);
+    return section?.content || null;
+  };
+
+  const [heroContent, setHeroContent] = useState<ContactHeroContent>({
+    title: "Let's Connect",
+    subtitle: "Ready to dig deep?",
+    description: "Whether you have a question, want to discuss a project, or just want to say hello — I'd love to hear from you.",
+  });
+
+  const [contactInfo, setContactInfo] = useState<ContactInfoContent>({
+    email: "hello@sarahdigs.com",
+    phone: "+1 (555) 000-0000",
+    location: "Remote / Worldwide",
+    availability: "Mon-Fri, 9am-6pm EST",
+  });
+
+  const [formContent, setFormContent] = useState<ContactFormContent>({
+    formTitle: "Send a Message",
+    formSubtitle: "Fill out the form below and I'll get back to you within 24 hours.",
+    submitButtonText: "Send Message",
+    successMessage: "Thanks for reaching out! I'll get back to you soon.",
+  });
+
+  useEffect(() => {
+    if (pageContent.length > 0) {
+      const hero = getSection("hero") as ContactHeroContent | null;
+      const info = getSection("contactInfo") as ContactInfoContent | null;
+      const form = getSection("form") as ContactFormContent | null;
+      
+      if (hero) setHeroContent(hero);
+      if (info) setContactInfo(info);
+      if (form) setFormContent(form);
+    }
+  }, [pageContent]);
+
+  const saveMutation = useMutation({
+    mutationFn: async (data: { pageSlug: string; sectionKey: string; content: unknown }) => {
+      return await apiRequest("PUT", "/api/admin/page-content", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/page-content", "contact"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/page-content", "contact"] });
+      toast({ title: "Content saved successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to save content", variant: "destructive" });
+    },
+  });
+
+  const saveHero = () => saveMutation.mutate({ pageSlug: "contact", sectionKey: "hero", content: heroContent });
+  const saveContactInfo = () => saveMutation.mutate({ pageSlug: "contact", sectionKey: "contactInfo", content: contactInfo });
+  const saveFormContent = () => saveMutation.mutate({ pageSlug: "contact", sectionKey: "form", content: formContent });
+
+  if (isLoading) {
+    return <div className="text-gray-400">Loading...</div>;
+  }
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <FileText className="w-5 h-5" />
+            Hero Section
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label className="text-gray-300">Title</Label>
+            <Input
+              value={heroContent.title}
+              onChange={(e) => setHeroContent({ ...heroContent, title: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Subtitle</Label>
+            <Input
+              value={heroContent.subtitle}
+              onChange={(e) => setHeroContent({ ...heroContent, subtitle: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Description</Label>
+            <Textarea
+              value={heroContent.description}
+              onChange={(e) => setHeroContent({ ...heroContent, description: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+              rows={3}
+            />
+          </div>
+          <Button onClick={saveHero} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Hero
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <Phone className="w-5 h-5" />
+            Contact Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label className="text-gray-300 flex items-center gap-2">
+                <Mail className="w-4 h-4" /> Email
+              </Label>
+              <Input
+                value={contactInfo.email}
+                onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
+                className="bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+            <div>
+              <Label className="text-gray-300 flex items-center gap-2">
+                <Phone className="w-4 h-4" /> Phone
+              </Label>
+              <Input
+                value={contactInfo.phone}
+                onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
+                className="bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label className="text-gray-300 flex items-center gap-2">
+                <MapPin className="w-4 h-4" /> Location
+              </Label>
+              <Input
+                value={contactInfo.location}
+                onChange={(e) => setContactInfo({ ...contactInfo, location: e.target.value })}
+                className="bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+            <div>
+              <Label className="text-gray-300 flex items-center gap-2">
+                <Clock className="w-4 h-4" /> Availability
+              </Label>
+              <Input
+                value={contactInfo.availability}
+                onChange={(e) => setContactInfo({ ...contactInfo, availability: e.target.value })}
+                className="bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+          </div>
+          <Button onClick={saveContactInfo} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Contact Info
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <MessageSquare className="w-5 h-5" />
+            Form Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label className="text-gray-300">Form Title</Label>
+            <Input
+              value={formContent.formTitle}
+              onChange={(e) => setFormContent({ ...formContent, formTitle: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Form Subtitle</Label>
+            <Input
+              value={formContent.formSubtitle}
+              onChange={(e) => setFormContent({ ...formContent, formSubtitle: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Submit Button Text</Label>
+            <Input
+              value={formContent.submitButtonText}
+              onChange={(e) => setFormContent({ ...formContent, submitButtonText: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Success Message</Label>
+            <Textarea
+              value={formContent.successMessage}
+              onChange={(e) => setFormContent({ ...formContent, successMessage: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+              rows={2}
+            />
+          </div>
+          <Button onClick={saveFormContent} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Form Settings
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// ============ DIG ON DEMAND PAGE EDITOR ============
+
+interface DigOnDemandHeroContent {
+  badge: string;
+  title: string;
+  titleHighlight: string;
+  description: string;
+  ctaText: string;
+}
+
+interface WhatYouGetCard {
+  title: string;
+  description: string;
+}
+
+interface TimelineStep {
+  id: string;
+  title: string;
+  description: string;
+}
+
+interface ModuleOption {
+  name: string;
+}
+
+interface DigOnDemandFormContent {
+  formTitle: string;
+  formSubtitle: string;
+  submitButtonText: string;
+  budgetOptions: string[];
+}
+
+function DigOnDemandPageEditor() {
+  const { toast } = useToast();
+  
+  const { data: pageContent = [], isLoading } = useQuery<PageContent[]>({
+    queryKey: ["/api/admin/page-content", "dig-on-demand"],
+    queryFn: async () => {
+      const res = await fetch("/api/admin/page-content/dig-on-demand", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch");
+      return res.json();
+    },
+  });
+
+  const getSection = (key: string) => {
+    const section = pageContent.find(p => p.sectionKey === key);
+    return section?.content || null;
+  };
+
+  const [heroContent, setHeroContent] = useState<DigOnDemandHeroContent>({
+    badge: "Custom Solutions Built Around You",
+    title: "Your business is unique.",
+    titleHighlight: "Your marketing should be too.",
+    description: "Custom-built brand, strategy, and SEO packages tailored to your exact stage, challenge, and goals.",
+    ctaText: "Start Your Custom Plan",
+  });
+
+  const [whatYouGet, setWhatYouGet] = useState<WhatYouGetCard[]>([
+    { title: "Deep Discovery", description: "Mini-audit + insights to understand brand, audience, gaps, and growth levers." },
+    { title: "Tailored Strategy", description: "A modular plan covering exactly what you need: brand, positioning, SEO, CRO, content, funnels, etc." },
+    { title: "Fast Implementation Support", description: "Action steps, frameworks, and direction you can activate immediately." },
+    { title: "Founder-Friendly Collaboration", description: "Clear communication, async support, and a no-fluff, structured workflow." },
+  ]);
+
+  const [modules, setModules] = useState<ModuleOption[]>([
+    { name: "Brand & Positioning" },
+    { name: "Messaging" },
+    { name: "Brand Identity Direction" },
+    { name: "Website Review" },
+    { name: "SEO Strategy" },
+    { name: "Content Strategy" },
+    { name: "Social Growth Plan" },
+    { name: "Funnel Strategy" },
+    { name: "Audience Research" },
+    { name: "Competitor Analysis" },
+    { name: "Keyword Discovery" },
+    { name: "Email Strategy" },
+    { name: "Product & Feature GTM" },
+    { name: "Analytics Review" },
+  ]);
+
+  const [timeline, setTimeline] = useState<TimelineStep[]>([
+    { id: "01", title: "Tell me what you need", description: "Quick form or intake quiz." },
+    { id: "02", title: "I design a custom plan", description: "A tailored package that aligns with your goals, budget, and urgency." },
+    { id: "03", title: "We execute together", description: "Hands-on support, frameworks, and direction." },
+  ]);
+
+  const [formContent, setFormContent] = useState<DigOnDemandFormContent>({
+    formTitle: "Let's Build Your Custom Marketing Plan",
+    formSubtitle: "Tell me your goals, challenges, and what you want to improve — I'll create a custom strategy just for you.",
+    submitButtonText: "Let's Plan Your Next Move",
+    budgetOptions: ["$2,000 - $5,000", "$5,000 - $10,000", "$10,000 - $15,000", "$20,000+"],
+  });
+
+  useEffect(() => {
+    if (pageContent.length > 0) {
+      const hero = getSection("hero") as DigOnDemandHeroContent | null;
+      const cards = getSection("whatYouGet") as WhatYouGetCard[] | null;
+      const mods = getSection("modules") as ModuleOption[] | null;
+      const steps = getSection("timeline") as TimelineStep[] | null;
+      const form = getSection("form") as DigOnDemandFormContent | null;
+      
+      if (hero) setHeroContent(hero);
+      if (cards) setWhatYouGet(cards);
+      if (mods) setModules(mods);
+      if (steps) setTimeline(steps);
+      if (form) setFormContent(form);
+    }
+  }, [pageContent]);
+
+  const saveMutation = useMutation({
+    mutationFn: async (data: { pageSlug: string; sectionKey: string; content: unknown }) => {
+      return await apiRequest("PUT", "/api/admin/page-content", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/page-content", "dig-on-demand"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/page-content", "dig-on-demand"] });
+      toast({ title: "Content saved successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to save content", variant: "destructive" });
+    },
+  });
+
+  const saveHero = () => saveMutation.mutate({ pageSlug: "dig-on-demand", sectionKey: "hero", content: heroContent });
+  const saveWhatYouGet = () => saveMutation.mutate({ pageSlug: "dig-on-demand", sectionKey: "whatYouGet", content: whatYouGet });
+  const saveModules = () => saveMutation.mutate({ pageSlug: "dig-on-demand", sectionKey: "modules", content: modules });
+  const saveTimeline = () => saveMutation.mutate({ pageSlug: "dig-on-demand", sectionKey: "timeline", content: timeline });
+  const saveFormContent = () => saveMutation.mutate({ pageSlug: "dig-on-demand", sectionKey: "form", content: formContent });
+
+  if (isLoading) {
+    return <div className="text-gray-400">Loading...</div>;
+  }
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <Target className="w-5 h-5" />
+            Hero Section
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label className="text-gray-300">Badge Text</Label>
+            <Input
+              value={heroContent.badge}
+              onChange={(e) => setHeroContent({ ...heroContent, badge: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Title</Label>
+            <Input
+              value={heroContent.title}
+              onChange={(e) => setHeroContent({ ...heroContent, title: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Title Highlight (colored part)</Label>
+            <Input
+              value={heroContent.titleHighlight}
+              onChange={(e) => setHeroContent({ ...heroContent, titleHighlight: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Description</Label>
+            <Textarea
+              value={heroContent.description}
+              onChange={(e) => setHeroContent({ ...heroContent, description: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+              rows={3}
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">CTA Button Text</Label>
+            <Input
+              value={heroContent.ctaText}
+              onChange={(e) => setHeroContent({ ...heroContent, ctaText: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <Button onClick={saveHero} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Hero
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center justify-between">
+            <span className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              What You Get Cards
+            </span>
+            <Button size="sm" onClick={() => setWhatYouGet([...whatYouGet, { title: "", description: "" }])}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Card
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {whatYouGet.map((card, index) => (
+            <div key={index} className="border border-gray-700 rounded-lg p-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400 text-sm">Card {index + 1}</span>
+                <Button size="icon" variant="ghost" onClick={() => setWhatYouGet(whatYouGet.filter((_, i) => i !== index))}>
+                  <Trash2 className="w-4 h-4 text-red-500" />
+                </Button>
+              </div>
+              <div>
+                <Label className="text-gray-300">Title</Label>
+                <Input
+                  value={card.title}
+                  onChange={(e) => {
+                    const updated = [...whatYouGet];
+                    updated[index].title = e.target.value;
+                    setWhatYouGet(updated);
+                  }}
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+              <div>
+                <Label className="text-gray-300">Description</Label>
+                <Textarea
+                  value={card.description}
+                  onChange={(e) => {
+                    const updated = [...whatYouGet];
+                    updated[index].description = e.target.value;
+                    setWhatYouGet(updated);
+                  }}
+                  className="bg-gray-800 border-gray-700 text-white"
+                  rows={2}
+                />
+              </div>
+            </div>
+          ))}
+          <Button onClick={saveWhatYouGet} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Cards
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center justify-between">
+            <span className="flex items-center gap-2">
+              <LayoutList className="w-5 h-5" />
+              Focus Area Modules
+            </span>
+            <Button size="sm" onClick={() => setModules([...modules, { name: "" }])}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Module
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            {modules.map((mod, index) => (
+              <div key={index} className="flex gap-2">
+                <Input
+                  value={mod.name}
+                  onChange={(e) => {
+                    const updated = [...modules];
+                    updated[index].name = e.target.value;
+                    setModules(updated);
+                  }}
+                  className="bg-gray-800 border-gray-700 text-white flex-1"
+                  placeholder="Module name"
+                />
+                <Button size="icon" variant="ghost" onClick={() => setModules(modules.filter((_, i) => i !== index))}>
+                  <Trash2 className="w-4 h-4 text-red-500" />
+                </Button>
+              </div>
+            ))}
+          </div>
+          <Button onClick={saveModules} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Modules
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center justify-between">
+            <span className="flex items-center gap-2">
+              <ListOrdered className="w-5 h-5" />
+              Timeline Steps
+            </span>
+            <Button size="sm" onClick={() => setTimeline([...timeline, { id: String(timeline.length + 1).padStart(2, '0'), title: "", description: "" }])}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Step
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {timeline.map((step, index) => (
+            <div key={index} className="border border-gray-700 rounded-lg p-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400 text-sm">Step {step.id}</span>
+                <Button size="icon" variant="ghost" onClick={() => setTimeline(timeline.filter((_, i) => i !== index))}>
+                  <Trash2 className="w-4 h-4 text-red-500" />
+                </Button>
+              </div>
+              <div className="grid grid-cols-4 gap-4">
+                <div>
+                  <Label className="text-gray-300">Step ID</Label>
+                  <Input
+                    value={step.id}
+                    onChange={(e) => {
+                      const updated = [...timeline];
+                      updated[index].id = e.target.value;
+                      setTimeline(updated);
+                    }}
+                    className="bg-gray-800 border-gray-700 text-white"
+                  />
+                </div>
+                <div className="col-span-3">
+                  <Label className="text-gray-300">Title</Label>
+                  <Input
+                    value={step.title}
+                    onChange={(e) => {
+                      const updated = [...timeline];
+                      updated[index].title = e.target.value;
+                      setTimeline(updated);
+                    }}
+                    className="bg-gray-800 border-gray-700 text-white"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label className="text-gray-300">Description</Label>
+                <Input
+                  value={step.description}
+                  onChange={(e) => {
+                    const updated = [...timeline];
+                    updated[index].description = e.target.value;
+                    setTimeline(updated);
+                  }}
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+            </div>
+          ))}
+          <Button onClick={saveTimeline} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Timeline
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-[#1a1a1a] border-gray-800">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <MessageSquare className="w-5 h-5" />
+            Form Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label className="text-gray-300">Form Title</Label>
+            <Input
+              value={formContent.formTitle}
+              onChange={(e) => setFormContent({ ...formContent, formTitle: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Form Subtitle</Label>
+            <Textarea
+              value={formContent.formSubtitle}
+              onChange={(e) => setFormContent({ ...formContent, formSubtitle: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+              rows={2}
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Submit Button Text</Label>
+            <Input
+              value={formContent.submitButtonText}
+              onChange={(e) => setFormContent({ ...formContent, submitButtonText: e.target.value })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-gray-300">Budget Options (comma-separated)</Label>
+            <Input
+              value={formContent.budgetOptions.join(", ")}
+              onChange={(e) => setFormContent({ ...formContent, budgetOptions: e.target.value.split(",").map(o => o.trim()).filter(Boolean) })}
+              className="bg-gray-800 border-gray-700 text-white"
+            />
+          </div>
+          <Button onClick={saveFormContent} disabled={saveMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            Save Form Settings
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 // ============ MAIN COMPONENT ============
 
 const availablePages = [
-  { slug: "home", label: "Home Page", icon: Home },
-  { slug: "about", label: "About Page", icon: User },
+  { slug: "home", label: "Home", icon: Home },
+  { slug: "about", label: "About", icon: User },
   { slug: "consultations", label: "Consultations", icon: LayoutList },
+  { slug: "contact", label: "Contact", icon: Mail },
+  { slug: "dig-on-demand", label: "Dig on Demand", icon: Target },
 ];
 
 export default function AdminPages() {
@@ -1181,7 +1836,7 @@ export default function AdminPages() {
       </div>
 
       <Tabs defaultValue="home" className="w-full">
-        <TabsList className="bg-[#1a1a1a] border-gray-800 mb-6">
+        <TabsList className="bg-[#1a1a1a] border-gray-800 mb-6 flex-wrap h-auto gap-1 p-1">
           {availablePages.map((page) => (
             <TabsTrigger
               key={page.slug}
@@ -1204,6 +1859,14 @@ export default function AdminPages() {
 
         <TabsContent value="consultations">
           <ConsultationsPageEditor />
+        </TabsContent>
+
+        <TabsContent value="contact">
+          <ContactPageEditor />
+        </TabsContent>
+
+        <TabsContent value="dig-on-demand">
+          <DigOnDemandPageEditor />
         </TabsContent>
       </Tabs>
     </AdminLayout>
