@@ -262,7 +262,7 @@ const Hero = () => {
 
   return (
     <section 
-      className="flex flex-col justify-center py-[130px] relative overflow-hidden"
+      className="flex flex-col justify-center pt-[180px] pb-[130px] relative overflow-hidden"
       style={heroData.backgroundImage ? {
         backgroundImage: `url(${heroData.backgroundImage})`,
         backgroundSize: 'cover',
