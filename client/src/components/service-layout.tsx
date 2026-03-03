@@ -367,9 +367,11 @@ export const ServiceLayout = ({ content }: { content: ServiceLayoutProps }) => {
             <div className="max-w-3xl mx-auto">
                <h2 className="text-5xl font-black tracking-tighter mb-6">{content.finalCta.title}</h2>
                <p className="text-xl text-[#1B1B1B]/70 mb-10">{content.finalCta.subtitle}</p>
-               <Button size="lg" className="text-lg h-16 px-12 bg-[#4D00FF] hover:bg-[#1B1B1B] text-white transition-all rounded-full shadow-xl shadow-[#4D00FF]/20 mb-6">
-                  {content.finalCta.buttonText}
-               </Button>
+               <Link href="/contact#contact-form">
+                 <Button size="lg" className="text-lg h-16 px-12 bg-[#4D00FF] hover:bg-[#1B1B1B] text-white transition-all rounded-full shadow-xl shadow-[#4D00FF]/20 mb-6 cursor-pointer">
+                    {content.finalCta.buttonText}
+                 </Button>
+               </Link>
                <p className="text-sm font-medium text-[#1B1B1B]/50 uppercase tracking-wide">
                   {content.finalCta.microProof}
                </p>

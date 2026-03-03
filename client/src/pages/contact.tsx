@@ -69,6 +69,15 @@ const CountUp = ({ value, label }: { value: string, label: string }) => {
 
 export default function Contact() {
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (window.location.hash === '#contact-form') {
+      setTimeout(() => {
+        document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -125,10 +134,20 @@ export default function Contact() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-40 pb-20 bg-gradient-to-b from-[#F4F2FF] to-[#FBFCFE]">
-        <div className="container mx-auto px-6">
+      <section className="pt-40 pb-20 bg-gradient-to-b from-[#F4F2FF] to-[#FBFCFE] relative overflow-hidden">
+        {/* Faded background image */}
+        <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
+          backgroundImage: `url(${contactHero})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 20%',
+          opacity: 0.18,
+          maskImage: 'radial-gradient(ellipse at 70% 50%, black 20%, transparent 70%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 70% 50%, black 20%, transparent 70%)',
+        }} />
+
+        <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
@@ -153,16 +172,6 @@ export default function Contact() {
                   </Button>
                 </Link>
               </div>
-            </motion.div>
-            <motion.div 
-               initial={{ opacity: 0, scale: 0.9 }}
-               animate={{ opacity: 1, scale: 1 }}
-               transition={{ duration: 0.6, delay: 0.2 }}
-               className="relative hidden lg:block"
-            >
-               <div className="aspect-square overflow-hidden">
-                  <img src={contactHero} alt="Sarah" className="w-full h-full object-cover object-top" />
-               </div>
             </motion.div>
           </div>
         </div>

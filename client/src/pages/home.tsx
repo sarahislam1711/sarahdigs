@@ -625,17 +625,6 @@ const Contact = () => {
               >
                 {contactData.email}
               </a>
-              <div className="flex gap-4 mt-8">
-                {(contactData.socialLinks || []).map((link: { platform: string; url: string }, i: number) => (
-                  <a
-                    key={i}
-                    href={link.url}
-                    className="text-[#1B1B1B]/70 hover:text-[#4D00FF] transition-colors"
-                  >
-                    {link.platform}
-                  </a>
-                ))}
-              </div>
             </div>
           </div>
           <div className="bg-[#F4F2FF] p-8 md:p-12 shadow-2xl border border-[#1B1B1B]/10 rounded-3xl text-[#1B1B1B] backdrop-blur-sm">
