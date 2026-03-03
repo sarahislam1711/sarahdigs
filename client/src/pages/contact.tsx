@@ -141,7 +141,9 @@ export default function Contact() {
                 Whether you need a quick audit or a full-scale growth excavation, I'm here to help you find the gold in your business.
               </p>
               <div className="flex gap-4">
-                <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all">
+                <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all cursor-pointer"
+                  onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   Book a Free Call
                 </Button>
                 <Link href="/projects">
@@ -241,7 +243,7 @@ export default function Contact() {
 
 
       {/* CTA Form */}
-      <section className="py-32 bg-[#FBFCFE]">
+      <section id="contact-form" className="py-32 bg-[#FBFCFE] scroll-mt-20">
         <div className="container mx-auto px-6">
            <div className="max-w-3xl mx-auto">
              <div className="text-center mb-16">
