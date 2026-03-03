@@ -313,15 +313,24 @@ const Hero = () => {
             <p className="text-lg md:text-xl font-light leading-relaxed text-muted-foreground max-w-lg">
               {heroData.description}
             </p>
-            <Button
-              size="lg"
-              className="text-lg h-14 px-8 w-fit shrink-0 group"
-            >
-              {heroData.ctaText}{" "}
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform" />
-            </Button>
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="mt-12"
+        >
+          <Button
+            size="lg"
+            className="text-lg h-14 px-8 w-fit shrink-0 group"
+            onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            {heroData.ctaText}{" "}
+            <ArrowRight className="ml-2 h-5 w-5 transition-transform" />
+          </Button>
+        </motion.div>
       </div>
     </section>
   );
@@ -408,7 +417,7 @@ const Services = () => {
   const services = servicesData.length > 0 ? servicesData : defaultServices;
 
   return (
-    <section className="py-8 bg-transparent text-[#1B1B1B]">
+    <section id="services" className="py-8 bg-transparent text-[#1B1B1B]">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 pb-8">
           <h2 className="text-5xl md:text-7xl font-bold tracking-tighter">
