@@ -22,6 +22,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer as FooterComponent } from "@/components/layout/footer";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import heroBg from "@/assets/hero-bg.jpg";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Search,
@@ -268,7 +269,7 @@ const Hero = () => {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: `url(/IMG_6646.jpg)`,
+          backgroundImage: `url(${heroBg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           opacity: 0.12,
