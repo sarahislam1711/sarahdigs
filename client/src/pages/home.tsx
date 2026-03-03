@@ -245,13 +245,13 @@ const Hero = () => {
   });
 
   const heroData = homeContent?.hero || {
-    rotatingWords: ["goals", "users", "data", "market", "product"],
+    rotatingWords: ["goals", "users", "data", "content"],
     description: "I help brands find the hidden gold in their analytics, content, and user journeys. No fluff, just deep excavation for growth.",
     ctaText: "Start Digging",
     backgroundImage: "",
   };
   
-  const words = heroData.rotatingWords || ["goals", "users", "data", "market", "product"];
+  const words = heroData.rotatingWords || ["goals", "users", "data", "content"];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -601,7 +601,7 @@ const Contact = () => {
 
   const contactData = homeContent?.contact || {
     headline: "Ready to dig deep?",
-    description: "Let's uncover the Chances hidden in your business. Schedule a discovery call or drop me a line.",
+    description: "Let's uncover the chances hidden in your business. Schedule a discovery call or drop me a line.",
     email: "hello@sarahdigs.com",
     phone: "+20 (106) 282-2666",
     socialLinks: [
