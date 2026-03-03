@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { storage } from "./storage";
 
 const app = express();
 
@@ -49,6 +50,26 @@ app.use((req, res, next) => {
 
 (async () => {
   const server = await registerRoutes(app);
+
+  // Fix hero rotating words - remove "product" and "market"
+  try {
+    const homeContent = await storage.getPageContent("home");
+    const heroContent = homeContent.find(c => c.sectionKey === "hero");
+    if (heroContent) {
+      const content = heroContent.content as Record<string, unknown>;
+      const words = content.rotatingWords as string[] | undefined;
+      if (words && (words.includes("product") || words.includes("market"))) {
+        await storage.upsertPageContent({
+          pageSlug: "home",
+          sectionKey: "hero",
+          content: { ...content, rotatingWords: ["goals", "users", "data", "content"] }
+        });
+        log("Updated hero rotating words");
+      }
+    }
+  } catch (e) {
+    console.error("Failed to update hero rotating words:", e);
+  }
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
