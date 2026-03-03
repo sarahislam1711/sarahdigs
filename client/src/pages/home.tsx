@@ -245,13 +245,13 @@ const Hero = () => {
   });
 
   const heroData = homeContent?.hero || {
-    rotatingWords: ["goals", "users", "data", "content"],
+    rotatingWords: ["goals", "users", "data"],
     description: "I help brands find the hidden gold in their analytics, content, and user journeys. No fluff, just deep excavation for growth.",
-    ctaText: "Start Digging",
+    ctaText: "Explore Services",
     backgroundImage: "",
   };
   
-  const words = heroData.rotatingWords || ["goals", "users", "data", "content"];
+  const words = heroData.rotatingWords || ["goals", "users", "data"];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -324,7 +324,7 @@ const Hero = () => {
         >
           <Button
             size="lg"
-            className="text-lg h-14 px-8 w-fit shrink-0 group"
+            className="text-lg h-14 px-8 w-fit shrink-0 group cursor-pointer"
             onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
           >
             {heroData.ctaText}{" "}
@@ -404,7 +404,6 @@ const Services = () => {
 
   const servicesHeaderData = homeContent?.services || {
     headline: "Where do you wanna dig?",
-    subtitle: "I don't just scratch the surface. I excavate the insight.",
   };
 
   const defaultServices = [
@@ -417,38 +416,33 @@ const Services = () => {
   const services = servicesData.length > 0 ? servicesData : defaultServices;
 
   return (
-    <section id="services" className="py-8 bg-transparent text-[#1B1B1B]">
+    <section id="services" className="py-6 bg-transparent text-[#1B1B1B]">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 pb-8">
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter">
-            {servicesHeaderData.headline}
-          </h2>
-          <p className="mt-8 md:mt-0 max-w-md text-lg font-light text-[#1B1B1B]/80 text-right">
-            {servicesHeaderData.subtitle}
-          </p>
-        </div>
+        <h2 className="text-5xl md:text-7xl font-bold tracking-tighter whitespace-nowrap mb-6">
+          {servicesHeaderData.headline}
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {services.map((service, i) => {
             const IconComponent = iconMap[service.iconName || "Search"] || Search;
             return (
               <Link href={`/services/${service.slug}`} key={service.slug || i}>
                 <div
-                  className="group border border-[#1B1B1B]/20 p-12 hover:bg-[#F4F2FF] hover:text-[#1B1B1B] transition-colors duration-500 cursor-pointer relative overflow-hidden rounded-[1.25rem]"
+                  className="group border border-[#1B1B1B]/20 p-8 hover:bg-[#F4F2FF] hover:text-[#1B1B1B] transition-colors duration-500 cursor-pointer relative overflow-hidden rounded-[1.25rem]"
                 >
-                  <div className="flex justify-between items-start mb-12">
+                  <div className="flex justify-between items-start mb-6">
                     <div className="w-12 h-12 rounded-full bg-[#4D00FF] flex items-center justify-center text-white font-bold text-sm">
                       {String(i + 1).padStart(2, "0")}
                     </div>
                     <IconComponent className="h-8 w-8 opacity-60 group-hover:text-[#4D00FF] transition-colors" />
                   </div>
-                  <h3 className="text-3xl font-bold mb-4 group-hover:translate-x-2 transition-transform duration-300">
+                  <h3 className="text-3xl font-bold mb-3 group-hover:translate-x-2 transition-transform duration-300">
                     {service.title}
                   </h3>
                   <p className="text-lg font-light opacity-70 group-hover:opacity-100 transition-opacity">
                     {service.shortDescription}
                   </p>
-                  <ArrowUpRight className="absolute bottom-8 right-8 h-6 w-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 text-[#4D00FF]" />
+                  <ArrowUpRight className="absolute bottom-6 right-6 h-6 w-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 text-[#4D00FF]" />
                 </div>
               </Link>
             );

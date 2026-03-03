@@ -51,24 +51,26 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  // Fix hero rotating words - remove "product" and "market"
+  // Fix hero content - update rotating words and CTA text
   try {
     const homeContent = await storage.getPageContent("home");
     const heroContent = homeContent.find(c => c.sectionKey === "hero");
     if (heroContent) {
       const content = heroContent.content as Record<string, unknown>;
       const words = content.rotatingWords as string[] | undefined;
-      if (words && (words.includes("product") || words.includes("market"))) {
+      const needsWordFix = words && (words.includes("product") || words.includes("market") || words.includes("content"));
+      const needsCtaFix = content.ctaText !== "Explore Services";
+      if (needsWordFix || needsCtaFix) {
         await storage.upsertPageContent({
           pageSlug: "home",
           sectionKey: "hero",
-          content: { ...content, rotatingWords: ["goals", "users", "data", "content"] }
+          content: { ...content, rotatingWords: ["goals", "users", "data"], ctaText: "Explore Services" }
         });
-        log("Updated hero rotating words");
+        log("Updated hero content");
       }
     }
   } catch (e) {
-    console.error("Failed to update hero rotating words:", e);
+    console.error("Failed to update hero content:", e);
   }
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
