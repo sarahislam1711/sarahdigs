@@ -56,23 +56,20 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
   const heroImage = content.imageUrl || stockImage;
   
   return (
-    <section 
-      className="pt-40 pb-20 bg-[#FBFCFE] relative overflow-hidden"
-      style={content.backgroundImage ? {
-        backgroundImage: `url(${content.backgroundImage})`,
+    <section className="pt-40 pb-20 bg-[#FBFCFE] relative overflow-hidden">
+      {/* Background image on the right half */}
+      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
+        backgroundImage: `url(${heroImage})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      } : {}}
-    >
-      {/* Overlay for background image */}
-      {content.backgroundImage && (
-        <div className="absolute inset-0 bg-[#FBFCFE]/85 backdrop-blur-sm"></div>
-      )}
-      
+        backgroundPosition: 'center 30%',
+        opacity: 0.25,
+      }} />
+      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#FBFCFE] to-transparent" />
+
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <div className="lg:w-1/2">
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -80,7 +77,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
             >
               {content.title} <br/>{content.name}
             </motion.h1>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -90,21 +87,21 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
 
               {/* Mobile Layout - Horizontal Stack below text */}
               <div className="flex flex-wrap gap-2 mt-6 md:hidden">
-                <motion.div 
+                <motion.div
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   className="bg-[#4D00FF] text-white px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
                    {content.tagline1}
                 </motion.div>
-                <motion.div 
+                <motion.div
                   animate={{ y: [0, 5, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
                   className="bg-[#1B1B1B] text-white px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
                    {content.tagline2}
                 </motion.div>
-                <motion.div 
+                <motion.div
                   animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
                   className="bg-white border border-[#1B1B1B]/10 text-[#4D00FF] px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
@@ -115,16 +112,9 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
             </motion.p>
           </div>
           <div className="lg:w-1/2 relative hidden lg:block">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="relative z-10 h-[600px]"
-            >
-               <img src={heroImage} alt="Sarah Portrait" className="w-full h-full object-cover object-top" />
-
-               {/* Bubbles Visual - Vertically Stacked overlapping image */}
-               <div className="absolute bottom-16 -left-10 flex flex-col gap-3 z-20">
+            {/* Bubbles Visual - floating over background image area */}
+            <div className="relative h-[400px] flex items-end">
+               <div className="absolute bottom-16 left-6 flex flex-col gap-3 z-20">
                 <motion.div
                   animate={{ x: [0, 5, 0], y: [0, -5, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -149,7 +139,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
                    {content.tagline3}
                 </motion.div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
