@@ -271,8 +271,8 @@ const Hero = () => {
         style={{
           backgroundImage: `url(${heroBg})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.22,
+          backgroundPosition: 'center 40%',
+          opacity: 0.32,
         }}
       />
 
