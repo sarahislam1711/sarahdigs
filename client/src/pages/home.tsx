@@ -263,7 +263,7 @@ const Hero = () => {
 
   return (
     <section
-      className="flex flex-col justify-center pt-[210px] pb-[130px] relative overflow-hidden"
+      className="flex flex-col justify-center pt-[240px] pb-[130px] relative overflow-hidden"
     >
       {/* Faded background portrait */}
       <div
