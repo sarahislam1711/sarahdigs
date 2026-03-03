@@ -245,13 +245,13 @@ const Hero = () => {
   });
 
   const heroData = homeContent?.hero || {
-    rotatingWords: ["goals", "users", "data"],
+    rotatingWords: ["goals", "users", "data", "intent", "gaps", "story"],
     description: "I help brands find the hidden gold in their analytics, content, and user journeys. No fluff, just deep excavation for growth.",
     ctaText: "Explore Services",
     backgroundImage: "",
   };
   
-  const words = heroData.rotatingWords || ["goals", "users", "data"];
+  const words = heroData.rotatingWords || ["goals", "users", "data", "intent", "gaps", "story"];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

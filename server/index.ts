@@ -58,13 +58,14 @@ app.use((req, res, next) => {
     if (heroContent) {
       const content = heroContent.content as Record<string, unknown>;
       const words = content.rotatingWords as string[] | undefined;
-      const needsWordFix = words && (words.includes("product") || words.includes("market") || words.includes("content"));
+      const expectedWords = ["goals", "users", "data", "intent", "gaps", "story"];
+      const needsWordFix = !words || words.length !== expectedWords.length || !expectedWords.every(w => words.includes(w));
       const needsCtaFix = content.ctaText !== "Explore Services";
       if (needsWordFix || needsCtaFix) {
         await storage.upsertPageContent({
           pageSlug: "home",
           sectionKey: "hero",
-          content: { ...content, rotatingWords: ["goals", "users", "data"], ctaText: "Explore Services" }
+          content: { ...content, rotatingWords: expectedWords, ctaText: "Explore Services" }
         });
         log("Updated hero content");
       }

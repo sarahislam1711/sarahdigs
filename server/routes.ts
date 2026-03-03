@@ -956,7 +956,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const existingHomeContent = await storage.getPageContent("home");
       if (existingHomeContent.length === 0) {
-        await storage.upsertPageContent({ pageSlug: "home", sectionKey: "hero", content: { rotatingWords: ["goals", "users", "data"], description: "I help brands find the hidden gold in their analytics, content, and user journeys. No fluff, just deep excavation for growth.", ctaText: "Explore Services" } });
+        await storage.upsertPageContent({ pageSlug: "home", sectionKey: "hero", content: { rotatingWords: ["goals", "users", "data", "intent", "gaps", "story"], description: "I help brands find the hidden gold in their analytics, content, and user journeys. No fluff, just deep excavation for growth.", ctaText: "Explore Services" } });
         await storage.upsertPageContent({ pageSlug: "home", sectionKey: "problems", content: { title: "Does this sound familiar?", items: ["You're drowning in data but starving for actionable insights.", "Your traffic is growing, but your revenue remains flat.", "You're creating content that no one seems to be finding or reading.", "Technical SEO feels like a black box you can't unlock.", "You're guessing at strategy instead of following a roadmap."] } });
         await storage.upsertPageContent({ pageSlug: "home", sectionKey: "solution", content: { title: "Stop guessing. Start growing.", description: "I turn chaotic data into a clear, actionable growth engine. No fluff, just results-driven strategy that bridges the gap between technical execution and brand storytelling.", benefits: ["Clear, prioritized roadmaps backed by data", "High-intent traffic that actually converts", "Technical foundation built for scale", "Content strategy that drives real revenue"] } });
         await storage.upsertPageContent({ pageSlug: "home", sectionKey: "whyMe", content: { sectionLabel: "WHY SARAHDIGS?", headline: "Most consultants skim the surface. I bring a shovel." } });
@@ -965,7 +965,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const heroContent = existingHomeContent.find(c => c.sectionKey === "hero");
         if (heroContent) {
           const content = heroContent.content as Record<string, unknown>;
-          await storage.upsertPageContent({ pageSlug: "home", sectionKey: "hero", content: { ...content, rotatingWords: ["goals", "users", "data"], ctaText: "Explore Services" } });
+          await storage.upsertPageContent({ pageSlug: "home", sectionKey: "hero", content: { ...content, rotatingWords: ["goals", "users", "data", "intent", "gaps", "story"], ctaText: "Explore Services" } });
         }
       }
 
