@@ -261,19 +261,20 @@ const Hero = () => {
   }, [words.length]);
 
   return (
-    <section 
+    <section
       className="flex flex-col justify-center pt-[180px] pb-[130px] relative overflow-hidden"
-      style={heroData.backgroundImage ? {
-        backgroundImage: `url(${heroData.backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      } : {}}
     >
-      {/* Overlay for background image */}
-      {heroData.backgroundImage && (
-        <div className="absolute inset-0 bg-[#FBFCFE]/85 backdrop-blur-sm"></div>
-      )}
-      
+      {/* Faded background portrait */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `url(/IMG_6646.jpg)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.12,
+        }}
+      />
+
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-fit">
           <motion.h1
