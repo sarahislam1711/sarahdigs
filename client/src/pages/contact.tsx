@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -143,9 +144,11 @@ export default function Contact() {
                 <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all">
                   Book a Free Call
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF]">
-                  Explore Services
-                </Button>
+                <Link href="/projects">
+                  <Button variant="outline" size="lg" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] cursor-pointer">
+                    Explore Client Stories
+                  </Button>
+                </Link>
               </div>
             </motion.div>
             <motion.div 

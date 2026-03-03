@@ -416,7 +416,7 @@ const Services = () => {
   const services = servicesData.length > 0 ? servicesData : defaultServices;
 
   return (
-    <section id="services" className="py-6 bg-transparent text-[#1B1B1B]">
+    <section id="services" className="py-6 bg-transparent text-[#1B1B1B] scroll-mt-20">
       <div className="container mx-auto px-6">
         <h2 className="text-5xl md:text-7xl font-bold tracking-tighter whitespace-nowrap mb-6">
           {servicesHeaderData.headline}
@@ -596,8 +596,7 @@ const Contact = () => {
   const contactData = homeContent?.contact || {
     headline: "Ready to dig deep?",
     description: "Let's uncover the chances hidden in your business. Schedule a discovery call or drop me a line.",
-    email: "hello@sarahdigs.com",
-    phone: "+20 (106) 282-2666",
+    email: "sarah@sarahdigs.com",
     socialLinks: [
       { platform: "LinkedIn", url: "#" },
       { platform: "Twitter", url: "#" },
@@ -611,8 +610,9 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           <div>
             <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-8">
-              Ready to <br />
-              <span className="text-[#4D00FF]">dig</span> deep?
+              Ready <br />
+              <span className="whitespace-nowrap">to <span className="text-[#4D00FF]">dig</span></span> <br />
+              deep?
             </h2>
             <p className="text-xl text-[#1B1B1B]/80 mb-12 max-w-md">
               Let's uncover the opportunities hidden in your business. Schedule
@@ -624,12 +624,6 @@ const Contact = () => {
                 className="block hover:text-[#4D00FF] transition-colors text-[#1B1B1B]"
               >
                 {contactData.email}
-              </a>
-              <a
-                href={`tel:${contactData.phone.replace(/\s/g, '')}`}
-                className="block hover:text-[#4D00FF] transition-colors text-[#1B1B1B]"
-              >
-                {contactData.phone}
               </a>
               <div className="flex gap-4 mt-8">
                 {(contactData.socialLinks || []).map((link: { platform: string; url: string }, i: number) => (
