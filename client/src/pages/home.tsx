@@ -263,7 +263,7 @@ const Hero = () => {
 
   return (
     <section
-      className="flex flex-col justify-center pt-[180px] pb-[130px] relative overflow-hidden"
+      className="flex flex-col justify-center pt-[210px] pb-[130px] relative overflow-hidden"
     >
       {/* Faded background portrait */}
       <div
@@ -282,7 +282,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-6xl md:text-8xl lg:text-9xl font-black leading-[0.9] tracking-tighter mb-12"
+            className="text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-12"
           >
             sarah<span className="text-[#4D00FF]">digs</span> <br />
             <div className="whitespace-nowrap">
