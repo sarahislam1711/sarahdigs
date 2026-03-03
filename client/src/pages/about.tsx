@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Briefcase, Calendar, Layers, Search, LineChart, Globe, FileText, Terminal, BarChart4, Tags, MessageSquare, MessageCircle, Mic, CheckSquare, Building2, Landmark } from "lucide-react";
 
-import stockImage from '@assets/sarah-portrait.jpeg';
+import stockImage from '@/assets/IMG_6698.jpg';
 
 interface HeroContent {
   title: string;
@@ -115,20 +115,17 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
             </motion.p>
           </div>
           <div className="lg:w-1/2 relative hidden lg:block">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="relative z-10"
+              className="relative z-10 h-[600px]"
             >
-               <div className="relative h-[600px] w-full rounded-[2.5rem] overflow-hidden">
-                 <img src={heroImage} alt="Sarah Portrait" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#1B1B1B]/50 to-transparent opacity-50"></div>
-               </div>
+               <img src={heroImage} alt="Sarah Portrait" className="w-full h-full object-cover object-top" />
 
                {/* Bubbles Visual - Vertically Stacked overlapping image */}
                <div className="absolute bottom-16 -left-10 flex flex-col gap-3 z-20">
-                <motion.div 
+                <motion.div
                   animate={{ x: [0, 5, 0], y: [0, -5, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   className="bg-[#4D00FF] text-white px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start"
@@ -136,7 +133,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
                    {content.tagline1}
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   animate={{ x: [0, -5, 0], y: [0, 5, 0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                   className="bg-[#1B1B1B] text-white px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap ml-6"
@@ -144,7 +141,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
                    {content.tagline2}
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   animate={{ x: [0, 5, 0], y: [0, 5, 0] }}
                   transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                   className="bg-white border border-[#1B1B1B]/10 text-[#4D00FF] px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start ml-2"

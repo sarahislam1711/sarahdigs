@@ -7,6 +7,7 @@ import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import contactHero from "@/assets/IMG_6292.jpg";
 
 const CountUp = ({ value, label }: { value: string, label: string }) => {
   const ref = useRef(null);
@@ -159,14 +160,8 @@ export default function Contact() {
                transition={{ duration: 0.6, delay: 0.2 }}
                className="relative hidden lg:block"
             >
-               <div className="aspect-square rounded-[2rem] bg-[#1B1B1B] relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-60 mix-blend-overlay"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-white text-center p-8">
-                      <div className="text-8xl font-black mb-2">24h</div>
-                      <div className="text-xl font-light tracking-wider uppercase">Response Time</div>
-                    </div>
-                  </div>
+               <div className="aspect-square overflow-hidden">
+                  <img src={contactHero} alt="Sarah" className="w-full h-full object-cover object-top" />
                </div>
             </motion.div>
           </div>
