@@ -58,13 +58,13 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
   return (
     <section className="pt-40 pb-20 bg-[#FBFCFE] relative overflow-hidden">
       {/* Background image on the right half */}
-      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
+      <div className="absolute top-0 right-[10%] w-1/2 h-full hidden lg:block pointer-events-none" style={{
         backgroundImage: `url(${heroImage})`,
-        backgroundSize: '130%',
-        backgroundPosition: 'center 20%',
+        backgroundSize: '115%',
+        backgroundPosition: 'center 10%',
         opacity: 0.4,
       }} />
-      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#FBFCFE] to-transparent" />
+      <div className="absolute top-0 right-[10%] w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#FBFCFE] to-transparent" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
