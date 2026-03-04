@@ -7,7 +7,7 @@ import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import contactHero from "@/assets/IMG_6292.jpg";
+import contactHero from "@/assets/IMG_6270.jpg";
 
 const CountUp = ({ value, label }: { value: string, label: string }) => {
   const ref = useRef(null);
@@ -139,7 +139,7 @@ export default function Contact() {
         <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
           backgroundImage: `url(${contactHero})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center 20%',
+          backgroundPosition: 'center 5%',
           opacity: 0.18,
           maskImage: 'radial-gradient(ellipse at 70% 50%, black 20%, transparent 70%)',
           WebkitMaskImage: 'radial-gradient(ellipse at 70% 50%, black 20%, transparent 70%)',
