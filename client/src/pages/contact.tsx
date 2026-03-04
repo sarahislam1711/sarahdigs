@@ -136,13 +136,13 @@ export default function Contact() {
       {/* Hero Section */}
       <section className="pt-40 pb-20 bg-gradient-to-b from-[#F4F2FF] to-[#FBFCFE] relative overflow-hidden">
         {/* Faded background image */}
-        <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
+        <div className="absolute top-0 right-[-5%] w-[60%] h-[120%] hidden lg:block pointer-events-none" style={{
           backgroundImage: `url(${contactHero})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center 5%',
-          opacity: 0.18,
-          maskImage: 'radial-gradient(ellipse at 70% 50%, black 20%, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at 70% 50%, black 20%, transparent 70%)',
+          opacity: 0.25,
+          maskImage: 'radial-gradient(ellipse at 65% 50%, black 30%, transparent 75%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 65% 50%, black 30%, transparent 75%)',
         }} />
 
         <div className="container mx-auto px-6 relative z-10">
