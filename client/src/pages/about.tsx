@@ -60,8 +60,8 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
       {/* Background image on the right half */}
       <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
         backgroundImage: `url(${heroImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 3%',
+        backgroundSize: '130%',
+        backgroundPosition: 'center 20%',
         opacity: 0.4,
       }} />
       <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#FBFCFE] to-transparent" />

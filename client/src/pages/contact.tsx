@@ -138,8 +138,8 @@ export default function Contact() {
         {/* Faded background image */}
         <div className="absolute top-0 right-[-5%] w-[60%] h-[120%] hidden lg:block pointer-events-none" style={{
           backgroundImage: `url(${contactHero})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 5%',
+          backgroundSize: '130%',
+          backgroundPosition: 'center 20%',
           opacity: 0.25,
           maskImage: 'radial-gradient(ellipse at 65% 50%, black 30%, transparent 75%)',
           WebkitMaskImage: 'radial-gradient(ellipse at 65% 50%, black 30%, transparent 75%)',
