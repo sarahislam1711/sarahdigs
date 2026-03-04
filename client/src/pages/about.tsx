@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Briefcase, Calendar, Layers, Search, LineChart, Globe, FileText, Terminal, BarChart4, Tags, MessageSquare, MessageCircle, Mic, CheckSquare, Building2, Landmark } from "lucide-react";
 
-import stockImage from '@/assets/IMG_6698.jpg';
+import stockImage from '@/assets/IMG_6700.jpg';
 
 interface HeroContent {
   title: string;
@@ -53,7 +53,7 @@ const defaultCta: CtaContent = {
 };
 
 const AboutHero = ({ content }: { content: HeroContent }) => {
-  const heroImage = content.imageUrl || stockImage;
+  const heroImage = stockImage;
   
   return (
     <section className="pt-40 pb-20 bg-[#FBFCFE] relative overflow-hidden">
@@ -61,7 +61,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
       <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
         backgroundImage: `url(${heroImage})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center 30%',
+        backgroundPosition: 'center 15%',
         opacity: 0.4,
       }} />
       <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#FBFCFE] to-transparent" />
