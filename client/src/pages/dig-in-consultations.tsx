@@ -72,7 +72,7 @@ const defaultConsultations: ConsultationType[] = [
   { title: "Strategic Deep Dive", slug: "strategic-deep-dive", desc: "Comprehensive analysis of your business model, market position, and growth levers.", iconName: "Sparkles", color: "bg-[#1B1B1B]" },
   { title: "AI Workflow Optimization", slug: "ai-workflow-optimization", desc: "Tailoring AI integration to your specific team structure and operational needs.", iconName: "Brain", color: "bg-[#4D00FF]" },
   { title: "Leadership Advisory", slug: "leadership-advisory", desc: "One-on-one guidance for executives on navigating market shifts and technology trends.", iconName: "LineChart", color: "bg-[#F4F2FF] text-[#1B1B1B] border-[#1B1B1B]/10" },
-  { title: "Custom Growth Roadmap", slug: "custom-growth-roadmap", desc: "Developing a bespoke step-by-step plan to achieve your specific business objectives.", iconName: "BookOpen", color: "bg-[#4D00FF]" },
+  { title: "Custom Growth Roadmap", slug: "custom-growth-roadmap", desc: "Developing a bespoke step-by-step plan to achieve your specific business objectives.", iconName: "BookOpen", color: "bg-[#1B1B1B]" },
 ];
 
 // Flip Card Component with proper 3D animation
@@ -553,7 +553,7 @@ const FAQ = () => {
 
 const CTA = () => {
   return (
-    <section className="py-20 bg-[#F4F2FF] text-center">
+    <section className="py-10 bg-[#F4F2FF] text-center">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 text-[#1B1B1B]">
