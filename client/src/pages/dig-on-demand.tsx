@@ -32,7 +32,7 @@ const Hero = () => {
               <Button
                 size="lg"
                 className="text-lg h-16 px-12 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all rounded-full shadow-xl"
-                onClick={() => document.getElementById("custom-plan-form")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => document.getElementById("focus-areas")?.scrollIntoView({ behavior: "smooth" })}
               >
                 Start Your Custom Plan <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -135,7 +135,7 @@ const InteractiveModules = ({ selectedModules, toggleModule }: { selectedModules
   ];
 
   return (
-    <section id="focus-areas" className="py-12 bg-[#1B1B1B] text-white scroll-mt-20">
+    <section id="focus-areas" className="py-12 bg-[#1B1B1B] text-white scroll-mt-24">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
@@ -382,15 +382,6 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
               </div>
            </form>
 
-           <div className="text-center mt-8">
-             <button
-               onClick={() => document.getElementById("focus-areas")?.scrollIntoView({ behavior: "smooth" })}
-               className="text-[#4D00FF] hover:text-[#1B1B1B] font-medium transition-colors inline-flex items-center gap-2 group"
-             >
-               <ArrowRight className="w-4 h-4 -rotate-90 group-hover:-translate-y-1 transition-transform" />
-               Update your focus areas
-             </button>
-           </div>
         </div>
       </div>
     </section>
