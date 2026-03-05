@@ -1,13 +1,32 @@
 import nodemailer from "nodemailer";
 
+const smtpHost = process.env.SMTP_HOST || "mail.privateemail.com";
+const smtpPort = Number(process.env.SMTP_PORT) || 465;
+const smtpUser = process.env.SMTP_USER;
+const smtpPass = process.env.SMTP_PASS;
+
+// Log SMTP config status on startup (no secrets)
+console.log(`[Email] SMTP config: host=${smtpHost}, port=${smtpPort}, user=${smtpUser ? smtpUser : "NOT SET"}, pass=${smtpPass ? "SET" : "NOT SET"}`);
+
+if (!smtpUser || !smtpPass) {
+  console.warn("[Email] WARNING: SMTP_USER or SMTP_PASS not set — emails will NOT be sent.");
+}
+
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "mail.privateemail.com",
-  port: Number(process.env.SMTP_PORT) || 465,
+  host: smtpHost,
+  port: smtpPort,
   secure: true,
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: smtpUser,
+    pass: smtpPass,
   },
+});
+
+// Verify SMTP connection on startup
+transporter.verify().then(() => {
+  console.log("[Email] SMTP connection verified successfully — ready to send emails.");
+}).catch((err) => {
+  console.error("[Email] SMTP connection FAILED:", err.message);
 });
 
 export async function sendCustomPlanEmail(data: {
@@ -18,7 +37,7 @@ export async function sendCustomPlanEmail(data: {
   selectedModules: string[];
   budgetRange: string;
 }) {
-  const contactEmail = process.env.CONTACT_EMAIL || process.env.SMTP_USER;
+  const contactEmail = process.env.CONTACT_EMAIL || smtpUser;
 
   const html = `
     <h2>New Custom Plan Request</h2>
@@ -37,7 +56,7 @@ export async function sendCustomPlanEmail(data: {
   `;
 
   await transporter.sendMail({
-    from: `"SarahDigs Website" <${process.env.SMTP_USER}>`,
+    from: `"SarahDigs Website" <${smtpUser}>`,
     to: contactEmail,
     replyTo: data.email,
     subject: `New Custom Plan Request from ${data.name}`,
@@ -48,15 +67,17 @@ export async function sendCustomPlanEmail(data: {
 export async function sendContactEmail(data: {
   name: string;
   email: string;
-  company?: string;
+  companyWebsite?: string;
+  projectType?: string;
   message: string;
 }) {
-  const contactEmail = process.env.CONTACT_EMAIL || process.env.SMTP_USER;
+  const contactEmail = process.env.CONTACT_EMAIL || smtpUser;
 
   const html = `
     <h2>New Contact Form Submission</h2>
     <p><strong>From:</strong> ${data.name} (${data.email})</p>
-    ${data.company ? `<p><strong>Company:</strong> ${data.company}</p>` : ""}
+    ${data.companyWebsite ? `<p><strong>Company:</strong> ${data.companyWebsite}</p>` : ""}
+    ${data.projectType ? `<p><strong>Project Type:</strong> ${data.projectType}</p>` : ""}
     <hr/>
     <h3>Message</h3>
     <p>${data.message}</p>
@@ -65,7 +86,7 @@ export async function sendContactEmail(data: {
   `;
 
   await transporter.sendMail({
-    from: `"SarahDigs Website" <${process.env.SMTP_USER}>`,
+    from: `"SarahDigs Website" <${smtpUser}>`,
     to: contactEmail,
     replyTo: data.email,
     subject: `New Contact from ${data.name}`,
