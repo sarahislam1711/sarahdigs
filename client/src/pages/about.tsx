@@ -211,7 +211,7 @@ const ClientStories = () => {
     <section className="py-24 bg-white border-b border-[#1B1B1B]/10">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold tracking-tighter mb-12">Digging for results</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {clients.map((client, i) => (
              <Link key={i} href={`/projects/${client.slug}`}>
                <div className="group bg-[#FBFCFE] border border-[#1B1B1B]/10 p-8 rounded-3xl hover:border-[#4D00FF] transition-all hover:shadow-lg cursor-pointer relative overflow-hidden h-full">
@@ -296,24 +296,24 @@ const Timeline = () => {
   ];
 
   return (
-    <section className="py-24 bg-[#1B1B1B]">
+    <section className="py-24 bg-[#F4F2FF]">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-xs font-bold uppercase tracking-widest text-[#4D00FF]">The Path</span>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-white mt-4">My Journey</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-[#1B1B1B] mt-4">My Journey</h2>
         </div>
 
         {/* Desktop: horizontal */}
         <div className="hidden md:block relative">
-          <div className="absolute top-[52px] left-0 right-0 h-[2px] bg-white/10"></div>
+          <div className="absolute top-[52px] left-0 right-0 h-[2px] bg-[#4D00FF]/15"></div>
           <div className="grid grid-cols-5 gap-6 relative">
             {milestones.map((m, i) => (
               <div key={i} className="flex flex-col items-center text-center group">
                 <span className="text-[#4D00FF] font-bold text-2xl mb-4">{m.year}</span>
-                <div className="w-5 h-5 rounded-full bg-[#4D00FF] border-4 border-[#1B1B1B] relative z-10 mb-6 group-hover:scale-125 transition-transform"></div>
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:border-[#4D00FF]/40 hover:bg-white/10 transition-all">
-                  <h3 className="font-bold text-white mb-2 text-sm">{m.title}</h3>
-                  <p className="text-white/50 text-xs leading-relaxed">{m.desc}</p>
+                <div className="w-5 h-5 rounded-full bg-[#4D00FF] border-4 border-[#F4F2FF] relative z-10 mb-6 group-hover:scale-125 transition-transform"></div>
+                <div className="bg-white border border-[#1B1B1B]/10 rounded-2xl p-5 h-full hover:border-[#4D00FF]/40 hover:shadow-lg transition-all">
+                  <h3 className="font-bold text-[#1B1B1B] mb-2 text-sm">{m.title}</h3>
+                  <p className="text-[#1B1B1B]/60 text-xs leading-relaxed">{m.desc}</p>
                 </div>
               </div>
             ))}
@@ -322,15 +322,15 @@ const Timeline = () => {
 
         {/* Mobile: vertical */}
         <div className="md:hidden relative pl-8">
-          <div className="absolute top-0 bottom-0 left-[11px] w-[2px] bg-white/10"></div>
+          <div className="absolute top-0 bottom-0 left-[11px] w-[2px] bg-[#4D00FF]/15"></div>
           <div className="space-y-8">
             {milestones.map((m, i) => (
               <div key={i} className="relative flex items-start gap-6">
-                <div className="absolute left-[-21px] top-1 w-4 h-4 rounded-full bg-[#4D00FF] border-[3px] border-[#1B1B1B] z-10"></div>
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 flex-1">
+                <div className="absolute left-[-21px] top-1 w-4 h-4 rounded-full bg-[#4D00FF] border-[3px] border-[#F4F2FF] z-10"></div>
+                <div className="bg-white border border-[#1B1B1B]/10 rounded-2xl p-5 flex-1">
                   <span className="text-[#4D00FF] font-bold text-sm">{m.year}</span>
-                  <h3 className="font-bold text-white mt-1 mb-1">{m.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed">{m.desc}</p>
+                  <h3 className="font-bold text-[#1B1B1B] mt-1 mb-1">{m.title}</h3>
+                  <p className="text-[#1B1B1B]/60 text-sm leading-relaxed">{m.desc}</p>
                 </div>
               </div>
             ))}
