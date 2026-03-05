@@ -21,6 +21,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer as FooterComponent } from "@/components/layout/footer";
 import { cn } from "@/lib/utils";
+import { openCalendly } from "@/lib/calendly";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg.jpg";
@@ -321,7 +322,7 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="mt-12"
+          className="mt-12 flex flex-col sm:flex-row gap-4"
         >
           <Button
             size="lg"
@@ -330,6 +331,14 @@ const Hero = () => {
           >
             {heroData.ctaText}{" "}
             <ArrowRight className="ml-2 h-5 w-5 transition-transform" />
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="text-lg h-14 px-8 w-fit shrink-0 cursor-pointer border-[#4D00FF] text-[#4D00FF] hover:bg-[#4D00FF] hover:text-white transition-colors"
+            onClick={() => openCalendly()}
+          >
+            Book a free strategy call
           </Button>
         </motion.div>
       </div>
