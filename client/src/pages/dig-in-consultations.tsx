@@ -72,7 +72,6 @@ const defaultConsultations: ConsultationType[] = [
   { title: "Strategic Deep Dive", slug: "strategic-deep-dive", desc: "Comprehensive analysis of your business model, market position, and growth levers.", iconName: "Sparkles", color: "bg-[#1B1B1B]" },
   { title: "AI Workflow Optimization", slug: "ai-workflow-optimization", desc: "Tailoring AI integration to your specific team structure and operational needs.", iconName: "Brain", color: "bg-[#4D00FF]" },
   { title: "Leadership Advisory", slug: "leadership-advisory", desc: "One-on-one guidance for executives on navigating market shifts and technology trends.", iconName: "LineChart", color: "bg-[#F4F2FF] text-[#1B1B1B] border-[#1B1B1B]/10" },
-  { title: "Quarterly Strategy Review", slug: "quarterly-strategy-review", desc: "Regular check-ins to assess performance, adjust course, and set new targets.", iconName: "Zap", color: "bg-[#1B1B1B]" },
   { title: "Custom Growth Roadmap", slug: "custom-growth-roadmap", desc: "Developing a bespoke step-by-step plan to achieve your specific business objectives.", iconName: "BookOpen", color: "bg-[#4D00FF]" },
 ];
 
@@ -474,7 +473,7 @@ const FreeValue = ({ content }: { content: FreeValueContent }) => {
           {content.resources.map((resource, i) => {
             const IconComponent = getIconComponent(resource.iconName);
             return (
-              <div key={i} className="group relative bg-[#1B1B1B] p-8 rounded-3xl border border-white/10 hover:border-[#4D00FF]/50 transition-all hover:shadow-lg hover:shadow-[#4D00FF]/10">
+              <div key={i} className="group relative bg-[#1B1B1B] p-8 rounded-3xl border border-white/10 hover:border-[#4D00FF]/50 transition-all hover:shadow-lg hover:shadow-[#4D00FF]/10 flex flex-col">
                 <span className="absolute top-4 right-4 bg-white/10 text-white/70 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                   {resource.tag}
                 </span>
@@ -482,10 +481,10 @@ const FreeValue = ({ content }: { content: FreeValueContent }) => {
                   <IconComponent className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-white">{resource.title}</h3>
-                <p className="text-white/60 leading-relaxed mb-6">{resource.desc}</p>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-white/20 text-white hover:bg-white hover:text-[#1B1B1B] transition-all rounded-full"
+                <p className="text-white/60 leading-relaxed mb-6 flex-1">{resource.desc}</p>
+                <Button
+                  variant="outline"
+                  className="w-full border-white/20 text-white hover:bg-white hover:text-[#1B1B1B] transition-all rounded-full mt-auto"
                 >
                   {resource.cta}
                 </Button>
@@ -554,30 +553,25 @@ const FAQ = () => {
 
 const CTA = () => {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-20 bg-[#F4F2FF] text-center">
       <div className="container mx-auto px-6">
-        <div className="bg-[#1B1B1B] rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#4D00FF]/20 to-transparent"></div>
-          <div className="relative z-10">
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6">
-              Ready to unlock your next level?
-            </h2>
-            <p className="text-white/70 text-xl mb-10 max-w-2xl mx-auto">
-              Book a discovery call to discuss your challenges and explore how we can work together.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg h-14 px-8 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full cursor-pointer" onClick={() => openCalendly()}>
-                <Calendar className="mr-2 h-5 w-5" />
-                Schedule Discovery Call
-              </Button>
-              <Link href="/contact#contact-form">
-                <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-white/30 text-white hover:bg-white/10 rounded-full cursor-pointer">
-                  <Mail className="mr-2 h-5 w-5" />
-                  Send a Message
-                </Button>
-              </Link>
-            </div>
-          </div>
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 text-[#1B1B1B]">
+            Ready to unlock your <span className="text-[#4D00FF]">next level?</span>
+          </h2>
+          <p className="text-xl text-[#1B1B1B]/70 mb-10">
+            Book a discovery call to discuss your challenges and explore how we can work together.
+          </p>
+          <Button
+            size="lg"
+            className="text-lg h-16 px-12 bg-[#4D00FF] hover:bg-[#1B1B1B] text-white transition-all rounded-full shadow-xl shadow-[#4D00FF]/20 mb-6 cursor-pointer"
+            onClick={() => openCalendly()}
+          >
+            Schedule Discovery Call
+          </Button>
+          <p className="text-sm font-medium text-[#1B1B1B]/50 uppercase tracking-wide">
+            Join 50+ founders scaling with expert guidance
+          </p>
         </div>
       </div>
     </section>

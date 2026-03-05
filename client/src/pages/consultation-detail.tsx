@@ -58,23 +58,6 @@ const consultationData = {
       { duration: "60 Min", price: "$400", desc: "Executive Deep Dive" }
     ]
   },
-  "quarterly-strategy-review": {
-    title: "Quarterly Strategy Review",
-    subtitle: "Regular check-ins to assess performance, adjust course, and set new targets.",
-    description: "Strategies shouldn't be set in stone. This quarterly deep-dive ensures your roadmap evolves with your data, keeping your team aligned and focused on what's actually working right now.",
-    outcomes: [
-      "Quarterly performance deep-dive analysis",
-      "Roadmap adjustment and reprioritization",
-      "Team alignment workshop",
-      "KPI setting for the next quarter"
-    ],
-    benefit: "You'll have a recalibrated strategy based on real data, not assumptions. Ensure your team is working on the right things for the next 90 days.",
-    valueProp: "Keep your strategy agile and responsive to real-world data.",
-    pricingOptions: [
-      { duration: "30 Min", price: "$150", desc: "Performance Check" },
-      { duration: "60 Min", price: "$300", desc: "Full Quarterly Plan" }
-    ]
-  },
   "custom-growth-roadmap": {
     title: "Custom Growth Roadmap",
     subtitle: "Developing a bespoke step-by-step plan to achieve your specific business objectives.",
