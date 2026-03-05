@@ -6,6 +6,7 @@ import { ArrowUpRight, TrendingUp, Users, BarChart3, Search, Layout } from "luci
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { Project } from "@shared/schema";
+import { openCalendly } from "@/lib/calendly";
 
 const iconMap: Record<string, React.ReactElement> = {
   TrendingUp: <TrendingUp size={64} />,
@@ -95,7 +96,6 @@ const ProjectsList = () => {
 
     const defaultProjects = [
         { name: "TechFlow", website: "techflow.io", industry: "B2B SaaS", projectType: "SEO Strategy", focus: "Recovering organic traffic after a failed site migration and scaling lead generation.", results: "+450% Organic Traffic in 12 Months", iconName: "TrendingUp", slug: "techflow" },
-        { name: "Lumina", website: "lumina-fashion.com", industry: "E-commerce", projectType: "Technical Audit", focus: "Fixing critical crawl budget issues and implementing programmatic SEO for product pages.", results: "$2.4M Additional Revenue Attributed to SEO", iconName: "BarChart3", slug: "lumina" },
         { name: "FinSmart", website: "finsmart.io", industry: "Fintech", projectType: "Content Engine", focus: "Building a content machine to capture high-intent bottom-of-funnel keywords.", results: "150+ Qualified Leads Per Month", iconName: "Users", slug: "finsmart" },
     ];
 
@@ -124,7 +124,7 @@ const CTA = () => {
           <p className="text-xl text-[#1B1B1B]/70 max-w-2xl mx-auto mb-12">
             I only take on 3 clients at a time to ensure deep focus. Check if I have a slot open.
           </p>
-          <Button size="lg" className="text-lg h-16 px-10 bg-[#1B1B1B] hover:bg-[#4D00FF] transition-all rounded-full text-white">
+          <Button size="lg" className="text-lg h-16 px-10 bg-[#1B1B1B] hover:bg-[#4D00FF] transition-all rounded-full text-white cursor-pointer" onClick={() => openCalendly()}>
             Inquire about Availability
           </Button>
        </div>

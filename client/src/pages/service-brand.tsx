@@ -42,9 +42,9 @@ export default function ServiceBrand() {
     },
     proof: {
       stat: "Brand Refresh",
-      text: "See how we helped Lumina redefine their e-commerce presence and recover lost revenue.",
-      projectLink: "/projects/lumina",
-      projectTitle: "Lumina Fashion"
+      text: "See how we helped TechFlow redefine their market presence and scale organic traffic by 450%.",
+      projectLink: "/projects/techflow",
+      projectTitle: "TechFlow SaaS"
     },
     nextSteps: {
       steps: [

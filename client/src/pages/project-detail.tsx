@@ -63,49 +63,6 @@ const projectsData = {
       "bg-[#1B1B1B]"
     ]
   },
-  "lumina": {
-    name: "Lumina",
-    website: "lumina-fashion.com",
-    industry: "E-commerce",
-    type: "Technical Audit",
-    icon: BarChart3,
-    hero: {
-      description: "Modern Sustainable Fashion Brand",
-      oneLiner: "Fixing critical crawl budget issues and implementing programmatic SEO for product pages.",
-      highlight: "$2.4M Additional Revenue Attributed to SEO."
-    },
-    situation: {
-      title: "Invisible Products",
-      description: "Lumina had over 10,000 SKUs, but Google was only indexing 15% of them. Their faceted navigation was creating millions of duplicate pages, wasting crawl budget and diluting authority."
-    },
-    approach: {
-      title: "Crawl Budget Optimization",
-      steps: [
-        "Implemented proper canonical tags for all product variants.",
-        "Fixed faceted navigation with robots.txt rules and parameter handling.",
-        "Created a programmatic SEO strategy for 'Category + Attribute' pages.",
-        "Optimized internal linking structure to boost deep pages."
-      ]
-    },
-    timeline: [
-      { phase: "Month 1", title: "Audit", desc: "Deep crawl analysis, log file analysis, identifying waste." },
-      { phase: "Month 2", title: "Fix", desc: "Implemented technical fixes, pruned low-value pages." },
-      { phase: "Month 3-4", title: "Programmatic", desc: "Launched 500+ targeted landing pages for long-tail keywords." },
-      { phase: "Month 5+", title: "Growth", desc: "Monitoring indexation rates and optimizing conversion paths." },
-      { phase: "Month 9", title: "Conversion", desc: "Implemented advanced CRO tests on high-traffic product pages." },
-      { phase: "Year 1", title: "Scale", desc: "Expanded strategy to new product lines and international markets." }
-    ],
-    results: [
-      { label: "Pages Indexed", value: "98%" },
-      { label: "Organic Revenue", value: "+$2.4M" },
-      { label: "Crawl Efficiency", value: "+300%" }
-    ],
-    images: [
-      "bg-[#F4F2FF]",
-      "bg-[#FBFCFE]",
-      "bg-[#1B1B1B]"
-    ]
-  },
   "finsmart": {
     name: "FinSmart",
     website: "finsmart.io",

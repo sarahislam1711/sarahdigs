@@ -200,12 +200,6 @@ const ClientStories = () => {
        slug: "techflow"
      },
      {
-       name: "Urban Wear",
-       desc: "Fixed technical debt and recovered 40% lost revenue from site migration.",
-       tags: ["E-commerce", "Technical"],
-       slug: "lumina"
-     },
-     {
        name: "FinSmart",
        desc: "Built a content engine that generates 100+ qualified leads per month.",
        tags: ["Fintech", "Content"],
@@ -217,7 +211,7 @@ const ClientStories = () => {
     <section className="py-24 bg-white border-b border-[#1B1B1B]/10">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold tracking-tighter mb-12">Digging for results</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
            {clients.map((client, i) => (
              <Link key={i} href={`/projects/${client.slug}`}>
                <div className="group bg-[#FBFCFE] border border-[#1B1B1B]/10 p-8 rounded-3xl hover:border-[#4D00FF] transition-all hover:shadow-lg cursor-pointer relative overflow-hidden h-full">

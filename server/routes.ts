@@ -884,8 +884,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const existingProjects = await storage.getProjects();
       if (existingProjects.length === 0) {
         await storage.createProject({ name: "TechFlow", slug: "techflow", website: "techflow.io", industry: "B2B SaaS", projectType: "SEO Strategy", focus: "Recovering organic traffic after a failed site migration and scaling lead generation.", results: "+450% Organic Traffic in 12 Months", iconName: "TrendingUp", displayOrder: 0, isVisible: true });
-        await storage.createProject({ name: "Lumina", slug: "lumina", website: "lumina-fashion.com", industry: "E-commerce", projectType: "Technical Audit", focus: "Fixing critical crawl budget issues and implementing programmatic SEO for product pages.", results: "$2.4M Additional Revenue Attributed to SEO", iconName: "BarChart3", displayOrder: 1, isVisible: true });
-        await storage.createProject({ name: "FinSmart", slug: "finsmart", website: "finsmart.io", industry: "Fintech", projectType: "Content Engine", focus: "Building a content machine to capture high-intent bottom-of-funnel keywords.", results: "150+ Qualified Leads Per Month", iconName: "Users", displayOrder: 2, isVisible: true });
+        await storage.createProject({ name: "FinSmart", slug: "finsmart", website: "finsmart.io", industry: "Fintech", projectType: "Content Engine", focus: "Building a content machine to capture high-intent bottom-of-funnel keywords.", results: "150+ Qualified Leads Per Month", iconName: "Users", displayOrder: 1, isVisible: true });
       }
 
       const existingServices = await storage.getServices();
@@ -927,7 +926,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           whatYouGetTitle: "What you'll get", whatYouGetDescription: "A comprehensive brand strategy that guides all your marketing efforts.",
           whatYouGetItems: [{ title: "Brand Audit", desc: "Understanding where you are and where you need to go." }, { title: "Positioning Strategy", desc: "Finding your unique space in the market." }, { title: "Messaging Framework", desc: "Words that resonate with your audience." }, { title: "Visual Direction", desc: "Guidelines for consistent brand expression." }],
           whatToExpectItems: ["Clear brand positioning", "Consistent messaging", "Stronger market presence", "Improved customer perception", "Actionable brand guidelines"],
-          proofStat: "50% Recall", proofText: "See how we helped a startup achieve 50% higher brand recall after repositioning.", proofProjectLink: "/projects/lumina", proofProjectTitle: "Brand Case Study",
+          proofStat: "50% Recall", proofText: "See how we helped a startup achieve 50% higher brand recall after repositioning.", proofProjectLink: "/projects/techflow", proofProjectTitle: "Brand Case Study",
           nextSteps: [{ title: "Discovery", desc: "We dive deep into your brand and market.", bullets: ["Stakeholder interviews", "Competitor analysis", "Audience research"] }, { title: "Strategy", desc: "We develop your brand positioning.", bullets: ["Brand architecture", "Value proposition", "Key messages"] }, { title: "Activation", desc: "We bring your brand to life.", bullets: ["Visual guidelines", "Content templates", "Launch plan"] }],
           finalCtaTitle: "Ready to build a memorable brand?", finalCtaSubtitle: "Create a brand that stands the test of time.", finalCtaButtonText: "Book Your Strategy Call", finalCtaMicroProof: "Join brands making lasting impressions",
           displayOrder: 2, isVisible: true
