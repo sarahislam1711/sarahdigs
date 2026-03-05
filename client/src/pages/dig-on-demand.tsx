@@ -135,7 +135,7 @@ const InteractiveModules = ({ selectedModules, toggleModule }: { selectedModules
   ];
 
   return (
-    <section className="py-12 bg-[#1B1B1B] text-white">
+    <section id="focus-areas" className="py-12 bg-[#1B1B1B] text-white scroll-mt-20">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
@@ -364,10 +364,10 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
               </div>
               
               <div className="pt-6">
-                 <Button 
+                 <Button
                    type="submit"
                    disabled={customPlanMutation.isPending}
-                   size="lg" 
+                   size="lg"
                    className="w-full h-16 text-lg bg-[#4D00FF] hover:bg-[#1B1B1B] text-white rounded-full"
                  >
                    {customPlanMutation.isPending ? (
@@ -381,6 +381,16 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                  </Button>
               </div>
            </form>
+
+           <div className="text-center mt-8">
+             <button
+               onClick={() => document.getElementById("focus-areas")?.scrollIntoView({ behavior: "smooth" })}
+               className="text-[#4D00FF] hover:text-[#1B1B1B] font-medium transition-colors inline-flex items-center gap-2 group"
+             >
+               <ArrowRight className="w-4 h-4 -rotate-90 group-hover:-translate-y-1 transition-transform" />
+               Update your focus areas
+             </button>
+           </div>
         </div>
       </div>
     </section>

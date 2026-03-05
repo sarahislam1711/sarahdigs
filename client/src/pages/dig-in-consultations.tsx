@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowRight, Download, Calendar, Sparkles, Brain, LineChart, BookOpen, Mail, Zap, FileText, MessageSquare } from "lucide-react";
+import { ArrowRight, Download, Calendar, Sparkles, Brain, LineChart, BookOpen, Mail, Zap, FileText, MessageSquare, X, Check, Loader2 } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import type { PageContent } from "@shared/schema";
 import { openCalendly } from "@/lib/calendly";
@@ -129,7 +129,143 @@ const FlipCard = ({ card, index }: { card: PainPoint; index: number }) => {
   );
 };
 
-const Hero = ({ content, painPoints }: { content: HeroContent; painPoints: PainPoint[] }) => {
+const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const [email, setEmail] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const deckMutation = useMutation({
+    mutationFn: async (userEmail: string) => {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Consulting Deck Request",
+          email: userEmail,
+          companyWebsite: "",
+          jobRole: "Not specified",
+          companySize: "Not specified",
+          projectType: "Consulting Deck Request",
+          budget: "Not specified",
+          message: `User requested the consulting deck. Email: ${userEmail}`,
+        }),
+      });
+      if (!response.ok) throw new Error("Failed to submit");
+      return response.json();
+    },
+    onSuccess: () => {
+      setShowSuccess(true);
+      setEmail("");
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    deckMutation.mutate(email);
+  };
+
+  const handleClose = () => {
+    setShowSuccess(false);
+    deckMutation.reset();
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={handleClose}
+        >
+          <motion.div
+            className="bg-white rounded-3xl p-8 md:p-10 max-w-md w-full mx-6 shadow-2xl relative"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={handleClose}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F4F2FF] flex items-center justify-center text-[#1B1B1B]/60 hover:text-[#1B1B1B] transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {showSuccess ? (
+              <div className="text-center py-4">
+                <div className="w-16 h-16 bg-[#4D00FF] rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Check className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#1B1B1B] mb-3">You're on the list!</h3>
+                <p className="text-[#1B1B1B]/60 leading-relaxed">
+                  I'll send the consulting deck to your inbox shortly.
+                </p>
+                <Button
+                  onClick={handleClose}
+                  className="mt-6 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full px-8"
+                >
+                  Got it
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className="text-center mb-6">
+                  <div className="w-12 h-12 bg-[#F4F2FF] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Download className="w-6 h-6 text-[#4D00FF]" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#1B1B1B] mb-2">Get the Consulting Deck</h3>
+                  <p className="text-[#1B1B1B]/60 text-sm leading-relaxed">
+                    Enter your email and I'll send you a detailed overview of my consulting services and approach.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF] outline-none text-[#1B1B1B] placeholder:text-[#1B1B1B]/30"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    disabled={deckMutation.isPending}
+                    size="lg"
+                    className="w-full h-14 text-lg bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full"
+                  >
+                    {deckMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send me the deck
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+
+                {deckMutation.isError && (
+                  <p className="text-red-500 text-sm text-center mt-3">Something went wrong. Please try again.</p>
+                )}
+              </>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Hero = ({ content, painPoints, onOpenDeck }: { content: HeroContent; painPoints: PainPoint[]; onOpenDeck: () => void }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -153,7 +289,7 @@ const Hero = ({ content, painPoints }: { content: HeroContent; painPoints: PainP
             <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1] text-[#1B1B1B]">
               {content.title} <span className="text-[#4D00FF]">{content.highlightWord}</span> {content.subtitle}
             </h1>
-            
+
             <div className="mb-8 flex items-center justify-center gap-2 text-lg md:text-3xl font-light text-[#1B1B1B]/60 whitespace-nowrap flex-wrap md:flex-nowrap">
               <span>Consultations that make you</span>
               <div className="h-[1.2em] overflow-hidden inline-flex items-center relative text-left">
@@ -174,12 +310,10 @@ const Hero = ({ content, painPoints }: { content: HeroContent; painPoints: PainP
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Link href="/contact#contact-form">
-                <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all rounded-full shadow-xl group cursor-pointer">
-                  <Download className="mr-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
-                  {content.ctaButton1Text}
-                </Button>
-              </Link>
+              <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all rounded-full shadow-xl group cursor-pointer" onClick={onOpenDeck}>
+                <Download className="mr-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
+                {content.ctaButton1Text}
+              </Button>
               <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] transition-all rounded-full cursor-pointer" onClick={() => openCalendly()}>
                 <Calendar className="mr-2 h-5 w-5" />
                 {content.ctaButton2Text}
@@ -458,6 +592,8 @@ interface PageContentMap {
 }
 
 export default function DigInConsultations() {
+  const [showDeckPopup, setShowDeckPopup] = useState(false);
+
   const { data: pageContent = {} } = useQuery<PageContentMap>({
     queryKey: ["/api/page-content", "consultations"],
     queryFn: async () => {
@@ -475,12 +611,13 @@ export default function DigInConsultations() {
   return (
     <div className="min-h-screen bg-white text-[#1B1B1B]">
       <Navbar />
-      <Hero content={heroContent} painPoints={painPoints} />
+      <Hero content={heroContent} painPoints={painPoints} onOpenDeck={() => setShowDeckPopup(true)} />
       <ConsultationsCarousel consultations={consultations} />
       <FreeValue content={freeValueContent} />
       <FAQ />
       <CTA />
       <Footer />
+      <ConsultingDeckPopup isOpen={showDeckPopup} onClose={() => setShowDeckPopup(false)} />
     </div>
   );
 }
