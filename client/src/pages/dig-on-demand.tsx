@@ -171,7 +171,7 @@ const InteractiveModules = ({ selectedModules, toggleModule }: { selectedModules
                 className="text-lg h-14 px-8 bg-white text-[#1B1B1B] hover:bg-[#4D00FF] hover:text-white transition-all rounded-full"
                 onClick={() => document.getElementById("custom-plan-form")?.scrollIntoView({ behavior: "smooth" })}
               >
-                Create My Plan Based on Selection <ArrowRight className="ml-2 h-5 w-5" />
+                Create My Plan <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
         </div>
       </div>
@@ -273,10 +273,10 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
   };
 
   return (
-    <section id="custom-plan-form" className="pt-8 pb-32 bg-[#F4F2FF]">
+    <section id="custom-plan-form" className="pt-8 pb-32 bg-[#F4F2FF] scroll-mt-24">
       <div className="container mx-auto px-6 max-w-3xl">
         <div className="text-center mb-12">
-           <h2 className="text-5xl font-black tracking-tighter mb-6">Let's Build Your Custom Marketing Plan</h2>
+           <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-6 leading-[1.3]">Let's Build Your <br />Custom Marketing Plan</h2>
            <p className="text-xl text-[#1B1B1B]/70">Tell me your goals, challenges, and what you want to improve — I'll create a custom strategy just for you.</p>
         </div>
 
