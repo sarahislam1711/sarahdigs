@@ -590,9 +590,6 @@ const Testimonials = () => {
 };
     
 const Contact = () => {
-  const { data: homeContent } = useQuery<Record<string, any>>({
-    queryKey: ["/api/page-content/home"],
-  });
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -608,7 +605,16 @@ const Contact = () => {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          companyWebsite: data.company,
+          jobRole: "Not specified",
+          companySize: "Not specified",
+          projectType: data.projectType,
+          budget: "Not specified",
+          message: data.message,
+        }),
       });
       if (!response.ok) throw new Error("Failed to submit inquiry");
       return response.json();
@@ -627,16 +633,6 @@ const Contact = () => {
     contactMutation.mutate(formData);
   };
 
-  const contactData = homeContent?.contact || {
-    headline: "Ready to dig deep?",
-    description: "Let's uncover the chances hidden in your business. Schedule a discovery call or drop me a line.",
-    email: "sarah@sarahdigs.com",
-    socialLinks: [
-      { platform: "LinkedIn", url: "#" },
-      { platform: "Twitter", url: "#" },
-      { platform: "Instagram", url: "#" },
-    ],
-  };
 
   return (
     <section className="py-32 bg-transparent text-[#1B1B1B] relative">
@@ -652,14 +648,6 @@ const Contact = () => {
               Let's uncover the opportunities hidden in your business. Schedule
               a discovery call or drop me a line.
             </p>
-            <div className="space-y-4 text-lg">
-              <a
-                href={`mailto:${contactData.email}`}
-                className="block hover:text-[#4D00FF] transition-colors text-[#1B1B1B]"
-              >
-                {contactData.email}
-              </a>
-            </div>
           </div>
           <div className="bg-[#F4F2FF] p-8 md:p-12 shadow-2xl border border-[#1B1B1B]/10 rounded-3xl text-[#1B1B1B] backdrop-blur-sm">
             <form className="space-y-6" onSubmit={handleSubmit}>
