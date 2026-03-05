@@ -21,7 +21,8 @@ import useEmblaCarousel from "embla-carousel-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer as FooterComponent } from "@/components/layout/footer";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -592,6 +593,39 @@ const Contact = () => {
   const { data: homeContent } = useQuery<Record<string, any>>({
     queryKey: ["/api/page-content/home"],
   });
+  const { toast } = useToast();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    projectType: "SEO and Organic Growth",
+    message: "",
+  });
+
+  const contactMutation = useMutation({
+    mutationFn: async (data: typeof formData) => {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error("Failed to submit inquiry");
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Message sent!", description: "We'll get back to you soon." });
+      setFormData({ name: "", email: "", company: "", projectType: "SEO and Organic Growth", message: "" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Something went wrong. Please try again.", variant: "destructive" });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    contactMutation.mutate(formData);
+  };
 
   const contactData = homeContent?.contact || {
     headline: "Ready to dig deep?",
@@ -628,7 +662,7 @@ const Contact = () => {
             </div>
           </div>
           <div className="bg-[#F4F2FF] p-8 md:p-12 shadow-2xl border border-[#1B1B1B]/10 rounded-3xl text-[#1B1B1B] backdrop-blur-sm">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium uppercase tracking-wider text-[#1B1B1B]/80">
@@ -636,6 +670,9 @@ const Contact = () => {
                   </label>
                   <input
                     type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-transparent border-b border-[#1B1B1B]/20 focus:border-[#4D00FF] outline-none py-3 transition-colors rounded-t-lg placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]"
                     placeholder="Jane Doe"
                   />
@@ -646,6 +683,8 @@ const Contact = () => {
                   </label>
                   <input
                     type="text"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     className="w-full bg-transparent border-b border-[#1B1B1B]/20 focus:border-[#4D00FF] outline-none py-3 transition-colors rounded-t-lg placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]"
                     placeholder="Acme Inc."
                   />
@@ -657,6 +696,9 @@ const Contact = () => {
                 </label>
                 <input
                   type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full bg-transparent border-b border-[#1B1B1B]/20 focus:border-[#4D00FF] outline-none py-3 transition-colors rounded-t-lg placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]"
                   placeholder="jane@example.com"
                 />
@@ -665,7 +707,11 @@ const Contact = () => {
                 <label className="text-sm font-medium uppercase tracking-wider text-[#1B1B1B]/80">
                   Project Type
                 </label>
-                <select className="w-full bg-transparent border-b border-[#1B1B1B]/20 focus:border-[#4D00FF] outline-none py-3 transition-colors rounded-t-lg [&>option]:text-black text-[#1B1B1B]">
+                <select
+                  value={formData.projectType}
+                  onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                  className="w-full bg-transparent border-b border-[#1B1B1B]/20 focus:border-[#4D00FF] outline-none py-3 transition-colors rounded-t-lg [&>option]:text-black text-[#1B1B1B]"
+                >
                   <option>SEO and Organic Growth</option>
                   <option>Product-Led Marketing</option>
                   <option>Brand and Strategy</option>
@@ -678,12 +724,15 @@ const Contact = () => {
                   Message
                 </label>
                 <textarea
+                  required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full bg-transparent border-b border-[#1B1B1B]/20 focus:border-[#4D00FF] outline-none py-3 transition-colors rounded-t-lg min-h-[100px] resize-none placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]"
                   placeholder="Tell me about your project..."
                 />
               </div>
-              <Button size="lg" className="w-full text-lg h-14">
-                Send Message
+              <Button type="submit" size="lg" className="w-full text-lg h-14" disabled={contactMutation.isPending}>
+                {contactMutation.isPending ? "Sending..." : "Send Message"}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </form>

@@ -173,14 +173,18 @@ const Hero = ({ content, painPoints }: { content: HeroContent; painPoints: PainP
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all rounded-full shadow-xl group">
-                <Download className="mr-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
-                {content.ctaButton1Text}
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] transition-all rounded-full">
-                <Calendar className="mr-2 h-5 w-5" />
-                {content.ctaButton2Text}
-              </Button>
+              <Link href="/contact#contact-form">
+                <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all rounded-full shadow-xl group cursor-pointer">
+                  <Download className="mr-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
+                  {content.ctaButton1Text}
+                </Button>
+              </Link>
+              <Link href="/contact#contact-form">
+                <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] transition-all rounded-full cursor-pointer">
+                  <Calendar className="mr-2 h-5 w-5" />
+                  {content.ctaButton2Text}
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -429,14 +433,18 @@ const CTA = () => {
               Book a discovery call to discuss your challenges and explore how we can work together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg h-14 px-8 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full">
-                <Calendar className="mr-2 h-5 w-5" />
-                Schedule Discovery Call
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-white/30 text-white hover:bg-white/10 rounded-full">
-                <Mail className="mr-2 h-5 w-5" />
-                Send a Message
-              </Button>
+              <Link href="/contact#contact-form">
+                <Button size="lg" className="text-lg h-14 px-8 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full cursor-pointer">
+                  <Calendar className="mr-2 h-5 w-5" />
+                  Schedule Discovery Call
+                </Button>
+              </Link>
+              <Link href="/contact#contact-form">
+                <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-white/30 text-white hover:bg-white/10 rounded-full cursor-pointer">
+                  <Mail className="mr-2 h-5 w-5" />
+                  Send a Message
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
