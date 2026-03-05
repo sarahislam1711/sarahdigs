@@ -646,8 +646,8 @@ const Contact = () => {
   return (
     <section className="py-32 bg-transparent text-[#1B1B1B] relative">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 max-w-6xl mx-auto">
+          <div className="flex flex-col justify-center">
             <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-8">
               Ready <br />
               <span className="whitespace-nowrap">to <span className="text-[#4D00FF]">dig</span></span> <br />
@@ -658,7 +658,8 @@ const Contact = () => {
               a discovery call or drop me a line.
             </p>
           </div>
-          <div className="bg-[#F4F2FF] p-8 md:p-12 shadow-2xl border border-[#1B1B1B]/10 rounded-3xl text-[#1B1B1B] backdrop-blur-sm">
+          <div className="bg-white p-8 md:p-10 shadow-[0_8px_40px_-12px_rgba(77,0,255,0.12)] border border-[#4D00FF]/10 rounded-3xl text-[#1B1B1B] relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#4D00FF] to-[#4D00FF]/40"></div>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -728,7 +729,7 @@ const Contact = () => {
                   placeholder="Tell me about your project..."
                 />
               </div>
-              <Button type="submit" size="lg" className="w-full text-lg h-14" disabled={contactMutation.isPending}>
+              <Button type="submit" size="lg" className="w-full text-lg h-14 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full shadow-lg shadow-[#4D00FF]/20 transition-all" disabled={contactMutation.isPending}>
                 {contactMutation.isPending ? "Sending..." : "Send Message"}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
