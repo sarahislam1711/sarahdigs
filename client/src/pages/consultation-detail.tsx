@@ -3,6 +3,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Calendar, ArrowLeft, User, Code, Megaphone, Briefcase, Clock, Star, Phone } from "lucide-react";
+import { openCalendly } from "@/lib/calendly";
 
 // Mock data for the consultations (mirroring what's in dig-in-consultations.tsx but with more detail)
 const consultationData = {
@@ -256,7 +257,7 @@ export default function ConsultationDetail() {
                   </div>
                   
                   <div className="space-y-4">
-                    <Button className="w-full h-14 text-lg bg-[#1B1B1B] text-white hover:bg-[#4D00FF] hover:text-white transition-colors rounded-xl font-bold shadow-lg">
+                    <Button className="w-full h-14 text-lg bg-[#1B1B1B] text-white hover:bg-[#4D00FF] hover:text-white transition-colors rounded-xl font-bold shadow-lg cursor-pointer" onClick={() => openCalendly()}>
                       Book a Session
                       <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>

@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import { openCalendly } from "@/lib/calendly";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -84,7 +85,7 @@ export const Navbar = () => {
                           ))}
                         </ul>
                       </div>
-                      <Button className="w-full mt-4 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white">Book a free call</Button>
+                      <Button className="w-full mt-4 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white cursor-pointer" onClick={() => openCalendly()}>Book a free call</Button>
                     </div>
                   </div>
                 </NavigationMenuContent>

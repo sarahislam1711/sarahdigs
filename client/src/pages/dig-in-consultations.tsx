@@ -8,6 +8,7 @@ import { Link } from "wouter";
 import { ArrowRight, Download, Calendar, Sparkles, Brain, LineChart, BookOpen, Mail, Zap, FileText, MessageSquare } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import type { PageContent } from "@shared/schema";
+import { openCalendly } from "@/lib/calendly";
 
 interface HeroContent {
   title: string;
@@ -179,12 +180,10 @@ const Hero = ({ content, painPoints }: { content: HeroContent; painPoints: PainP
                   {content.ctaButton1Text}
                 </Button>
               </Link>
-              <Link href="/contact#contact-form">
-                <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] transition-all rounded-full cursor-pointer">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  {content.ctaButton2Text}
-                </Button>
-              </Link>
+              <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] transition-all rounded-full cursor-pointer" onClick={() => openCalendly()}>
+                <Calendar className="mr-2 h-5 w-5" />
+                {content.ctaButton2Text}
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -433,12 +432,10 @@ const CTA = () => {
               Book a discovery call to discuss your challenges and explore how we can work together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact#contact-form">
-                <Button size="lg" className="text-lg h-14 px-8 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full cursor-pointer">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Schedule Discovery Call
-                </Button>
-              </Link>
+              <Button size="lg" className="text-lg h-14 px-8 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full cursor-pointer" onClick={() => openCalendly()}>
+                <Calendar className="mr-2 h-5 w-5" />
+                Schedule Discovery Call
+              </Button>
               <Link href="/contact#contact-form">
                 <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-white/30 text-white hover:bg-white/10 rounded-full cursor-pointer">
                   <Mail className="mr-2 h-5 w-5" />

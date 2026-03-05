@@ -6,8 +6,9 @@ import { Check, X, ArrowRight, Zap, Target, BarChart, Rocket, TrendingDown, Bank
 import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
+import { AnimatePresence } from "framer-motion";
 import contactHero from "@/assets/IMG_6270.jpg";
+import { openCalendly } from "@/lib/calendly";
 
 const CountUp = ({ value, label }: { value: string, label: string }) => {
   const ref = useRef(null);
@@ -68,7 +69,8 @@ const CountUp = ({ value, label }: { value: string, label: string }) => {
 };
 
 export default function Contact() {
-  const { toast } = useToast();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     if (window.location.hash === '#contact-form') {
@@ -100,10 +102,7 @@ export default function Contact() {
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Inquiry sent!",
-        description: "I'll get back to you within 24 hours.",
-      });
+      setShowSuccess(true);
       setFormData({
         name: "",
         email: "",
@@ -116,11 +115,7 @@ export default function Contact() {
       });
     },
     onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to send inquiry. Please try again.",
-        variant: "destructive",
-      });
+      setShowError(true);
     },
   });
 
@@ -162,7 +157,7 @@ export default function Contact() {
               </p>
               <div className="flex gap-4">
                 <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all cursor-pointer"
-                  onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => openCalendly()}
                 >
                   Book a Free Call
                 </Button>
@@ -374,7 +369,7 @@ export default function Contact() {
                     size="lg" 
                     className="w-full py-8 text-lg bg-[#1B1B1B] hover:bg-[#4D00FF] text-white hover:text-white transition-colors rounded-xl shadow-lg shadow-[#4D00FF]/20"
                   >
-                    {contactMutation.isPending ? "Sending..." : "Send Inquiry"}
+                    {contactMutation.isPending ? "Sending..." : "Send me a message"}
                   </Button>
                 </form>
              </div>
@@ -383,6 +378,84 @@ export default function Contact() {
       </section>
 
       <Footer />
+
+      {/* Success Modal */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowSuccess(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="bg-white rounded-3xl p-10 md:p-14 max-w-md mx-6 text-center shadow-2xl border border-[#1B1B1B]/5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-16 h-16 bg-[#4D00FF] rounded-full flex items-center justify-center mx-auto mb-6">
+                <Check className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-black tracking-tight text-[#1B1B1B] mb-3">
+                Message sent!
+              </h3>
+              <p className="text-[#1B1B1B]/70 text-lg mb-8 leading-relaxed">
+                Your message has been delivered successfully. I'll get back to you within 24 hours.
+              </p>
+              <Button
+                onClick={() => setShowSuccess(false)}
+                size="lg"
+                className="bg-[#4D00FF] hover:bg-[#1B1B1B] text-white rounded-full px-10 h-12 text-base transition-colors cursor-pointer"
+              >
+                Got it
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Error Modal */}
+      <AnimatePresence>
+        {showError && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowError(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="bg-white rounded-3xl p-10 md:p-14 max-w-md mx-6 text-center shadow-2xl border border-[#1B1B1B]/5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <X className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-black tracking-tight text-[#1B1B1B] mb-3">
+                Something went wrong
+              </h3>
+              <p className="text-[#1B1B1B]/70 text-lg mb-8 leading-relaxed">
+                Your message couldn't be sent. Please try again or email me directly at sarah@sarahdigs.com.
+              </p>
+              <Button
+                onClick={() => setShowError(false)}
+                size="lg"
+                className="bg-[#1B1B1B] hover:bg-[#4D00FF] text-white rounded-full px-10 h-12 text-base transition-colors cursor-pointer"
+              >
+                Try again
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
