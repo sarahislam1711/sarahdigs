@@ -99,8 +99,10 @@ const ProjectsList = () => {
         { name: "FinSmart", website: "finsmart.io", industry: "Fintech", projectType: "Content Engine", focus: "Building a content machine to capture high-intent bottom-of-funnel keywords.", results: "150+ Qualified Leads Per Month", iconName: "Users", slug: "finsmart" },
     ];
 
-    const projects = projectsData.length > 0 
-        ? projectsData.map(p => ({ ...p, icon: iconMap[p.iconName || "TrendingUp"] || <TrendingUp size={64} />, type: p.projectType }))
+    const filteredData = projectsData.filter(p => p.slug !== "lumina");
+
+    const projects = filteredData.length > 0
+        ? filteredData.map(p => ({ ...p, icon: iconMap[p.iconName || "TrendingUp"] || <TrendingUp size={64} />, type: p.projectType }))
         : defaultProjects.map(p => ({ ...p, icon: iconMap[p.iconName] || <TrendingUp size={64} />, type: p.projectType }));
 
     return (
