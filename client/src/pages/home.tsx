@@ -539,11 +539,11 @@ const Testimonials = () => {
 
   // Fallback testimonials if database is empty
   const fallbackTestimonials = [
-    { quote: "Sarah completely transformed how we look at our data.", clientName: "Alex Morgan", clientRole: "SaaS Founder", clientCompany: "" },
-    { quote: "The deep dive uncovered opportunities we had been missing for years.", clientName: "Jordan Lee", clientRole: "E-commerce Director", clientCompany: "" },
-    { quote: "Finally, a strategy that connects creative with technical SEO.", clientName: "Casey Smith", clientRole: "Marketing VP", clientCompany: "" },
-    { quote: "Actionable, clear, and results-driven. Highly recommended.", clientName: "Taylor Reed", clientRole: "Fintech CEO", clientCompany: "" },
-    { quote: "We saw a 40% increase in organic traffic within 3 months.", clientName: "Morgan Chen", clientRole: "Head of Growth", clientCompany: "" },
+    { quote: "Sarah completely transformed how we look at our data. Within weeks, we had a clear roadmap that actually made sense.", clientName: "Alex Morgan", clientRole: "Founder", clientCompany: "TechFlow" },
+    { quote: "The deep dive uncovered opportunities we had been missing for years. Our organic traffic doubled in under 6 months.", clientName: "Jordan Lee", clientRole: "E-commerce Director", clientCompany: "Urban Collective" },
+    { quote: "Finally, a strategist who connects creative with technical SEO. Sarah doesn't just advise — she rolls up her sleeves and delivers.", clientName: "Casey Smith", clientRole: "VP of Marketing", clientCompany: "Bloom Health" },
+    { quote: "We went from zero organic presence to 150+ qualified leads per month. The ROI has been unreal.", clientName: "Taylor Reed", clientRole: "CEO", clientCompany: "FinSmart" },
+    { quote: "Sarah's audit saved us from a migration disaster. She found issues three agencies missed and fixed them in weeks, not months.", clientName: "Morgan Chen", clientRole: "Head of Growth", clientCompany: "ScaleUp Labs" },
   ];
 
   const testimonials = dbTestimonials.length > 0 ? dbTestimonials : fallbackTestimonials;

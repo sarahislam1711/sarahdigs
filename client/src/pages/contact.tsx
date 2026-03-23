@@ -161,11 +161,11 @@ export default function Contact() {
                 >
                   Book a Free Call
                 </Button>
-                <Link href="/projects">
-                  <Button variant="outline" size="lg" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] cursor-pointer">
-                    Explore Client Stories
-                  </Button>
-                </Link>
+                <Button variant="outline" size="lg" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] cursor-pointer"
+                  onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Share Your Project
+                </Button>
               </div>
             </motion.div>
           </div>
@@ -242,7 +242,7 @@ export default function Contact() {
 
 
       {/* CTA Form */}
-      <section id="contact-form" className="py-32 bg-[#FBFCFE] scroll-mt-20">
+      <section id="contact-form" className="py-32 bg-[#FBFCFE] scroll-mt-24">
         <div className="container mx-auto px-6">
            <div className="max-w-3xl mx-auto">
              <div className="text-center mb-16">
