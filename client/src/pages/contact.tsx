@@ -164,7 +164,7 @@ export default function Contact() {
                 <Button variant="outline" size="lg" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] cursor-pointer"
                   onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  Share Your Project
+                  Share My Project
                 </Button>
               </div>
             </motion.div>
