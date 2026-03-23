@@ -201,8 +201,8 @@ export default function ConsultationDetail() {
                         I've spent over a decade not just advising, but <strong>doing</strong>. I've led growth for startups, optimized enterprise-level SEO strategies, and built products from scratch. I don't give you theory; I give you what works in the trenches.
                       </p>
                       <div className="flex flex-wrap gap-4">
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">10+ Years Experience</div>
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">$50M+ Revenue Generated</div>
+                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">6+ Years Experience</div>
+                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">$10M+ Revenue Generated</div>
                          <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">50+ Happy Clients</div>
                       </div>
                       <div className="pt-6 border-t border-white/10">

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Stat, ProcessStep, Service, Project } from "@shared/schema";
+import type { ProcessStep, Service, Project } from "@shared/schema";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   ArrowDownRight,
@@ -99,18 +99,12 @@ const CountUp = ({ value, label }: { value: string; label: string }) => {
 };
 
 const Proof = () => {
-  const { data: stats = [] } = useQuery<Stat[]>({
-    queryKey: ["/api/stats"],
-  });
-
-  const defaultStats = [
-    { value: "10+", label: "Years Experience" },
-    { value: "$50M+", label: "Revenue Generated" },
+  const displayStats = [
+    { value: "6+", label: "Years Experience" },
+    { value: "$10M+", label: "Revenue Generated" },
     { value: "400%", label: "Avg. Traffic Growth" },
     { value: "50+", label: "Happy Clients" },
   ];
-
-  const displayStats = stats.length > 0 ? stats : defaultStats;
 
   return (
     <section className="py-20 bg-[#F4F2FF] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] relative z-10">

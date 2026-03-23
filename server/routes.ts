@@ -867,8 +867,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const existingStats = await storage.getStats();
       if (existingStats.length === 0) {
-        await storage.createStat({ value: "10+", label: "Years Experience", displayOrder: 0, isVisible: true });
-        await storage.createStat({ value: "$50M+", label: "Revenue Generated", displayOrder: 1, isVisible: true });
+        await storage.createStat({ value: "6+", label: "Years Experience", displayOrder: 0, isVisible: true });
+        await storage.createStat({ value: "$10M+", label: "Revenue Generated", displayOrder: 1, isVisible: true });
         await storage.createStat({ value: "400%", label: "Avg. Traffic Growth", displayOrder: 2, isVisible: true });
         await storage.createStat({ value: "50+", label: "Happy Clients", displayOrder: 3, isVisible: true });
       }

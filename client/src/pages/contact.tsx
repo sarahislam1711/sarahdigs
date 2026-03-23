@@ -229,8 +229,8 @@ export default function Contact() {
         <div className="container mx-auto px-6">
            <div className="flex flex-wrap justify-center md:justify-between gap-8 md:gap-0">
               {[
-                { val: "10+", label: "Years Experience" },
-                { val: "$50M+", label: "Revenue Generated" },
+                { val: "6+", label: "Years Experience" },
+                { val: "$10M+", label: "Revenue Generated" },
                 { val: "400%", label: "Avg. Traffic Growth" },
                 { val: "50+", label: "Happy Clients" }
               ].map((stat, i) => (
