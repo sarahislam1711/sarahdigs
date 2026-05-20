@@ -5,11 +5,15 @@ nixPkgs = ["nodejs_20"]
 # Combine install + build into a single phase so node_modules
 # is guaranteed to exist when `npm run build` runs.
 # (Separate phases caused vite to be missing at build time.)
+# Use `npm install` instead of `npm ci` because Nixpacks mounts
+# node_modules/.cache as a read-only cache volume, and `npm ci`
+# fails trying to rmdir it (EBUSY).
 [phases.build]
 cmds = [
-  "npm ci --include=dev --no-audit --no-fund",
+  "npm install --include=dev --no-audit --no-fund",
   "npm run build"
 ]
+cacheDirectories = []
 
 [start]
 cmd = "npm run start"
