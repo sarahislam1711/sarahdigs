@@ -2,11 +2,17 @@
 [phases.setup]
 nixPkgs = ["nodejs_20"]
 
-[phases.install]
-cmds = ["npm ci --include=dev"]
-
+# Combine install + build into a single phase so node_modules
+# is guaranteed to exist when `npm run build` runs.
+# (Separate phases caused vite to be missing at build time.)
 [phases.build]
-cmds = ["npm run build"]
+cmds = [
+  "npm ci --include=dev --no-audit --no-fund",
+  "npm run build"
+]
 
 [start]
 cmd = "npm run start"
+
+[variables]
+NPM_CONFIG_PRODUCTION = "false"
