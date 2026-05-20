@@ -101,7 +101,7 @@ export default function AdminServices() {
             </p>
           </div>
           <Link href="/admin/services/new">
-            <Button className="bg-[#4D00FF] hover:bg-[#3D00CC] text-white">
+            <Button className="bg-[#6B1421] hover:bg-[#3D00CC] text-white">
               <Plus className="w-4 h-4 mr-2" />
               Add Service
             </Button>
@@ -111,20 +111,20 @@ export default function AdminServices() {
         {/* Services List */}
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-[#4D00FF]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
           </div>
         ) : services.length === 0 ? (
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-12 text-center">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-12 text-center">
             <p className="text-gray-400 mb-4">No services yet</p>
             <Link href="/admin/services/new">
-              <Button className="bg-[#4D00FF] hover:bg-[#3D00CC] text-white">
+              <Button className="bg-[#6B1421] hover:bg-[#3D00CC] text-white">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Your First Service
               </Button>
             </Link>
           </div>
         ) : (
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 overflow-hidden">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-800">
@@ -153,7 +153,7 @@ export default function AdminServices() {
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <code className="text-[#4D00FF] bg-[#4D00FF]/10 px-2 py-1 rounded text-sm">
+                      <code className="text-[#6B1421] bg-[#6B1421]/10 px-2 py-1 rounded-md text-sm">
                         /services/{service.slug}
                       </code>
                     </td>
@@ -163,7 +163,7 @@ export default function AdminServices() {
                           id: service.id, 
                           isVisible: !service.isVisible 
                         })}
-                        className={`p-2 rounded-lg transition-colors ${
+                        className={`p-2 rounded-md transition-colors ${
                           service.isVisible 
                             ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" 
                             : "bg-gray-800 text-gray-500 hover:bg-gray-700"
@@ -183,14 +183,14 @@ export default function AdminServices() {
                           href={`/services/${service.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+                          className="p-2 rounded-md bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
                           title="View live page"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </a>
                         <Link href={`/admin/services/${service.id}`}>
                           <button
-                            className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+                            className="p-2 rounded-md bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
                             title="Edit service"
                           >
                             <Pencil className="w-4 h-4" />
@@ -198,7 +198,7 @@ export default function AdminServices() {
                         </Link>
                         <button
                           onClick={() => setDeleteId(service.id)}
-                          className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                          className="p-2 rounded-md bg-gray-800 text-gray-400 hover:text-red-500 hover:bg-red-500/10 transition-colors"
                           title="Delete service"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -214,17 +214,17 @@ export default function AdminServices() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-6">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-6">
             <p className="text-gray-400 text-sm">Total Services</p>
             <p className="text-3xl font-bold text-white mt-1">{services.length}</p>
           </div>
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-6">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-6">
             <p className="text-gray-400 text-sm">Visible</p>
             <p className="text-3xl font-bold text-green-500 mt-1">
               {services.filter(s => s.isVisible).length}
             </p>
           </div>
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-6">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-6">
             <p className="text-gray-400 text-sm">Hidden</p>
             <p className="text-3xl font-bold text-gray-500 mt-1">
               {services.filter(s => !s.isVisible).length}

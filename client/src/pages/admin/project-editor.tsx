@@ -253,7 +253,7 @@ export default function ProjectEditor() {
     return (
       <AdminLayout title="Loading...">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-[#4D00FF]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
         </div>
       </AdminLayout>
     );
@@ -282,7 +282,7 @@ export default function ProjectEditor() {
           <Button
             onClick={handleSave}
             disabled={saveMutation.isPending}
-            className="bg-[#4D00FF] hover:bg-[#3D00CC] text-white"
+            className="bg-[#6B1421] hover:bg-[#3D00CC] text-white"
           >
             {saveMutation.isPending ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -299,9 +299,9 @@ export default function ProjectEditor() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-4 py-2 rounded-md transition-colors ${
                 activeTab === tab.id
-                  ? "bg-[#4D00FF] text-white"
+                  ? "bg-[#6B1421] text-white"
                   : "text-gray-400 hover:text-white hover:bg-gray-800"
               }`}
             >
@@ -311,7 +311,7 @@ export default function ProjectEditor() {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-6">
+        <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-6">
           {activeTab === "basic" && (
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
@@ -477,7 +477,7 @@ export default function ProjectEditor() {
                   <img
                     src={project.featuredImage}
                     alt="Featured"
-                    className="mt-2 w-full max-w-md rounded-lg"
+                    className="mt-2 w-full max-w-md rounded-md"
                   />
                 )}
               </div>
@@ -511,7 +511,7 @@ export default function ProjectEditor() {
                       <img
                         src={img}
                         alt={`Gallery ${i + 1}`}
-                        className="w-full h-24 object-cover rounded-lg"
+                        className="w-full h-24 object-cover rounded-md"
                       />
                       <button
                         onClick={() => removeGalleryImage(i)}
@@ -601,12 +601,12 @@ export default function ProjectEditor() {
                 {project.timeline.map((item, index) => (
                   <div
                     key={index}
-                    className="border border-gray-700 rounded-lg p-4 bg-gray-900/50"
+                    className="border border-gray-700 rounded-md p-4 bg-gray-900/50"
                   >
                     <div className="flex items-start gap-4">
                       {/* Phase number indicator */}
                       <div className="flex flex-col items-center gap-1">
-                        <div className="w-10 h-10 rounded-full bg-[#4D00FF] flex items-center justify-center text-white font-bold">
+                        <div className="w-10 h-10 rounded-md bg-[#6B1421] flex items-center justify-center text-white font-bold">
                           {item.phase}
                         </div>
                         <div className="flex flex-col gap-1 mt-2">
@@ -687,7 +687,7 @@ export default function ProjectEditor() {
                 ))}
 
                 {project.timeline.length === 0 && (
-                  <div className="text-center py-12 border border-dashed border-gray-700 rounded-lg">
+                  <div className="text-center py-12 border border-dashed border-gray-700 rounded-md">
                     <Flag className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                     <p className="text-gray-500 mb-2">No timeline phases added yet</p>
                     <p className="text-gray-600 text-sm mb-4">
@@ -706,7 +706,7 @@ export default function ProjectEditor() {
               </div>
 
               {project.timeline.length > 0 && (
-                <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
+                <div className="mt-6 p-4 bg-gray-800/50 rounded-md">
                   <p className="text-gray-400 text-sm">
                     <strong className="text-white">Tip:</strong> A good project timeline typically includes 
                     3-5 phases such as: Discovery, Strategy, Design, Development, Launch & Results.
@@ -718,7 +718,7 @@ export default function ProjectEditor() {
 
           {activeTab === "settings" && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-gray-900 rounded-md">
                 <div>
                   <p className="text-white font-medium">Visible</p>
                   <p className="text-gray-500 text-sm">Show this project on the public site</p>
@@ -729,7 +729,7 @@ export default function ProjectEditor() {
                 />
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-gray-900 rounded-md">
                 <div>
                   <p className="text-white font-medium">Featured</p>
                   <p className="text-gray-500 text-sm">Highlight this project on the homepage</p>

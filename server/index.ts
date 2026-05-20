@@ -3,6 +3,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
+import { redirectsMiddleware } from "./redirects";
 
 const app = express();
 
@@ -91,6 +92,10 @@ app.use((req, res, next) => {
     // Just log it instead
   });
 
+  // 301/302 redirects — runs before static/vite so it can intercept
+  // retired URLs and bounce them to their new home.
+  app.use(redirectsMiddleware);
+
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
@@ -105,11 +110,15 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
+  const listenOpts: { port: number; host: string; reusePort?: boolean } = {
     port,
     host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+  };
+  // reusePort is Linux-only — Node on macOS rejects it with ENOTSUP.
+  if (process.platform === "linux") {
+    listenOpts.reusePort = true;
+  }
+  server.listen(listenOpts, () => {
     log(`serving on port ${port}`);
   });
 })();

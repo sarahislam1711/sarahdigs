@@ -14,7 +14,7 @@ import { Save, Plus, Trash2, FileText, Sparkles, Brain, LineChart, Mail, Zap, Bo
 import type { PageContent } from "@shared/schema";
 
 const VALID_ICONS = ["Sparkles", "Brain", "LineChart", "Mail", "Zap", "BookOpen", "MessageSquare", "FileText"] as const;
-const VALID_COLORS = ["bg-[#1B1B1B]", "bg-[#4D00FF]", "bg-[#F4F2FF] text-[#1B1B1B] border-[#1B1B1B]/10"] as const;
+const VALID_COLORS = ["bg-[#1B1B1B]", "bg-[#6B1421]", "bg-[#E7E2D6] text-[#181612] border-[#181612]/10"] as const;
 
 // ============ HOME PAGE EDITOR ============
 
@@ -117,7 +117,7 @@ function HomePageEditor() {
   });
 
   const [contactContent, setContactContent] = useState<HomeContactContent>({
-    email: "hello@sarahdigs.com",
+    email: "sarah@sarahdigs.com",
     phone: "+1 (555) 000-0000",
     socialLinks: [
       { platform: "LinkedIn", url: "#" },
@@ -237,7 +237,7 @@ function HomePageEditor() {
               <img 
                 src={heroContent.backgroundImage} 
                 alt="Hero background preview" 
-                className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+                className="mt-2 w-full h-32 object-cover rounded-md border border-gray-700"
               />
             )}
             <p className="text-gray-500 text-xs mt-1">Upload to Media Library first, then paste URL here</p>
@@ -448,7 +448,7 @@ function HomePageEditor() {
             />
           </div>
           {(whyMeContent.features || []).map((feature, index) => (
-            <div key={index} className="border border-gray-700 rounded-lg p-4 space-y-3">
+            <div key={index} className="border border-gray-700 rounded-md p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-400 text-sm">Feature {index + 1}</span>
                 <Button size="icon" variant="ghost" onClick={() => {
@@ -713,7 +713,7 @@ function AboutPageEditor() {
                 <img 
                   src={heroContent.imageUrl} 
                   alt="Preview" 
-                  className="w-32 h-32 object-cover rounded-lg"
+                  className="w-32 h-32 object-cover rounded-md"
                 />
               </div>
             )}
@@ -736,7 +736,7 @@ function AboutPageEditor() {
               <img 
                 src={heroContent.backgroundImage} 
                 alt="Hero background preview" 
-                className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+                className="mt-2 w-full h-32 object-cover rounded-md border border-gray-700"
               />
             )}
             <p className="text-gray-500 text-xs mt-1">Upload to Media Library first, then paste URL here</p>
@@ -892,9 +892,9 @@ function ConsultationsPageEditor() {
 
   const [consultations, setConsultations] = useState<Consultation[]>([
     { title: "Strategic Deep Dive", slug: "strategic-deep-dive", desc: "Comprehensive analysis of your business model.", iconName: "Sparkles", color: "bg-[#1B1B1B]" },
-    { title: "AI Integration Workshop", slug: "ai-integration", desc: "Hands-on session to identify AI opportunities.", iconName: "Brain", color: "bg-[#4D00FF]" },
+    { title: "AI Integration Workshop", slug: "ai-integration", desc: "Hands-on session to identify AI opportunities.", iconName: "Brain", color: "bg-[#6B1421]" },
     { title: "Growth Metrics Audit", slug: "growth-metrics", desc: "Deep analysis of your analytics setup.", iconName: "LineChart", color: "bg-[#1B1B1B]" },
-    { title: "Fractional CMO", slug: "fractional-cmo", desc: "Ongoing strategic leadership.", iconName: "Mail", color: "bg-[#4D00FF]" },
+    { title: "Fractional CMO", slug: "fractional-cmo", desc: "Ongoing strategic leadership.", iconName: "Mail", color: "bg-[#6B1421]" },
   ]);
 
   useEffect(() => {
@@ -1015,7 +1015,7 @@ function ConsultationsPageEditor() {
         </CardHeader>
         <CardContent className="space-y-4">
           {painPoints.map((point, index) => (
-            <div key={index} className="border border-gray-700 rounded-lg p-4 space-y-3">
+            <div key={index} className="border border-gray-700 rounded-md p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-400 text-sm">Card {index + 1}</span>
                 <Button size="icon" variant="ghost" onClick={() => setPainPoints(painPoints.filter((_, i) => i !== index))}>
@@ -1070,7 +1070,7 @@ function ConsultationsPageEditor() {
         </CardHeader>
         <CardContent className="space-y-4">
           {consultations.map((c, index) => (
-            <div key={index} className="border border-gray-700 rounded-lg p-4 space-y-3">
+            <div key={index} className="border border-gray-700 rounded-md p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-400 text-sm">Type {index + 1}</span>
                 <Button size="icon" variant="ghost" onClick={() => setConsultations(consultations.filter((_, i) => i !== index))}>
@@ -1145,8 +1145,8 @@ function ConsultationsPageEditor() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="bg-[#1B1B1B]">Dark</SelectItem>
-                      <SelectItem value="bg-[#4D00FF]">Purple</SelectItem>
-                      <SelectItem value="bg-[#F4F2FF] text-[#1B1B1B] border-[#1B1B1B]/10">Light</SelectItem>
+                      <SelectItem value="bg-[#6B1421]">Purple</SelectItem>
+                      <SelectItem value="bg-[#E7E2D6] text-[#181612] border-[#181612]/10">Light</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1209,7 +1209,7 @@ function ContactPageEditor() {
   });
 
   const [contactInfo, setContactInfo] = useState<ContactInfoContent>({
-    email: "hello@sarahdigs.com",
+    email: "sarah@sarahdigs.com",
     phone: "+1 (555) 000-0000",
     location: "Remote / Worldwide",
     availability: "Mon-Fri, 9am-6pm EST",
@@ -1615,7 +1615,7 @@ function DigOnDemandPageEditor() {
         </CardHeader>
         <CardContent className="space-y-4">
           {whatYouGet.map((card, index) => (
-            <div key={index} className="border border-gray-700 rounded-lg p-4 space-y-3">
+            <div key={index} className="border border-gray-700 rounded-md p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-400 text-sm">Card {index + 1}</span>
                 <Button size="icon" variant="ghost" onClick={() => setWhatYouGet(whatYouGet.filter((_, i) => i !== index))}>
@@ -1711,7 +1711,7 @@ function DigOnDemandPageEditor() {
         </CardHeader>
         <CardContent className="space-y-4">
           {timeline.map((step, index) => (
-            <div key={index} className="border border-gray-700 rounded-lg p-4 space-y-3">
+            <div key={index} className="border border-gray-700 rounded-md p-4 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-400 text-sm">Step {step.id}</span>
                 <Button size="icon" variant="ghost" onClick={() => setTimeline(timeline.filter((_, i) => i !== index))}>
@@ -1841,7 +1841,7 @@ export default function AdminPages() {
             <TabsTrigger
               key={page.slug}
               value={page.slug}
-              className="data-[state=active]:bg-[#4D00FF]"
+              className="data-[state=active]:bg-[#6B1421]"
             >
               <page.icon className="w-4 h-4 mr-2" />
               {page.label}

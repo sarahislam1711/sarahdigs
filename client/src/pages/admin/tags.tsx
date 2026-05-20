@@ -92,7 +92,7 @@ export default function AdminTags() {
         <p className="text-gray-400">Add tags to your blog posts for better organization</p>
         <Button
           onClick={() => setShowForm(true)}
-          className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+          className="bg-[#6B1421] hover:bg-[#6B1421]/80"
           data-testid="button-create-tag"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -137,7 +137,7 @@ export default function AdminTags() {
               <Button
                 onClick={handleSubmit}
                 disabled={!formData.name || !formData.slug}
-                className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+                className="bg-[#6B1421] hover:bg-[#6B1421]/80"
                 data-testid="button-save-tag"
               >
                 Create Tag
@@ -152,7 +152,7 @@ export default function AdminTags() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D00FF]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6B1421]"></div>
         </div>
       ) : tags && tags.length > 0 ? (
         <Card className="bg-[#0D0D0D] border-gray-800">
@@ -210,7 +210,7 @@ export default function AdminTags() {
             <p className="text-gray-400 mb-4">Create tags to label your blog posts</p>
             <Button
               onClick={() => setShowForm(true)}
-              className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+              className="bg-[#6B1421] hover:bg-[#6B1421]/80"
             >
               <Plus className="w-4 h-4 mr-2" />
               Create Your First Tag

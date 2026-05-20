@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { Service } from "@shared/schema";
 import { useParams } from "wouter";
 import { Loader2 } from "lucide-react";
+import SEO from "@/components/SEO";
 
 interface ServiceContent {
   hero: {
@@ -82,9 +83,14 @@ function transformServiceToContent(service: Service): ServiceContent {
   };
 }
 
-export default function ServiceDynamic() {
-  const { slug } = useParams<{ slug: string }>();
-  
+interface ServiceDynamicProps {
+  slug?: string;
+}
+
+export default function ServiceDynamic({ slug: slugProp }: ServiceDynamicProps = {}) {
+  const params = useParams<{ slug: string }>();
+  const slug = slugProp ?? params.slug;
+
   const { data: service, isLoading, error } = useQuery<Service>({
     queryKey: ["/api/services", slug],
     enabled: !!slug,
@@ -93,7 +99,7 @@ export default function ServiceDynamic() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#4D00FF]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
       </div>
     );
   }
@@ -110,6 +116,41 @@ export default function ServiceDynamic() {
   }
 
   const content = transformServiceToContent(service);
-  
-  return <ServiceLayout content={content} />;
+
+  const description = service.heroDescription || service.shortDescription || undefined;
+
+  // Flagship service lives at /the-full-dig; all others use /services/<slug>
+  const canonicalPath = service.slug === "seo" ? "/the-full-dig" : `/services/${service.slug}`;
+  const canonicalUrl = `https://www.sarahdigs.com${canonicalPath}`;
+
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description,
+    url: canonicalUrl,
+    provider: { "@type": "Organization", name: "SarahDigs", url: "https://www.sarahdigs.com" },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sarahdigs.com/" },
+      { "@type": "ListItem", position: 2, name: "Services", item: "https://www.sarahdigs.com/" },
+      { "@type": "ListItem", position: 3, name: service.title, item: canonicalUrl },
+    ],
+  };
+
+  return (
+    <>
+      <SEO
+        title={service.title}
+        description={description}
+        canonical={canonicalPath}
+        jsonLd={[serviceJsonLd, breadcrumbJsonLd]}
+      />
+      <ServiceLayout content={content} />
+    </>
+  );
 }

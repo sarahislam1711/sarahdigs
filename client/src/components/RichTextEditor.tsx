@@ -68,7 +68,7 @@ const fontSizes = [
 ];
 
 const colors = [
-  "#000000", "#1B1B1B", "#4D00FF", "#ffffff",
+  "#000000", "#1B1B1B", "#6B1421", "#ffffff",
   "#ef4444", "#f97316", "#eab308", "#22c55e",
   "#3b82f6", "#8b5cf6", "#ec4899", "#6b7280",
 ];
@@ -99,7 +99,7 @@ export function RichTextEditor({ content, onChange, onImageUpload }: RichTextEdi
       FontFamily,
       Image.configure({
         HTMLAttributes: {
-          class: "max-w-full h-auto rounded-lg my-4",
+          class: "max-w-full h-auto rounded-md my-4",
         },
       }),
     ],
@@ -160,7 +160,7 @@ export function RichTextEditor({ content, onChange, onImageUpload }: RichTextEdi
       onClick={onClick}
       title={title}
       className={`h-8 w-8 p-0 ${
-        isActive ? "bg-[#4D00FF] text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"
+        isActive ? "bg-[#6B1421] text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"
       }`}
     >
       {children}
@@ -170,7 +170,7 @@ export function RichTextEditor({ content, onChange, onImageUpload }: RichTextEdi
   const Divider = () => <div className="w-px h-6 bg-gray-700 mx-1" />;
 
   return (
-    <div className="border border-gray-700 rounded-lg overflow-hidden bg-gray-900">
+    <div className="border border-gray-700 rounded-md overflow-hidden bg-gray-900">
       <div className="flex flex-wrap items-center gap-1 p-2 border-b border-gray-700 bg-gray-800">
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
@@ -287,7 +287,7 @@ export function RichTextEditor({ content, onChange, onImageUpload }: RichTextEdi
                   key={color}
                   type="button"
                   onClick={() => editor.chain().focus().setColor(color).run()}
-                  className="w-6 h-6 rounded border border-gray-600 hover:scale-110 transition-transform"
+                  className="w-6 h-6 rounded-md border border-gray-600 hover:scale-110 transition-transform"
                   style={{ backgroundColor: color }}
                   title={color}
                 />
@@ -378,7 +378,7 @@ export function RichTextEditor({ content, onChange, onImageUpload }: RichTextEdi
                 <Button
                   type="button"
                   onClick={handleImageUpload}
-                  className="w-full bg-[#4D00FF] hover:bg-[#4D00FF]/80 text-sm"
+                  className="w-full bg-[#6B1421] hover:bg-[#6B1421]/80 text-sm"
                 >
                   Upload Image
                 </Button>
@@ -400,7 +400,7 @@ export function RichTextEditor({ content, onChange, onImageUpload }: RichTextEdi
                   onClick={addImage}
                   disabled={!imageUrl}
                   size="sm"
-                  className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+                  className="bg-[#6B1421] hover:bg-[#6B1421]/80"
                 >
                   Add
                 </Button>
@@ -412,7 +412,7 @@ export function RichTextEditor({ content, onChange, onImageUpload }: RichTextEdi
 
       <EditorContent
         editor={editor}
-        className="bg-gray-900 text-white [&_.ProseMirror]:min-h-[300px] [&_.ProseMirror]:p-4 [&_.ProseMirror]:focus:outline-none [&_.ProseMirror_h1]:text-3xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h1]:mb-4 [&_.ProseMirror_h2]:text-2xl [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h2]:mb-3 [&_.ProseMirror_h3]:text-xl [&_.ProseMirror_h3]:font-bold [&_.ProseMirror_h3]:mb-2 [&_.ProseMirror_p]:mb-3 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-[#4D00FF] [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_blockquote]:text-gray-300 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-6 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-6 [&_.ProseMirror_img]:max-w-full [&_.ProseMirror_img]:h-auto [&_.ProseMirror_img]:rounded-lg [&_.ProseMirror_img]:my-4"
+        className="bg-gray-900 text-white [&_.ProseMirror]:min-h-[300px] [&_.ProseMirror]:p-4 [&_.ProseMirror]:focus:outline-none [&_.ProseMirror_h1]:text-3xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h1]:mb-4 [&_.ProseMirror_h2]:text-2xl [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h2]:mb-3 [&_.ProseMirror_h3]:text-xl [&_.ProseMirror_h3]:font-bold [&_.ProseMirror_h3]:mb-2 [&_.ProseMirror_p]:mb-3 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-[#6B1421] [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_blockquote]:text-gray-300 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-6 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-6 [&_.ProseMirror_img]:max-w-full [&_.ProseMirror_img]:h-auto [&_.ProseMirror_img]:rounded-md [&_.ProseMirror_img]:my-4"
       />
     </div>
   );

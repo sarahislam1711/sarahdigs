@@ -266,6 +266,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/admin/inquiries/contact", isAuthenticated, async (_req, res) => {
+    try {
+      const inquiries = await storage.getContactInquiries();
+      res.json(inquiries);
+    } catch (error) {
+      console.error("Error fetching contact inquiries:", error);
+      res.status(500).json({ error: "Failed to fetch inquiries" });
+    }
+  });
+
+  app.get("/api/admin/inquiries/custom-plan", isAuthenticated, async (_req, res) => {
+    try {
+      const inquiries = await storage.getCustomPlanInquiries();
+      res.json(inquiries);
+    } catch (error) {
+      console.error("Error fetching custom plan inquiries:", error);
+      res.status(500).json({ error: "Failed to fetch inquiries" });
+    }
+  });
+
   app.get("/api/admin/media", isAuthenticated, async (req, res) => {
     try {
       const mediaItems = await storage.getMedia();

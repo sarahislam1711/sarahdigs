@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useRoute, Link } from "wouter";
@@ -58,8 +59,8 @@ const projectsData = {
       { label: "CAC Reduction", value: "-40%" }
     ],
     images: [
-      "bg-[#F4F2FF]", // Placeholder colors for now
-      "bg-[#FBFCFE]",
+      "bg-[#E7E2D6]", // Placeholder colors for now
+      "bg-[#F4F1EA]",
       "bg-[#1B1B1B]"
     ]
   },
@@ -101,8 +102,8 @@ const projectsData = {
       { label: "Domain Authority", value: "0 -> 45" }
     ],
     images: [
-      "bg-[#F4F2FF]",
-      "bg-[#FBFCFE]",
+      "bg-[#E7E2D6]",
+      "bg-[#F4F1EA]",
       "bg-[#1B1B1B]"
     ]
   }
@@ -128,12 +129,29 @@ export default function ProjectDetail() {
     setCurrentSlide((prev) => (prev - 1 + project.images.length) % project.images.length);
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sarahdigs.com/" },
+      { "@type": "ListItem", position: 2, name: "Projects", item: "https://www.sarahdigs.com/projects" },
+      { "@type": "ListItem", position: 3, name: project.name, item: `https://www.sarahdigs.com/projects/${slug}` },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
+    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+      <SEO
+        title={`${project.name} — ${project.type}`}
+        description={project.hero.oneLiner}
+        canonical={`/projects/${slug}`}
+        ogType="article"
+        jsonLd={breadcrumbJsonLd}
+      />
       <Navbar />
-      
+
       {/* Hero Section */}
-      <section className="pt-40 pb-20 bg-[#FBFCFE]">
+      <section className="pt-40 pb-20 bg-[#F4F1EA]">
         <div className="container mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -141,17 +159,17 @@ export default function ProjectDetail() {
             transition={{ duration: 0.6 }}
             className="flex flex-col md:flex-row gap-12 items-start md:items-center mb-24"
           >
-            <div className="w-24 h-24 bg-white rounded-2xl border border-[#1B1B1B]/10 flex items-center justify-center shadow-lg shrink-0">
-              <Icon className="w-10 h-10 text-[#4D00FF]" />
+            <div className="w-24 h-24 bg-white rounded-md border border-[#181612]/10 flex items-center justify-center shadow-lg shrink-0">
+              <Icon className="w-10 h-10 text-[#6B1421]" />
             </div>
             <div>
                <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[0.95] mb-4">
                 {project.name}
                </h1>
-               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 text-[#1B1B1B]/60 text-lg">
+               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 text-[#181612]/60 text-lg">
                  <span>{project.hero.description}</span>
                  <span className="hidden md:block w-1 h-1 bg-[#1B1B1B]/20 rounded-full"></span>
-                 <a href={`https://${project.website}`} target="_blank" rel="noreferrer" className="hover:text-[#4D00FF] transition-colors flex items-center gap-1">
+                 <a href={`https://${project.website}`} target="_blank" rel="noreferrer" className="hover:text-[#6B1421] transition-colors flex items-center gap-1">
                    {project.website} <ArrowUpRight className="w-4 h-4" />
                  </a>
                </div>
@@ -165,14 +183,14 @@ export default function ProjectDetail() {
             className="max-w-4xl"
           >
             <p className="text-2xl md:text-4xl font-medium leading-tight">
-              {project.hero.oneLiner} <br /> <span className="bg-[#4D00FF]/10 text-[#4D00FF] px-2 rounded-lg decoration-clone">{project.hero.highlight}</span>
+              {project.hero.oneLiner} <br /> <span className="bg-[#6B1421]/10 text-[#6B1421] px-2 rounded-md decoration-clone">{project.hero.highlight}</span>
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Situation & Approach */}
-      <section className="py-24 bg-white border-t border-[#1B1B1B]/5">
+      <section className="py-24 bg-white border-t border-[#181612]/5">
         <div className="container mx-auto px-6">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
               {/* Situation */}
@@ -182,13 +200,13 @@ export default function ProjectDetail() {
                 viewport={{ once: true }}
               >
                  <div className="flex items-center gap-3 mb-6">
-                   <div className="w-10 h-10 rounded-full bg-[#F4F2FF] flex items-center justify-center text-[#4D00FF]">
+                   <div className="w-10 h-10 rounded-md bg-[#E7E2D6] flex items-center justify-center text-[#6B1421]">
                       <Target className="w-5 h-5" />
                    </div>
                    <h2 className="text-2xl font-bold uppercase tracking-wide">The Situation</h2>
                  </div>
                  <h3 className="text-3xl font-bold mb-6">{project.situation.title}</h3>
-                 <p className="text-xl text-[#1B1B1B]/70 leading-relaxed">
+                 <p className="text-xl text-[#181612]/70 leading-relaxed">
                    {project.situation.description}
                  </p>
               </motion.div>
@@ -201,7 +219,7 @@ export default function ProjectDetail() {
                  transition={{ delay: 0.2 }}
               >
                  <div className="flex items-center gap-3 mb-6">
-                   <div className="w-10 h-10 rounded-full bg-[#1B1B1B] flex items-center justify-center text-white">
+                   <div className="w-10 h-10 rounded-md bg-[#1B1B1B] flex items-center justify-center text-white">
                       <CheckCircle2 className="w-5 h-5" />
                    </div>
                    <h2 className="text-2xl font-bold uppercase tracking-wide">Our Approach</h2>
@@ -209,8 +227,8 @@ export default function ProjectDetail() {
                  <h3 className="text-3xl font-bold mb-6">{project.approach.title}</h3>
                  <ul className="space-y-4">
                    {project.approach.steps.map((step, i) => (
-                     <li key={i} className="flex items-start gap-4 text-lg text-[#1B1B1B]/80">
-                       <span className="w-1.5 h-1.5 rounded-full bg-[#4D00FF] mt-2.5 shrink-0"></span>
+                     <li key={i} className="flex items-start gap-4 text-lg text-[#181612]/80">
+                       <span className="w-1.5 h-1.5 rounded-full bg-[#6B1421] mt-2.5 shrink-0"></span>
                        {step}
                      </li>
                    ))}
@@ -221,11 +239,11 @@ export default function ProjectDetail() {
       </section>
 
       {/* Timeline */}
-      <section className="py-24 bg-[#F4F2FF]">
+      <section className="py-24 bg-[#E7E2D6]">
         <div className="container mx-auto px-6">
            <div className="text-center mb-16">
              <h2 className="text-3xl font-bold tracking-tight flex items-center justify-center gap-3">
-               <Clock className="w-6 h-6 text-[#4D00FF]" /> Project Timeline
+               <Clock className="w-6 h-6 text-[#6B1421]" /> Project Timeline
              </h2>
            </div>
 
@@ -244,24 +262,24 @@ export default function ProjectDetail() {
                     className={`relative flex flex-col ${i % 2 === 0 ? 'md:flex-col-reverse md:mb-12' : 'md:flex-col md:mt-12'}`}
                   >
                      {/* Main Axis Dot */}
-                     <div className={`w-4 h-4 rounded-full bg-[#FBFCFE] border-[3px] border-[#4D00FF] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:block z-10`}></div>
+                     <div className={`w-4 h-4 rounded-full bg-[#F4F1EA] border-[3px] border-[#6B1421] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:block z-10`}></div>
 
                      {/* Mobile Layout */}
-                     <div className="md:hidden pl-8 border-l-2 border-[#1B1B1B]/10 pb-12 relative">
-                        <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-[#4D00FF] border-2 border-white"></div>
-                        <span className="text-xs font-bold uppercase tracking-widest text-[#4D00FF] mb-2 block">{item.phase}</span>
+                     <div className="md:hidden pl-8 border-l-2 border-[#181612]/10 pb-12 relative">
+                        <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-[#6B1421] border-2 border-white"></div>
+                        <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421] mb-2 block">{item.phase}</span>
                         <h4 className="text-xl font-bold mb-2">{item.title}</h4>
-                        <p className="text-[#1B1B1B]/70 text-sm leading-relaxed">{item.desc}</p>
+                        <p className="text-[#181612]/70 text-sm leading-relaxed">{item.desc}</p>
                      </div>
 
                      {/* Desktop Content */}
-                     <div className={`hidden md:flex flex-col items-center text-center p-4 bg-white rounded-2xl shadow-sm border border-[#1B1B1B]/5 hover:shadow-md transition-all relative z-20 max-w-[200px] mx-auto ${i % 2 === 0 ? 'mb-8' : 'mt-8'}`}>
+                     <div className={`hidden md:flex flex-col items-center text-center p-4 bg-white rounded-md shadow-sm border border-[#181612]/5 hover:shadow-md transition-all relative z-20 max-w-[200px] mx-auto ${i % 2 === 0 ? 'mb-8' : 'mt-8'}`}>
                         {/* Connection Dot on Card */}
-                        <div className={`absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#4D00FF] ${i % 2 === 0 ? 'top-[-6px]' : 'bottom-[-6px]'}`}></div>
+                        <div className={`absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#6B1421] ${i % 2 === 0 ? 'top-[-6px]' : 'bottom-[-6px]'}`}></div>
                         
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#4D00FF] mb-1 block">{item.phase}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#6B1421] mb-1 block">{item.phase}</span>
                         <h4 className="text-lg font-bold mb-1 leading-tight">{item.title}</h4>
-                        <p className="text-[#1B1B1B]/70 text-xs leading-snug">{item.desc}</p>
+                        <p className="text-[#181612]/70 text-xs leading-snug">{item.desc}</p>
                      </div>
                   </motion.div>
                 ))}
@@ -285,10 +303,10 @@ export default function ProjectDetail() {
                      whileInView={{ opacity: 1, x: 0 }}
                      viewport={{ once: true }}
                      transition={{ delay: i * 0.1 }}
-                     className="bg-[#FBFCFE] p-8 rounded-3xl border border-[#1B1B1B]/5"
+                     className="bg-[#F4F1EA] p-8 rounded-md border border-[#181612]/5"
                    >
-                      <div className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/50 mb-2">{result.label}</div>
-                      <div className="text-4xl md:text-5xl font-bold text-[#4D00FF]">{result.value}</div>
+                      <div className="text-sm font-bold uppercase tracking-widest text-[#181612]/50 mb-2">{result.label}</div>
+                      <div className="text-4xl md:text-5xl font-bold text-[#6B1421]">{result.value}</div>
                    </motion.div>
                  ))}
                </div>
@@ -296,7 +314,7 @@ export default function ProjectDetail() {
 
              {/* Slideshow */}
              <div className="lg:w-2/3">
-               <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/3] bg-[#F4F2FF] group">
+               <div className="relative rounded-md overflow-hidden aspect-[4/3] bg-[#E7E2D6] group">
                  {/* Images (Placeholder colors for now) */}
                  <motion.div 
                    key={currentSlide}
@@ -305,20 +323,20 @@ export default function ProjectDetail() {
                    transition={{ duration: 0.5 }}
                    className={`w-full h-full ${project.images[currentSlide]} flex items-center justify-center`}
                  >
-                    <span className="text-[#1B1B1B]/20 text-2xl font-bold">Project Image {currentSlide + 1}</span>
+                    <span className="text-[#181612]/20 text-2xl font-bold">Project Image {currentSlide + 1}</span>
                  </motion.div>
 
                  {/* Controls */}
                  <div className="absolute bottom-8 right-8 flex gap-4">
                     <button 
                       onClick={prevSlide}
-                      className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-white hover:text-[#4D00FF] transition-all shadow-lg"
+                      className="w-14 h-14 rounded-md bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-white hover:text-[#6B1421] transition-all shadow-lg"
                     >
                        <ArrowLeft className="w-6 h-6" />
                     </button>
                     <button 
                       onClick={nextSlide}
-                      className="w-14 h-14 rounded-full bg-[#1B1B1B]/90 backdrop-blur-sm text-white flex items-center justify-center hover:bg-[#4D00FF] transition-all shadow-lg"
+                      className="w-14 h-14 rounded-md bg-[#1B1B1B]/90 backdrop-blur-sm text-white flex items-center justify-center hover:bg-[#6B1421] transition-all shadow-lg"
                     >
                        <ArrowRight className="w-6 h-6" />
                     </button>

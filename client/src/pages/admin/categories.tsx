@@ -124,7 +124,7 @@ export default function AdminCategories() {
         <p className="text-gray-400">Organize your blog posts with categories</p>
         <Button
           onClick={() => setShowForm(true)}
-          className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+          className="bg-[#6B1421] hover:bg-[#6B1421]/80"
           data-testid="button-create-category"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -179,7 +179,7 @@ export default function AdminCategories() {
               <Button
                 onClick={handleSubmit}
                 disabled={!formData.name || !formData.slug}
-                className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+                className="bg-[#6B1421] hover:bg-[#6B1421]/80"
                 data-testid="button-save-category"
               >
                 <Save className="w-4 h-4 mr-2" />
@@ -195,7 +195,7 @@ export default function AdminCategories() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D00FF]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6B1421]"></div>
         </div>
       ) : categories && categories.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -204,8 +204,8 @@ export default function AdminCategories() {
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-[#4D00FF]/20">
-                      <Folder className="w-5 h-5 text-[#4D00FF]" />
+                    <div className="p-2 rounded-md bg-[#6B1421]/20">
+                      <Folder className="w-5 h-5 text-[#6B1421]" />
                     </div>
                     <div>
                       <h3 className="text-white font-medium">{category.name}</h3>
@@ -270,7 +270,7 @@ export default function AdminCategories() {
             <p className="text-gray-400 mb-4">Create categories to organize your blog posts</p>
             <Button
               onClick={() => setShowForm(true)}
-              className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+              className="bg-[#6B1421] hover:bg-[#6B1421]/80"
             >
               <Plus className="w-4 h-4 mr-2" />
               Create Your First Category

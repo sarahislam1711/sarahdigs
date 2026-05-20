@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowRight, Loader2, Sparkles } from "lucide-react";
 import { Link } from "wouter";
@@ -10,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const Hero = () => {
   return (
-    <section className="pt-32 pb-12 bg-[#F4F2FF] relative overflow-hidden">
+    <section className="pt-32 pb-12 bg-[#E7E2D6] relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <div className="lg:w-1/2 text-center lg:text-left">
@@ -19,19 +20,19 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-block py-1 px-3 rounded-full bg-[#4D00FF]/10 text-[#4D00FF] text-sm font-bold uppercase tracking-widest mb-6">
+              <span className="inline-block py-1 px-3 rounded-full bg-[#6B1421]/10 text-[#6B1421] text-sm font-bold uppercase tracking-widest mb-6">
                 Custom Solutions Built Around You
               </span>
-              <h1 className="text-5xl md:text-7xl tracking-tighter mb-6 leading-[0.95] text-[#1B1B1B] font-bold text-left">
+              <h1 className="text-5xl md:text-7xl tracking-tighter mb-6 leading-[0.95] text-[#181612] font-bold text-left">
                 Your business is unique. <br />
-                <span className="text-[#4D00FF]">Your marketing should be too.</span>
+                <span className="text-[#6B1421]">Your marketing should be too.</span>
               </h1>
-              <p className="text-xl text-[#1B1B1B]/70 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-xl text-[#181612]/70 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 Custom-built brand, strategy, and SEO packages tailored to your exact stage, challenge, and goals.
               </p>
               <Button
                 size="lg"
-                className="text-lg h-16 px-12 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all rounded-full shadow-xl"
+                className="text-lg h-16 px-12 bg-[#1B1B1B] hover:bg-[#6B1421] text-white transition-all rounded-md shadow-xl"
                 onClick={() => document.getElementById("focus-areas")?.scrollIntoView({ behavior: "smooth" })}
               >
                 Start Your Custom Plan <ArrowRight className="ml-2 h-5 w-5" />
@@ -39,35 +40,35 @@ const Hero = () => {
             </motion.div>
           </div>
           <div className="lg:w-1/2 w-full">
-            <div className="relative aspect-square md:aspect-video lg:aspect-square bg-white rounded-[2.5rem] shadow-2xl border border-[#1B1B1B]/5 p-8 flex items-center justify-center overflow-hidden">
+            <div className="relative aspect-square md:aspect-video lg:aspect-square bg-white rounded-md shadow-2xl border border-[#181612]/5 p-8 flex items-center justify-center overflow-hidden">
               {/* Animated Modular Blocks Visual */}
               <div className="grid grid-cols-2 gap-4 w-full max-w-md relative z-10">
                 <motion.div 
                   initial={{ x: -50, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.8 }}
-                  className="h-32 bg-[#4D00FF] rounded-2xl"
+                  className="h-32 bg-[#6B1421] rounded-md"
                 />
                 <motion.div 
                   initial={{ y: -50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4, duration: 0.8 }}
-                  className="h-32 bg-[#1B1B1B] rounded-2xl"
+                  className="h-32 bg-[#1B1B1B] rounded-md"
                 />
                 <motion.div 
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.6, duration: 0.8 }}
-                  className="h-32 bg-[#F4F2FF] rounded-2xl border-2 border-[#4D00FF] border-dashed"
+                  className="h-32 bg-[#E7E2D6] rounded-md border-2 border-[#6B1421] border-dashed"
                 />
                 <motion.div 
                   initial={{ x: 50, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.8 }}
-                  className="h-32 bg-[#1B1B1B]/10 rounded-2xl"
+                  className="h-32 bg-[#1B1B1B]/10 rounded-md"
                 />
               </div>
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#4D00FF]/5 via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#6B1421]/5 via-transparent to-transparent"></div>
             </div>
           </div>
         </div>
@@ -101,7 +102,7 @@ const WhatYouGet = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-8">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
-            What to Expect When We Build <br /><span className="text-[#4D00FF]">Your Custom Strategy</span>
+            What to Expect When We Build <br /><span className="text-[#6B1421]">Your Custom Strategy</span>
           </h2>
         </div>
 
@@ -110,13 +111,13 @@ const WhatYouGet = () => {
             <motion.div
               key={i}
               whileHover={{ y: -5 }}
-              className="p-6 rounded-[1.5rem] bg-[#F4F2FF] border border-[#1B1B1B]/5 hover:border-[#4D00FF]/30 hover:shadow-lg transition-all group cursor-default"
+              className="p-6 rounded-[1.5rem] bg-[#E7E2D6] border border-[#181612]/5 hover:border-[#6B1421]/30 hover:shadow-lg transition-all group cursor-default"
             >
-              <div className="w-10 h-10 rounded-full bg-[#4D00FF]/10 flex items-center justify-center mb-4 group-hover:bg-[#4D00FF] transition-colors">
-                <span className="font-bold text-[#4D00FF] group-hover:text-white text-sm">{i + 1}</span>
+              <div className="w-10 h-10 rounded-md bg-[#6B1421]/10 flex items-center justify-center mb-4 group-hover:bg-[#6B1421] transition-colors">
+                <span className="font-bold text-[#6B1421] group-hover:text-white text-sm">{i + 1}</span>
               </div>
-              <h3 className="text-lg font-bold mb-2 group-hover:text-[#4D00FF] transition-colors">{card.title}</h3>
-              <p className="text-[#1B1B1B]/70 leading-relaxed text-sm">{card.description}</p>
+              <h3 className="text-lg font-bold mb-2 group-hover:text-[#6B1421] transition-colors">{card.title}</h3>
+              <p className="text-[#181612]/70 leading-relaxed text-sm">{card.description}</p>
             </motion.div>
           ))}
         </div>
@@ -153,9 +154,9 @@ const InteractiveModules = ({ selectedModules, toggleModule }: { selectedModules
                 onClick={() => toggleModule(mod)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-full text-sm md:text-base font-medium transition-all border ${
+                className={`px-6 py-3 rounded-md text-sm md:text-base font-medium transition-all border ${
                   isSelected 
-                    ? "bg-[#4D00FF] border-[#4D00FF] text-white shadow-[0_0_20px_-5px_#4D00FF]" 
+                    ? "bg-[#6B1421] border-[#6B1421] text-white shadow-[0_0_20px_-5px_#6B1421]" 
                     : "bg-transparent border-white/20 text-white/70 hover:border-white hover:text-white"
                 }`}
               >
@@ -168,7 +169,7 @@ const InteractiveModules = ({ selectedModules, toggleModule }: { selectedModules
         <div className="text-center">
              <Button
                 size="lg"
-                className="text-lg h-14 px-8 bg-white text-[#1B1B1B] hover:bg-[#4D00FF] hover:text-white transition-all rounded-full"
+                className="text-lg h-14 px-8 bg-white text-[#181612] hover:bg-[#6B1421] hover:text-white transition-all rounded-md"
                 onClick={() => document.getElementById("custom-plan-form")?.scrollIntoView({ behavior: "smooth" })}
               >
                 Create My Plan <ArrowRight className="ml-2 h-5 w-5" />
@@ -199,7 +200,7 @@ const Timeline = () => {
   ];
 
   return (
-    <section className="py-12 bg-[#F4F2FF]">
+    <section className="py-12 bg-[#E7E2D6]">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold tracking-tighter mb-16 text-center">How Custom Projects Work</h2>
         
@@ -209,11 +210,11 @@ const Timeline = () => {
            
            {steps.map((step) => (
              <div key={step.id} className="text-center md:text-left group">
-                <div className="w-24 h-24 mx-auto md:mx-0 bg-[#F4F2FF] border border-[#1B1B1B]/20 rounded-full flex items-center justify-center text-3xl font-bold text-[#1B1B1B]/30 mb-6 group-hover:border-[#4D00FF] group-hover:text-[#4D00FF] transition-all z-10 relative">
+                <div className="w-24 h-24 mx-auto md:mx-0 bg-[#E7E2D6] border border-[#181612]/20 rounded-full flex items-center justify-center text-3xl font-bold text-[#181612]/30 mb-6 group-hover:border-[#6B1421] group-hover:text-[#6B1421] transition-all z-10 relative">
                    {step.id}
                 </div>
                 <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
-                <p className="text-[#1B1B1B]/70">{step.desc}</p>
+                <p className="text-[#181612]/70">{step.desc}</p>
              </div>
            ))}
         </div>
@@ -273,83 +274,83 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
   };
 
   return (
-    <section id="custom-plan-form" className="pt-8 pb-32 bg-[#F4F2FF] scroll-mt-24">
+    <section id="custom-plan-form" className="pt-8 pb-32 bg-[#E7E2D6] scroll-mt-24">
       <div className="container mx-auto px-6 max-w-3xl">
         <div className="text-center mb-12">
            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-6 leading-[1.3]">Let's Build Your <br />Custom Marketing Plan</h2>
-           <p className="text-xl text-[#1B1B1B]/70">Tell me your goals, challenges, and what you want to improve — I'll create a custom strategy just for you.</p>
+           <p className="text-xl text-[#181612]/70">Tell me your goals, challenges, and what you want to improve — I'll create a custom strategy just for you.</p>
         </div>
 
-        <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-[#1B1B1B]/10">
+        <div className="bg-white p-8 md:p-12 rounded-md shadow-2xl border border-[#181612]/10">
            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                   <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">Your Name</label>
+                   <label className="text-sm font-bold uppercase tracking-widest text-[#181612]/70">Your Name</label>
                    <input 
                      type="text"
                      required
                      value={formData.name}
                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                     className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF]" 
+                     className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421]" 
                      placeholder="John Doe"
                    />
                 </div>
                 <div className="space-y-2">
-                   <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">Your Email</label>
+                   <label className="text-sm font-bold uppercase tracking-widest text-[#181612]/70">Your Email</label>
                    <input 
                      type="email"
                      required
                      value={formData.email}
                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                     className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF]" 
+                     className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421]" 
                      placeholder="john@company.com"
                    />
                 </div>
               </div>
 
               <div className="space-y-2">
-                 <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">What's your business about?</label>
+                 <label className="text-sm font-bold uppercase tracking-widest text-[#181612]/70">What's your business about?</label>
                  <textarea 
                    required
                    value={formData.businessDescription}
                    onChange={(e) => setFormData({ ...formData, businessDescription: e.target.value })}
-                   className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF] min-h-[100px]" 
+                   className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] min-h-[100px]" 
                    placeholder="Briefly describe your product/service..."
                  ></textarea>
               </div>
               
               <div className="space-y-2">
-                 <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">What's your main challenge right now?</label>
+                 <label className="text-sm font-bold uppercase tracking-widest text-[#181612]/70">What's your main challenge right now?</label>
                  <textarea 
                    required
                    value={formData.mainChallenge}
                    onChange={(e) => setFormData({ ...formData, mainChallenge: e.target.value })}
-                   className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF] min-h-[100px]" 
+                   className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] min-h-[100px]" 
                    placeholder="e.g. Traffic but no conversions, no clear strategy..."
                  ></textarea>
               </div>
 
               <div className="space-y-2">
-                 <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">Selected Focus Areas</label>
-                 <div className="p-4 bg-[#F4F2FF] rounded-xl min-h-[60px] flex flex-wrap gap-2">
+                 <label className="text-sm font-bold uppercase tracking-widest text-[#181612]/70">Selected Focus Areas</label>
+                 <div className="p-4 bg-[#E7E2D6] rounded-md min-h-[60px] flex flex-wrap gap-2">
                     {selectedModules.length > 0 ? (
                       selectedModules.map(m => (
-                        <span key={m} className="bg-[#4D00FF] text-white text-xs px-2 py-1 rounded-md">{m}</span>
+                        <span key={m} className="bg-[#6B1421] text-white text-xs px-2 py-1 rounded-md">{m}</span>
                       ))
                     ) : (
-                      <span className="text-[#1B1B1B]/40 text-sm italic">No specific areas selected yet (optional)</span>
+                      <span className="text-[#181612]/40 text-sm italic">No specific areas selected yet (optional)</span>
                     )}
                  </div>
               </div>
 
               <div className="space-y-2">
-                 <label className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/70">Budget Range</label>
+                 <label className="text-sm font-bold uppercase tracking-widest text-[#181612]/70">Budget Range</label>
                  <div className="relative">
                     <select 
                       required
                       value={formData.budgetRange}
                       onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                      className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF] appearance-none text-[#1B1B1B]"
+                      className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] appearance-none text-[#181612]"
                     >
                         <option value="" disabled>Select your budget</option>
                         <option value="2k-5k">$2,000 - $5,000</option>
@@ -358,7 +359,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                         <option value="20k+">$20,000+</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                        <svg className="w-4 h-4 text-[#1B1B1B]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg className="w-4 h-4 text-[#181612]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                  </div>
               </div>
@@ -368,7 +369,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                    type="submit"
                    disabled={customPlanMutation.isPending}
                    size="lg"
-                   className="w-full h-16 text-lg bg-[#4D00FF] hover:bg-[#1B1B1B] text-white rounded-full"
+                   className="w-full h-16 text-lg bg-[#6B1421] hover:bg-[#181612] text-white rounded-full"
                  >
                    {customPlanMutation.isPending ? (
                      <>
@@ -400,8 +401,13 @@ export default function DigOnDemand() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F2FF] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
-      <Navbar />
+    <div className="min-h-screen bg-[#E7E2D6] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+      <SEO
+        title="Custom Dig — Async Marketing Audits"
+        description="Async, on-demand marketing audits and growth diagnostics. Get expert SEO and content strategy without retainers."
+        canonical="/dig-on-demand"
+      />
+      <Navbar theme="light" />
       <Hero />
       <WhatYouGet />
       <InteractiveModules selectedModules={selectedModules} toggleModule={toggleModule} />

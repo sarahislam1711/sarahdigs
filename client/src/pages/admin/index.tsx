@@ -28,7 +28,7 @@ export default function AdminDashboard() {
       value: posts?.length || 0,
       icon: FileText,
       href: "/admin/posts",
-      color: "bg-[#4D00FF]",
+      color: "bg-[#6B1421]",
     },
     {
       title: "Media Files",
@@ -62,12 +62,12 @@ export default function AdminDashboard() {
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href}>
             <a className="block">
-              <Card className="bg-[#0D0D0D] border-gray-800 hover:border-[#4D00FF] transition-colors cursor-pointer">
+              <Card className="bg-[#0D0D0D] border-gray-800 hover:border-[#6B1421] transition-colors cursor-pointer">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-gray-400">
                     {stat.title}
                   </CardTitle>
-                  <div className={`p-2 rounded-lg ${stat.color}`}>
+                  <div className={`p-2 rounded-md ${stat.color}`}>
                     <stat.icon className="w-4 h-4 text-white" />
                   </div>
                 </CardHeader>
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
         <Card className="bg-[#0D0D0D] border-gray-800">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <FileText className="w-5 h-5 text-[#4D00FF]" />
+              <FileText className="w-5 h-5 text-[#6B1421]" />
               Recent Posts
             </CardTitle>
           </CardHeader>
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 {posts.slice(0, 5).map((post: any) => (
                   <Link key={post.id} href={`/admin/posts/${post.id}`}>
-                    <a className="flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-colors">
+                    <a className="flex items-center justify-between p-3 rounded-md bg-gray-800/50 hover:bg-gray-800 transition-colors">
                       <div>
                         <p className="text-white font-medium">{post.title}</p>
                         <p className="text-gray-500 text-sm">
@@ -124,31 +124,31 @@ export default function AdminDashboard() {
         <Card className="bg-[#0D0D0D] border-gray-800">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-[#4D00FF]" />
+              <MessageSquare className="w-5 h-5 text-[#6B1421]" />
               Quick Actions
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <Link href="/admin/posts/new">
-              <a className="flex items-center gap-3 p-4 rounded-lg bg-[#4D00FF]/10 hover:bg-[#4D00FF]/20 border border-[#4D00FF]/30 transition-colors" data-testid="button-new-post">
-                <FileText className="w-5 h-5 text-[#4D00FF]" />
+              <a className="flex items-center gap-3 p-4 rounded-md bg-[#6B1421]/10 hover:bg-[#6B1421]/20 border border-[#6B1421]/30 transition-colors" data-testid="button-new-post">
+                <FileText className="w-5 h-5 text-[#6B1421]" />
                 <span className="text-white font-medium">Create New Post</span>
               </a>
             </Link>
             <Link href="/admin/media">
-              <a className="flex items-center gap-3 p-4 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 transition-colors" data-testid="button-upload-media">
+              <a className="flex items-center gap-3 p-4 rounded-md bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 transition-colors" data-testid="button-upload-media">
                 <Image className="w-5 h-5 text-purple-500" />
                 <span className="text-white font-medium">Upload Media</span>
               </a>
             </Link>
             <Link href="/admin/settings">
-              <a className="flex items-center gap-3 p-4 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 transition-colors" data-testid="button-site-settings">
+              <a className="flex items-center gap-3 p-4 rounded-md bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 transition-colors" data-testid="button-site-settings">
                 <Tags className="w-5 h-5 text-blue-500" />
                 <span className="text-white font-medium">Site Settings</span>
               </a>
             </Link>
             <Link href="/admin/content">
-              <a className="flex items-center gap-3 p-4 rounded-lg bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 transition-colors" data-testid="button-site-content">
+              <a className="flex items-center gap-3 p-4 rounded-md bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 transition-colors" data-testid="button-site-content">
                 <FolderOpen className="w-5 h-5 text-green-500" />
                 <span className="text-white font-medium">Manage Site Content</span>
               </a>
@@ -202,7 +202,7 @@ export default function AdminDashboard() {
                 {media.slice(0, 8).map((item: any) => (
                   <div
                     key={item.id}
-                    className="aspect-square rounded-lg bg-gray-800 overflow-hidden"
+                    className="aspect-square rounded-md bg-gray-800 overflow-hidden"
                   >
                     {item.fileType?.startsWith("image") ? (
                       <img

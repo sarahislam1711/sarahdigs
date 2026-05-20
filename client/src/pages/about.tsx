@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Briefcase, Calendar, Layers, Search, LineChart, Globe, FileText, Terminal, BarChart4, Tags, MessageSquare, MessageCircle, Mic, CheckSquare, Building2, Landmark } from "lucide-react";
@@ -56,7 +57,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
   const heroImage = stockImage;
   
   return (
-    <section className="pt-40 pb-20 bg-[#FBFCFE] relative overflow-hidden">
+    <section className="pt-40 pb-20 bg-[#F4F1EA] relative overflow-hidden">
       {/* Background image on the right half */}
       <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
         backgroundImage: `url(${heroImage})`,
@@ -64,7 +65,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
         backgroundPosition: 'center 35%',
         opacity: 0.85,
       }} />
-      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#FBFCFE] to-transparent" />
+      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#F4F1EA] to-transparent" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
@@ -73,7 +74,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] flex items-center gap-6"
+              className="text-4xl sm:text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] flex flex-wrap items-center gap-3 md:gap-6"
             >
               {content.title} <br/>{content.name}
             </motion.h1>
@@ -81,7 +82,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl md:text-2xl font-light text-[#1B1B1B]/80 leading-relaxed max-w-lg relative"
+              className="text-xl md:text-2xl font-light text-[#181612]/80 leading-relaxed max-w-lg relative"
             >
               {content.intro}
 
@@ -90,21 +91,21 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
                 <motion.div
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="bg-[#4D00FF] text-white px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
+                  className="bg-[#6B1421] text-white px-3 py-2 rounded-md shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
                    {content.tagline1}
                 </motion.div>
                 <motion.div
                   animate={{ y: [0, 5, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-                  className="bg-[#1B1B1B] text-white px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
+                  className="bg-[#1B1B1B] text-white px-3 py-2 rounded-md shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
                    {content.tagline2}
                 </motion.div>
                 <motion.div
                   animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-                  className="bg-white border border-[#1B1B1B]/10 text-[#4D00FF] px-3 py-2 rounded-xl shadow-lg text-[10px] font-bold uppercase tracking-wider"
+                  className="bg-white border border-[#181612]/10 text-[#6B1421] px-3 py-2 rounded-md shadow-lg text-[10px] font-bold uppercase tracking-wider"
                 >
                    {content.tagline3}
                 </motion.div>
@@ -118,7 +119,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
                 <motion.div
                   animate={{ x: [0, 5, 0], y: [0, -5, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="bg-[#4D00FF] text-white px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start"
+                  className="bg-[#6B1421] text-white px-4 py-2 rounded-md shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start"
                 >
                    {content.tagline1}
                 </motion.div>
@@ -126,7 +127,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
                 <motion.div
                   animate={{ x: [0, -5, 0], y: [0, 5, 0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  className="bg-[#1B1B1B] text-white px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap ml-6"
+                  className="bg-[#1B1B1B] text-white px-4 py-2 rounded-md shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap ml-6"
                 >
                    {content.tagline2}
                 </motion.div>
@@ -134,7 +135,7 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
                 <motion.div
                   animate={{ x: [0, 5, 0], y: [0, 5, 0] }}
                   transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="bg-white border border-[#1B1B1B]/10 text-[#4D00FF] px-4 py-2 rounded-xl shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start ml-2"
+                  className="bg-white border border-[#181612]/10 text-[#6B1421] px-4 py-2 rounded-md shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start ml-2"
                 >
                    {content.tagline3}
                 </motion.div>
@@ -149,14 +150,14 @@ const AboutHero = ({ content }: { content: HeroContent }) => {
 
 const WhyTrustMe = () => {
   return (
-    <section className="py-24 bg-white border-b border-[#1B1B1B]/10">
+    <section className="py-24 bg-white border-b border-[#181612]/10">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#4D00FF]">Why Trust Me?</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421]">Why Trust Me?</span>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mt-4 mb-8">
             I bridge the gap between technical complexity and human connection.
           </h2>
-          <p className="text-lg text-[#1B1B1B]/70 leading-relaxed">
+          <p className="text-lg text-[#181612]/70 leading-relaxed">
             I help ambitious brands who are tired of surface-level tactics. My method works because I don't just look at the "what" (metrics), I uncover the "why" (behavior). By combining technical SEO precision with deep user empathy, I build growth engines that are sustainable, scalable, and surprisingly simple.
           </p>
         </div>
@@ -167,7 +168,7 @@ const WhyTrustMe = () => {
 
 const MyStory = ({ content }: { content: StoryContent }) => {
   return (
-    <section className="py-24 bg-[#FBFCFE]">
+    <section className="py-24 bg-[#F4F1EA]">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row items-start gap-16">
           <div className="lg:w-1/3 lg:sticky lg:top-32">
@@ -180,7 +181,7 @@ const MyStory = ({ content }: { content: StoryContent }) => {
               My<br/>Story
             </motion.h2>
           </div>
-           <div className="lg:w-2/3 text-lg text-[#1B1B1B]/80 leading-relaxed space-y-6">
+           <div className="lg:w-2/3 text-lg text-[#181612]/80 leading-relaxed space-y-6">
               <p>{content.paragraph1}</p>
               <p>{content.paragraph2}</p>
               <p>{content.paragraph3}</p>
@@ -208,26 +209,26 @@ const ClientStories = () => {
   ];
 
   return (
-    <section className="py-24 bg-white border-b border-[#1B1B1B]/10">
+    <section className="py-24 bg-white border-b border-[#181612]/10">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold tracking-tighter mb-12">Digging for results</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {clients.map((client, i) => (
              <Link key={i} href={`/projects/${client.slug}`}>
-               <div className="group bg-[#FBFCFE] border border-[#1B1B1B]/10 p-8 rounded-3xl hover:border-[#4D00FF] transition-all hover:shadow-lg cursor-pointer relative overflow-hidden h-full">
+               <div className="group bg-[#F4F1EA] border border-[#181612]/10 p-8 rounded-md hover:border-[#6B1421] transition-all hover:shadow-lg cursor-pointer relative overflow-hidden h-full">
                  <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                   <ArrowUpRight className="w-6 h-6 text-[#4D00FF]" />
+                   <ArrowUpRight className="w-6 h-6 text-[#6B1421]" />
                  </div>
                  <div className="mb-6 flex gap-2">
                    {client.tags.map(tag => (
-                     <span key={tag} className="text-xs font-bold uppercase tracking-wider bg-[#F4F2FF] text-[#4D00FF] px-3 py-1 rounded-full">{tag}</span>
+                     <span key={tag} className="text-xs font-bold uppercase tracking-wider bg-[#E7E2D6] text-[#6B1421] px-3 py-1 rounded-full">{tag}</span>
                    ))}
                  </div>
                  <h3 className="text-2xl font-bold mb-4">{client.name}</h3>
-                 <p className="text-[#1B1B1B]/70 leading-relaxed mb-8">
+                 <p className="text-[#181612]/70 leading-relaxed mb-8">
                    {client.desc}
                  </p>
-                 <div className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B] group-hover:text-[#4D00FF] transition-colors flex items-center gap-2 mt-auto">
+                 <div className="text-sm font-bold uppercase tracking-widest text-[#181612] group-hover:text-[#6B1421] transition-colors flex items-center gap-2 mt-auto">
                    View Story <ArrowRight className="w-4 h-4" />
                  </div>
                </div>
@@ -259,23 +260,23 @@ const Expertise = () => {
   ];
 
   return (
-    <section className="py-24 bg-[#FBFCFE] border-b border-[#1B1B1B]/10">
+    <section className="py-24 bg-[#F4F1EA] border-b border-[#181612]/10">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row gap-16">
           <div className="lg:w-1/3">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#4D00FF]">Expertise</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421]">Expertise</span>
             <h2 className="text-4xl font-bold tracking-tighter mt-4 mb-6">Specific expertise, concrete results.</h2>
-            <p className="text-[#1B1B1B]/70 leading-relaxed">
+            <p className="text-[#181612]/70 leading-relaxed">
               I don't do "general marketing". I specialize in the channels and strategies that drive sustainable, long-term growth.
             </p>
           </div>
           <div className="lg:w-2/3 space-y-8">
             {areas.map((area, i) => (
-              <div key={i} className="flex gap-6 items-start p-6 bg-white rounded-2xl border border-[#1B1B1B]/5">
-                <div className="bg-[#F4F2FF] text-[#4D00FF] p-3 rounded-xl">{area.icon}</div>
+              <div key={i} className="flex gap-6 items-start p-6 bg-white rounded-md border border-[#181612]/5">
+                <div className="bg-[#E7E2D6] text-[#6B1421] p-3 rounded-md">{area.icon}</div>
                 <div>
                   <h3 className="text-xl font-bold mb-2">{area.title}</h3>
-                  <p className="text-[#1B1B1B]/70 leading-relaxed">{area.desc}</p>
+                  <p className="text-[#181612]/70 leading-relaxed">{area.desc}</p>
                 </div>
               </div>
             ))}
@@ -296,24 +297,24 @@ const Timeline = () => {
   ];
 
   return (
-    <section className="py-24 bg-[#F4F2FF]">
+    <section className="py-24 bg-[#E7E2D6]">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#4D00FF]">The Path</span>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-[#1B1B1B] mt-4">My Journey</h2>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421]">The Path</span>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-[#181612] mt-4">My Journey</h2>
         </div>
 
         {/* Desktop: horizontal */}
         <div className="hidden md:block relative">
-          <div className="absolute top-[52px] left-0 right-0 h-[2px] bg-[#4D00FF]/15"></div>
+          <div className="absolute top-[52px] left-0 right-0 h-[2px] bg-[#6B1421]/15"></div>
           <div className="grid grid-cols-5 gap-6 relative">
             {milestones.map((m, i) => (
               <div key={i} className="flex flex-col items-center text-center group">
-                <span className="text-[#4D00FF] font-bold text-2xl mb-4">{m.year}</span>
-                <div className="w-5 h-5 rounded-full bg-[#4D00FF] border-4 border-[#F4F2FF] relative z-10 mb-6 group-hover:scale-125 transition-transform"></div>
-                <div className="bg-white border border-[#1B1B1B]/10 rounded-2xl p-5 h-full hover:border-[#4D00FF]/40 hover:shadow-lg transition-all">
-                  <h3 className="font-bold text-[#1B1B1B] mb-2 text-sm">{m.title}</h3>
-                  <p className="text-[#1B1B1B]/60 text-xs leading-relaxed">{m.desc}</p>
+                <span className="text-[#6B1421] font-bold text-2xl mb-4">{m.year}</span>
+                <div className="w-5 h-5 rounded-full bg-[#6B1421] border-4 border-[#E7E2D6] relative z-10 mb-6 group-hover:scale-125 transition-transform"></div>
+                <div className="bg-white border border-[#181612]/10 rounded-md p-5 h-full hover:border-[#6B1421]/40 hover:shadow-lg transition-all">
+                  <h3 className="font-bold text-[#181612] mb-2 text-sm">{m.title}</h3>
+                  <p className="text-[#181612]/60 text-xs leading-relaxed">{m.desc}</p>
                 </div>
               </div>
             ))}
@@ -322,15 +323,15 @@ const Timeline = () => {
 
         {/* Mobile: vertical */}
         <div className="md:hidden relative pl-8">
-          <div className="absolute top-0 bottom-0 left-[11px] w-[2px] bg-[#4D00FF]/15"></div>
+          <div className="absolute top-0 bottom-0 left-[11px] w-[2px] bg-[#6B1421]/15"></div>
           <div className="space-y-8">
             {milestones.map((m, i) => (
               <div key={i} className="relative flex items-start gap-6">
-                <div className="absolute left-[-21px] top-1 w-4 h-4 rounded-full bg-[#4D00FF] border-[3px] border-[#F4F2FF] z-10"></div>
-                <div className="bg-white border border-[#1B1B1B]/10 rounded-2xl p-5 flex-1">
-                  <span className="text-[#4D00FF] font-bold text-sm">{m.year}</span>
-                  <h3 className="font-bold text-[#1B1B1B] mt-1 mb-1">{m.title}</h3>
-                  <p className="text-[#1B1B1B]/60 text-sm leading-relaxed">{m.desc}</p>
+                <div className="absolute left-[-21px] top-1 w-4 h-4 rounded-full bg-[#6B1421] border-[3px] border-[#E7E2D6] z-10"></div>
+                <div className="bg-white border border-[#181612]/10 rounded-md p-5 flex-1">
+                  <span className="text-[#6B1421] font-bold text-sm">{m.year}</span>
+                  <h3 className="font-bold text-[#181612] mt-1 mb-1">{m.title}</h3>
+                  <p className="text-[#181612]/60 text-sm leading-relaxed">{m.desc}</p>
                 </div>
               </div>
             ))}
@@ -359,7 +360,7 @@ const Tools = () => {
   const allTools = [...tools, ...tools];
 
   return (
-    <section className="py-24 bg-[#FBFCFE] border-t border-[#1B1B1B]/10 overflow-hidden">
+    <section className="py-24 bg-[#F4F1EA] border-t border-[#181612]/10 overflow-hidden">
        <div className="container mx-auto px-6">
          <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">Tools of the trade</h2>
        </div>
@@ -389,10 +390,10 @@ const Tools = () => {
                rel="noopener noreferrer"
                className="flex flex-col items-center gap-4 min-w-[120px] group"
              >
-               <div className="w-20 h-20 bg-[#F5F5F5] rounded-2xl flex items-center justify-center text-[#1B1B1B]/50 group-hover:text-[#4D00FF] group-hover:bg-[#F4F2FF] transition-all shadow-sm">
+               <div className="w-20 h-20 bg-[#F5F5F5] rounded-md flex items-center justify-center text-[#181612]/50 group-hover:text-[#6B1421] group-hover:bg-[#E7E2D6] transition-all shadow-sm">
                  {tool.icon}
                </div>
-               <span className="text-sm text-[#1B1B1B]/60 group-hover:text-[#4D00FF] font-medium whitespace-nowrap transition-colors">{tool.name}</span>
+               <span className="text-sm text-[#181612]/60 group-hover:text-[#6B1421] font-medium whitespace-nowrap transition-colors">{tool.name}</span>
              </a>
            ))}
          </motion.div>
@@ -408,7 +409,7 @@ const FinalCTA = ({ content }: { content: CtaContent }) => {
           <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-6">{content.title}</h2>
           <p className="text-xl text-white/70 max-w-xl mx-auto mb-10">{content.subtitle}</p>
           <Link href="/contact">
-            <Button size="lg" className="text-lg h-16 px-10 bg-[#4D00FF] hover:bg-white hover:text-[#4D00FF] transition-all rounded-full">
+            <Button size="lg" className="text-lg h-16 px-10 bg-[#6B1421] hover:bg-white hover:text-[#6B1421] transition-all rounded-md">
               {content.buttonText}
             </Button>
           </Link>
@@ -432,8 +433,22 @@ export default function About() {
   const ctaContent = (pageContent?.cta as CtaContent) || defaultCta;
 
   return (
-    <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
-      <Navbar />
+    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+      <SEO
+        title="About Sarah Islam"
+        description="Marketing consultant with 8+ years helping founders and brands grow through SEO, content strategy, and data-driven marketing."
+        canonical="/about"
+        ogType="profile"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Sarah Islam",
+          jobTitle: "Marketing Consultant",
+          url: "https://www.sarahdigs.com/about",
+          worksFor: { "@type": "Organization", name: "SarahDigs" },
+        }}
+      />
+      <Navbar theme="light" />
       <AboutHero content={heroContent} />
       <WhyTrustMe />
       <MyStory content={storyContent} />

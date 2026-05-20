@@ -164,7 +164,7 @@ export default function ServiceEditor() {
     return (
       <AdminLayout title="Loading...">
         <div className="flex justify-center items-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-[#4D00FF]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
         </div>
       </AdminLayout>
     );
@@ -195,7 +195,7 @@ export default function ServiceEditor() {
           <Button
             onClick={() => saveMutation.mutate(formData)}
             disabled={saveMutation.isPending || !formData.title || !formData.slug}
-            className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+            className="bg-[#6B1421] hover:bg-[#6B1421]/80"
           >
             <Save className="w-4 h-4 mr-2" />
             {saveMutation.isPending ? "Saving..." : "Save Service"}
@@ -205,14 +205,14 @@ export default function ServiceEditor() {
 
       <Tabs defaultValue="basic" className="space-y-6">
         <TabsList className="bg-[#0D0D0D] border border-gray-800 p-1">
-          <TabsTrigger value="basic" className="data-[state=active]:bg-[#4D00FF]">Basic</TabsTrigger>
-          <TabsTrigger value="hero" className="data-[state=active]:bg-[#4D00FF]">Hero</TabsTrigger>
-          <TabsTrigger value="diagnostic" className="data-[state=active]:bg-[#4D00FF]">Diagnostic</TabsTrigger>
-          <TabsTrigger value="whatyouget" className="data-[state=active]:bg-[#4D00FF]">What You Get</TabsTrigger>
-          <TabsTrigger value="expect" className="data-[state=active]:bg-[#4D00FF]">What to Expect</TabsTrigger>
-          <TabsTrigger value="proof" className="data-[state=active]:bg-[#4D00FF]">Proof</TabsTrigger>
-          <TabsTrigger value="nextsteps" className="data-[state=active]:bg-[#4D00FF]">Next Steps</TabsTrigger>
-          <TabsTrigger value="finalcta" className="data-[state=active]:bg-[#4D00FF]">Final CTA</TabsTrigger>
+          <TabsTrigger value="basic" className="data-[state=active]:bg-[#6B1421]">Basic</TabsTrigger>
+          <TabsTrigger value="hero" className="data-[state=active]:bg-[#6B1421]">Hero</TabsTrigger>
+          <TabsTrigger value="diagnostic" className="data-[state=active]:bg-[#6B1421]">Diagnostic</TabsTrigger>
+          <TabsTrigger value="whatyouget" className="data-[state=active]:bg-[#6B1421]">What You Get</TabsTrigger>
+          <TabsTrigger value="expect" className="data-[state=active]:bg-[#6B1421]">What to Expect</TabsTrigger>
+          <TabsTrigger value="proof" className="data-[state=active]:bg-[#6B1421]">Proof</TabsTrigger>
+          <TabsTrigger value="nextsteps" className="data-[state=active]:bg-[#6B1421]">Next Steps</TabsTrigger>
+          <TabsTrigger value="finalcta" className="data-[state=active]:bg-[#6B1421]">Final CTA</TabsTrigger>
         </TabsList>
 
         {/* Basic Tab */}
@@ -418,7 +418,7 @@ export default function ServiceEditor() {
               <div>
                 <Label className="text-gray-400">Items</Label>
                 {formData.whatYouGetItems.map((item, index) => (
-                  <div key={index} className="border border-gray-700 rounded-lg p-4 mt-2 space-y-2">
+                  <div key={index} className="border border-gray-700 rounded-md p-4 mt-2 space-y-2">
                     <Input
                       value={item.title}
                       onChange={(e) => {
@@ -493,7 +493,7 @@ export default function ServiceEditor() {
                         <img 
                           src={url} 
                           alt={`Preview ${index + 1}`} 
-                          className="mt-2 w-32 h-20 object-cover rounded border border-gray-700"
+                          className="mt-2 w-32 h-20 object-cover rounded-md border border-gray-700"
                         />
                       )}
                     </div>
@@ -643,7 +643,7 @@ export default function ServiceEditor() {
                       <img 
                         src={formData.proofBeforeImage} 
                         alt="Before preview" 
-                        className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+                        className="mt-2 w-full h-32 object-cover rounded-md border border-gray-700"
                       />
                     )}
                   </div>
@@ -659,7 +659,7 @@ export default function ServiceEditor() {
                       <img 
                         src={formData.proofAfterImage} 
                         alt="After preview" 
-                        className="mt-2 w-full h-32 object-cover rounded border border-gray-700"
+                        className="mt-2 w-full h-32 object-cover rounded-md border border-gray-700"
                       />
                     )}
                   </div>
@@ -677,7 +677,7 @@ export default function ServiceEditor() {
             </CardHeader>
             <CardContent className="space-y-4">
               {formData.nextSteps.map((step, stepIndex) => (
-                <div key={stepIndex} className="border border-gray-700 rounded-lg p-4 space-y-3">
+                <div key={stepIndex} className="border border-gray-700 rounded-md p-4 space-y-3">
                   <div className="flex justify-between items-center">
                     <Label className="text-white font-medium">Step {stepIndex + 1}</Label>
                     <Button

@@ -29,16 +29,16 @@ export default function AdminPreview() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FBFCFE] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4D00FF]"></div>
+      <div className="min-h-screen bg-[#F4F1EA] flex items-center justify-center">
+        <div className="animate-spin rounded-md h-12 w-12 border-t-2 border-b-2 border-[#6B1421]"></div>
       </div>
     );
   }
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-[#FBFCFE] flex flex-col items-center justify-center">
-        <h1 className="text-2xl font-bold text-[#1B1B1B] mb-4">Post not found</h1>
+      <div className="min-h-screen bg-[#F4F1EA] flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold text-[#181612] mb-4">Post not found</h1>
         <Link href="/admin/posts">
           <Button variant="outline">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -50,7 +50,7 @@ export default function AdminPreview() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBFCFE]">
+    <div className="min-h-screen bg-[#F4F1EA]">
       <div className="bg-yellow-500 text-black text-center py-2 text-sm font-medium">
         Preview Mode - {post.status === "draft" ? "Draft" : "Published"}
         <Link href={`/admin/posts/${post.id}`} className="ml-4 underline">
@@ -65,7 +65,7 @@ export default function AdminPreview() {
             <img
               src={post.featuredImageUrl}
               alt={post.title}
-              className="w-full aspect-video object-cover rounded-2xl mb-8"
+              className="w-full aspect-video object-cover rounded-md mb-8"
             />
           )}
 
@@ -73,19 +73,19 @@ export default function AdminPreview() {
             {post.categories?.map((category) => (
               <span
                 key={category.id}
-                className="text-xs font-medium uppercase tracking-wider text-[#4D00FF]"
+                className="text-xs font-medium uppercase tracking-wider text-[#6B1421]"
               >
                 {category.name}
               </span>
             ))}
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-[#1B1B1B] mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#181612] mb-6 leading-tight">
             {post.title}
           </h1>
 
           {post.excerpt && (
-            <p className="text-xl text-[#1B1B1B]/70 mb-8 leading-relaxed">
+            <p className="text-xl text-[#181612]/70 mb-8 leading-relaxed">
               {post.excerpt}
             </p>
           )}
@@ -94,7 +94,7 @@ export default function AdminPreview() {
             {post.tags?.map((tag) => (
               <span
                 key={tag.id}
-                className="px-3 py-1 bg-[#F4F2FF] text-[#4D00FF] text-sm rounded-full"
+                className="px-3 py-1 bg-[#E7E2D6] text-[#6B1421] text-sm rounded-full"
               >
                 {tag.name}
               </span>
@@ -102,7 +102,7 @@ export default function AdminPreview() {
           </div>
 
           <div 
-            className="prose prose-lg max-w-none prose-headings:text-[#1B1B1B] prose-p:text-[#1B1B1B]/80 prose-a:text-[#4D00FF] prose-blockquote:border-l-[#4D00FF] prose-blockquote:text-[#1B1B1B]/70"
+            className="prose prose-lg max-w-none prose-headings:text-[#181612] prose-p:text-[#181612]/80 prose-a:text-[#6B1421] prose-blockquote:border-l-[#6B1421] prose-blockquote:text-[#181612]/70"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </div>

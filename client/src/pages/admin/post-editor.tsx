@@ -52,6 +52,9 @@ export default function PostEditor() {
     tagIds: [] as string[],
   });
 
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newTagName, setNewTagName] = useState("");
+
   const { data: post, isLoading: postLoading } = useQuery<PostWithRelations>({
     queryKey: ["/api/admin/posts", postId],
     enabled: !!postId,
@@ -102,6 +105,50 @@ export default function PostEditor() {
       toast({ title: "Failed to save post", description: error.message, variant: "destructive" });
     },
   });
+
+  const createCategoryMutation = useMutation({
+    mutationFn: async (name: string) => {
+      const slug = generateSlug(name);
+      const res = await apiRequest("POST", "/api/admin/categories", { name, slug });
+      return res as unknown as Category;
+    },
+    onSuccess: (newCat: Category) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/categories"] });
+      setFormData((prev) => ({ ...prev, categoryIds: [...prev.categoryIds, newCat.id] }));
+      setNewCategoryName("");
+      toast({ title: "Category created" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Failed to create category", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const createTagMutation = useMutation({
+    mutationFn: async (name: string) => {
+      const slug = generateSlug(name);
+      const res = await apiRequest("POST", "/api/admin/tags", { name, slug });
+      return res as unknown as Tag;
+    },
+    onSuccess: (newTag: Tag) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/tags"] });
+      setFormData((prev) => ({ ...prev, tagIds: [...prev.tagIds, newTag.id] }));
+      setNewTagName("");
+      toast({ title: "Tag created" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Failed to create tag", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const handleAddCategory = () => {
+    const name = newCategoryName.trim();
+    if (name) createCategoryMutation.mutate(name);
+  };
+
+  const handleAddTag = () => {
+    const name = newTagName.trim();
+    if (name) createTagMutation.mutate(name);
+  };
 
   const handleTitleChange = (title: string) => {
     setFormData((prev) => ({
@@ -167,21 +214,21 @@ export default function PostEditor() {
 
   if (postLoading && !isNew) {
     return (
-      <AdminLayout title="Loading...">
+      <AdminLayout title="loading…">
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D00FF]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#181612]/15 border-t-[#6B1421]"></div>
         </div>
       </AdminLayout>
     );
   }
 
   return (
-    <AdminLayout title={isNew ? "Create New Post" : "Edit Post"}>
+    <AdminLayout title={isNew ? "new post" : "edit post"}>
       <div className="flex items-center justify-between mb-6">
         <Button
           variant="ghost"
           onClick={() => navigate("/admin/posts")}
-          className="text-gray-400 hover:text-white"
+          className="text-[#6F6A5F] hover:text-[#181612]"
           data-testid="button-back"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -192,7 +239,7 @@ export default function PostEditor() {
             <Button
               variant="outline"
               onClick={() => window.open(`/admin/preview/${formData.slug}`, "_blank")}
-              className="border-gray-700 text-gray-400 hover:text-white"
+              className="border border-[#181612]/20 text-[#181612] hover:border-[#6B1421] hover:text-[#6B1421] bg-transparent rounded-md"
               data-testid="button-preview"
             >
               <Eye className="w-4 h-4 mr-2" />
@@ -202,7 +249,7 @@ export default function PostEditor() {
           <Button
             onClick={() => saveMutation.mutate(formData)}
             disabled={saveMutation.isPending || !formData.title || !formData.slug}
-            className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+            className="bg-[#181612] hover:bg-[#6B1421] text-[#F4F1EA] rounded-md"
             data-testid="button-save"
           >
             <Save className="w-4 h-4 mr-2" />
@@ -213,87 +260,87 @@ export default function PostEditor() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-[#0D0D0D] border-gray-800">
+          <Card className="bg-[#FBF9F3] border border-[#181612]/10 rounded-md">
             <CardHeader>
-              <CardTitle className="text-white">Post Content</CardTitle>
+              <CardTitle className="text-[#181612] font-display lowercase">Post Content</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-400">Title</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Title</Label>
                 <Input
                   value={formData.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
                   placeholder="Enter post title"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 rounded-md"
                   data-testid="input-title"
                 />
               </div>
               <div>
-                <Label className="text-gray-400">Slug</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Slug</Label>
                 <Input
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   placeholder="post-url-slug"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 rounded-md"
                   data-testid="input-slug"
                 />
               </div>
               <div>
-                <Label className="text-gray-400">Content</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Content</Label>
                 <RichTextEditor
                   content={formData.content}
                   onChange={(content) => setFormData((prev) => ({ ...prev, content }))}
                   onImageUpload={handleInlineImageUpload}
                 />
-                <p className="text-gray-500 text-xs mt-2">
+                <p className="text-[#6F6A5F]/80 text-xs mt-2">
                   Use the toolbar to format text, add headings, quotes, and insert images.
                 </p>
               </div>
               <div>
-                <Label className="text-gray-400">Excerpt</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Excerpt</Label>
                 <Textarea
                   value={formData.excerpt}
                   onChange={(e) => setFormData((prev) => ({ ...prev, excerpt: e.target.value }))}
                   placeholder="A short summary of the post"
-                  className="bg-gray-800 border-gray-700 text-white min-h-[80px]"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 min-h-[80px] rounded-md"
                   data-testid="input-excerpt"
                 />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#0D0D0D] border-gray-800">
+          <Card className="bg-[#FBF9F3] border border-[#181612]/10 rounded-md">
             <CardHeader>
-              <CardTitle className="text-white">SEO Settings</CardTitle>
+              <CardTitle className="text-[#181612] font-display lowercase">SEO Settings</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-400">Meta Title</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Meta Title</Label>
                 <Input
                   value={formData.metaTitle}
                   onChange={(e) => setFormData((prev) => ({ ...prev, metaTitle: e.target.value }))}
                   placeholder="SEO title (leave empty to use post title)"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 rounded-md"
                   data-testid="input-meta-title"
                 />
               </div>
               <div>
-                <Label className="text-gray-400">Meta Description</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Meta Description</Label>
                 <Textarea
                   value={formData.metaDescription}
                   onChange={(e) => setFormData((prev) => ({ ...prev, metaDescription: e.target.value }))}
                   placeholder="SEO description for search engines"
-                  className="bg-gray-800 border-gray-700 text-white min-h-[80px]"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 min-h-[80px] rounded-md"
                   data-testid="input-meta-description"
                 />
               </div>
               <div>
-                <Label className="text-gray-400">Keywords</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Keywords</Label>
                 <Input
                   value={formData.metaKeywords}
                   onChange={(e) => setFormData((prev) => ({ ...prev, metaKeywords: e.target.value }))}
                   placeholder="comma, separated, keywords"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 rounded-md"
                   data-testid="input-meta-keywords"
                 />
               </div>
@@ -302,23 +349,23 @@ export default function PostEditor() {
         </div>
 
         <div className="space-y-6">
-          <Card className="bg-[#0D0D0D] border-gray-800">
+          <Card className="bg-[#FBF9F3] border border-[#181612]/10 rounded-md">
             <CardHeader>
-              <CardTitle className="text-white">Publish Settings</CardTitle>
+              <CardTitle className="text-[#181612] font-display lowercase">Publish Settings</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-400">Status</Label>
+                <Label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">Status</Label>
                 <Select
                   value={formData.status}
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, status: value }))}
                 >
-                  <SelectTrigger className="bg-gray-800 border-gray-700 text-white" data-testid="select-status">
+                  <SelectTrigger className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 rounded-md" data-testid="select-status">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-700">
-                    <SelectItem value="draft" className="text-white">Draft</SelectItem>
-                    <SelectItem value="published" className="text-white">Published</SelectItem>
+                  <SelectContent className="bg-[#FBF9F3] border border-[#181612]/15 rounded-md">
+                    <SelectItem value="draft" className="text-[#181612]">Draft</SelectItem>
+                    <SelectItem value="published" className="text-[#181612]">Published</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -327,18 +374,18 @@ export default function PostEditor() {
                   id="isFeatured"
                   checked={formData.isFeatured}
                   onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isFeatured: checked === true }))}
-                  className="border-gray-600 data-[state=checked]:bg-[#4D00FF] data-[state=checked]:border-[#4D00FF]"
+                  className="border-[#181612]/30 data-[state=checked]:bg-[#6B1421] data-[state=checked]:border-[#6B1421]"
                 />
-                <Label htmlFor="isFeatured" className="text-gray-400 cursor-pointer">
+                <Label htmlFor="isFeatured" className="text-[#181612] text-sm cursor-pointer">
                   Feature this post
                 </Label>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#0D0D0D] border-gray-800">
+          <Card className="bg-[#FBF9F3] border border-[#181612]/10 rounded-md">
             <CardHeader>
-              <CardTitle className="text-white">Featured Image</CardTitle>
+              <CardTitle className="text-[#181612] font-display lowercase">Featured Image</CardTitle>
             </CardHeader>
             <CardContent>
               {formData.featuredImageUrl ? (
@@ -346,7 +393,7 @@ export default function PostEditor() {
                   <img
                     src={formData.featuredImageUrl}
                     alt="Featured"
-                    className="w-full aspect-video object-cover rounded-lg"
+                    className="w-full aspect-video object-cover rounded-md"
                   />
                   <Button
                     variant="destructive"
@@ -359,23 +406,47 @@ export default function PostEditor() {
                   </Button>
                 </div>
               ) : (
-                <div className="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center">
-                  <ImageIcon className="w-12 h-12 text-gray-600 mx-auto mb-2" />
+                <div className="border-2 border-dashed border-[#181612]/15 rounded-md p-8 text-center bg-[#F4F1EA]">
+                  <ImageIcon className="w-10 h-10 text-[#6F6A5F]/60 mx-auto mb-2" />
                   <p className="text-gray-500 text-sm mb-4">No featured image</p>
                   <ImageUploader
                     onUploadComplete={(objectPath) => setFormData((prev) => ({ ...prev, featuredImageUrl: objectPath }))}
-                    buttonClassName="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+                    buttonClassName="bg-[#181612] hover:bg-[#6B1421] text-[#F4F1EA] rounded-md"
                   />
                 </div>
               )}
             </CardContent>
           </Card>
 
-          <Card className="bg-[#0D0D0D] border-gray-800">
+          <Card className="bg-[#FBF9F3] border border-[#181612]/10 rounded-md">
             <CardHeader>
-              <CardTitle className="text-white">Categories</CardTitle>
+              <CardTitle className="text-[#181612] font-display lowercase">Categories</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              <div className="flex gap-2">
+                <Input
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddCategory();
+                    }
+                  }}
+                  placeholder="New category…"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 rounded-md"
+                  data-testid="input-new-category"
+                />
+                <Button
+                  type="button"
+                  onClick={handleAddCategory}
+                  disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
+                  className="bg-[#6B1421] hover:bg-[#4A0E16] text-white shrink-0"
+                  data-testid="button-add-category"
+                >
+                  Add
+                </Button>
+              </div>
               {categories && categories.length > 0 ? (
                 <div className="space-y-2">
                   {categories.map((category: any) => (
@@ -384,12 +455,12 @@ export default function PostEditor() {
                         id={`cat-${category.id}`}
                         checked={formData.categoryIds.includes(category.id)}
                         onCheckedChange={() => toggleCategory(category.id)}
-                        className="border-gray-600"
+                        className="border-[#181612]/30 data-[state=checked]:bg-[#6B1421] data-[state=checked]:border-[#6B1421]"
                         data-testid={`checkbox-category-${category.id}`}
                       />
                       <label
                         htmlFor={`cat-${category.id}`}
-                        className="text-gray-300 text-sm cursor-pointer"
+                        className="text-[#181612] text-sm cursor-pointer"
                       >
                         {category.name}
                       </label>
@@ -397,16 +468,40 @@ export default function PostEditor() {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">No categories. Create some first.</p>
+                <p className="text-[#6F6A5F] text-sm">No categories yet. Add one above.</p>
               )}
             </CardContent>
           </Card>
 
-          <Card className="bg-[#0D0D0D] border-gray-800">
+          <Card className="bg-[#FBF9F3] border border-[#181612]/10 rounded-md">
             <CardHeader>
-              <CardTitle className="text-white">Tags</CardTitle>
+              <CardTitle className="text-[#181612] font-display lowercase">Tags</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              <div className="flex gap-2">
+                <Input
+                  value={newTagName}
+                  onChange={(e) => setNewTagName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddTag();
+                    }
+                  }}
+                  placeholder="New tag…"
+                  className="bg-[#F4F1EA] border border-[#181612]/15 text-[#181612] placeholder:text-[#6F6A5F]/60 rounded-md"
+                  data-testid="input-new-tag"
+                />
+                <Button
+                  type="button"
+                  onClick={handleAddTag}
+                  disabled={!newTagName.trim() || createTagMutation.isPending}
+                  className="bg-[#6B1421] hover:bg-[#4A0E16] text-white shrink-0"
+                  data-testid="button-add-tag"
+                >
+                  Add
+                </Button>
+              </div>
               {tags && tags.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag: any) => (
@@ -415,8 +510,8 @@ export default function PostEditor() {
                       variant={formData.tagIds.includes(tag.id) ? "default" : "outline"}
                       className={`cursor-pointer ${
                         formData.tagIds.includes(tag.id)
-                          ? "bg-[#4D00FF]"
-                          : "border-gray-600 text-gray-400 hover:border-[#4D00FF]"
+                          ? "bg-[#6B1421] text-[#F4F1EA] border-[#6B1421]"
+                          : "border-[#181612]/20 text-[#181612] hover:border-[#6B1421] bg-transparent"
                       }`}
                       onClick={() => toggleTag(tag.id)}
                       data-testid={`badge-tag-${tag.id}`}
@@ -426,7 +521,7 @@ export default function PostEditor() {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">No tags. Create some first.</p>
+                <p className="text-[#6F6A5F] text-sm">No tags yet. Add one above.</p>
               )}
             </CardContent>
           </Card>

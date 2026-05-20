@@ -7,8 +7,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev:client": "vite dev --port 5000",
-    "dev": "NODE_ENV=development tsx server/index.ts",
+    "dev:client": "vite dev --port 5001",
+    "dev": "NODE_ENV=development PORT=5001 tsx server/index.ts",
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^7.17.3",
+    "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
     "@neondatabase/serverless": "^0.10.4",
@@ -77,7 +78,9 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "framer-motion": "^12.23.24",
+    "gsap": "^3.15.0",
     "input-otp": "^1.4.2",
+    "lenis": "^1.3.23",
     "lucide-react": "^0.545.0",
     "memoizee": "^0.4.17",
     "memorystore": "^1.6.7",
@@ -90,6 +93,7 @@
     "react": "^19.2.0",
     "react-day-picker": "^9.11.1",
     "react-dom": "^19.2.0",
+    "react-helmet-async": "^3.0.0",
     "react-hook-form": "^7.66.0",
     "react-resizable-panels": "^2.1.9",
     "recharts": "^2.15.4",
