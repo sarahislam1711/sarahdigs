@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import SEO from "@/components/SEO";
 import { motion } from "framer-motion";
 import { useRoute, Link } from "wouter";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
@@ -39,10 +40,10 @@ export default function BlogPostPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans">
+      <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans">
         <Navbar />
         <div className="pt-40 pb-20 flex justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D00FF]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6B1421]"></div>
         </div>
         <Footer />
       </div>
@@ -53,13 +54,53 @@ export default function BlogPostPage() {
     return <NotFound />;
   }
 
+  const description =
+    post.metaDescription ||
+    post.excerpt ||
+    (post.content ? `${post.content.replace(/<[^>]+>/g, "").slice(0, 155).trim()}…` : undefined);
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sarahdigs.com/" },
+      { "@type": "ListItem", position: 2, name: "Journal", item: "https://www.sarahdigs.com/journal" },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://www.sarahdigs.com/journal/post/${post.slug}` },
+    ],
+  };
+
+  const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description,
+    image: post.featuredImageUrl || undefined,
+    datePublished: post.publishedAt || post.createdAt,
+    dateModified: post.updatedAt,
+    author: { "@type": "Person", name: "Sarah Islam", url: "https://www.sarahdigs.com/about" },
+    publisher: {
+      "@type": "Organization",
+      name: "SarahDigs",
+      logo: { "@type": "ImageObject", url: "https://www.sarahdigs.com/favicon.png" },
+    },
+    mainEntityOfPage: `https://www.sarahdigs.com/journal/post/${post.slug}`,
+  };
+
   return (
-    <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
+    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+      <SEO
+        title={post.metaTitle || post.title}
+        description={description}
+        canonical={`/journal/post/${post.slug}`}
+        ogImage={post.featuredImageUrl || undefined}
+        ogType="article"
+        jsonLd={[blogPostingJsonLd, breadcrumbJsonLd]}
+      />
       <Navbar />
-      
+
       <article className="pt-32 pb-20">
         <div className="container mx-auto px-6">
-          <Link href="/journal" className="inline-flex items-center text-[#1B1B1B]/60 hover:text-[#4D00FF] mb-8 transition-colors">
+          <Link href="/journal" className="inline-flex items-center text-[#181612]/60 hover:text-[#6B1421] mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Journal
           </Link>
@@ -75,7 +116,7 @@ export default function BlogPostPage() {
                 {post.categories.map((category) => (
                   <span 
                     key={category.id}
-                    className="bg-[#4D00FF]/10 text-[#4D00FF] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+                    className="bg-[#6B1421]/10 text-[#6B1421] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
                   >
                     {category.name}
                   </span>
@@ -87,7 +128,7 @@ export default function BlogPostPage() {
               {post.title}
             </h1>
 
-            <div className="flex items-center gap-6 text-sm text-[#1B1B1B]/60 mb-12">
+            <div className="flex items-center gap-6 text-sm text-[#181612]/60 mb-12">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <span>{formatDate(post.publishedAt)}</span>
@@ -99,7 +140,7 @@ export default function BlogPostPage() {
             </div>
 
             {post.featuredImageUrl && (
-              <div className="rounded-3xl overflow-hidden mb-12">
+              <div className="rounded-md overflow-hidden mb-12">
                 <img 
                   src={post.featuredImageUrl} 
                   alt={post.title} 
@@ -109,24 +150,24 @@ export default function BlogPostPage() {
             )}
 
             {post.excerpt && (
-              <p className="text-xl text-[#1B1B1B]/80 leading-relaxed mb-12 font-light border-l-4 border-[#4D00FF] pl-6">
+              <p className="text-xl text-[#181612]/80 leading-relaxed mb-12 font-light border-l-4 border-[#6B1421] pl-6">
                 {post.excerpt}
               </p>
             )}
 
             <div 
-              className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-[#4D00FF] prose-a:no-underline hover:prose-a:underline"
+              className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-[#6B1421] prose-a:no-underline hover:prose-a:underline"
               dangerouslySetInnerHTML={{ __html: post.content || '' }}
             />
 
             {post.tags && post.tags.length > 0 && (
-              <div className="mt-12 pt-8 border-t border-[#1B1B1B]/10">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-[#1B1B1B]/50 mb-4">Tags</h3>
+              <div className="mt-12 pt-8 border-t border-[#181612]/10">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-[#181612]/50 mb-4">Tags</h3>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
                     <span 
                       key={tag.id}
-                      className="bg-[#F4F2FF] text-[#1B1B1B] px-4 py-2 rounded-full text-sm font-medium"
+                      className="bg-[#E7E2D6] text-[#181612] px-4 py-2 rounded-full text-sm font-medium"
                     >
                       {tag.name}
                     </span>

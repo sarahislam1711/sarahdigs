@@ -57,10 +57,10 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen bg-[#1B1B1B] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-[#0D0D0D] border border-gray-800 rounded-xl p-8">
+        <div className="bg-[#0D0D0D] border border-gray-800 rounded-md p-8">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-[#4D00FF]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Lock className="w-8 h-8 text-[#4D00FF]" />
+            <div className="w-16 h-16 bg-[#6B1421]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-[#6B1421]" />
             </div>
             <h1 className="font-['Syne'] text-2xl font-bold text-white mb-2">
               Admin Login
@@ -81,7 +81,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter admin password"
-                className="bg-[#1B1B1B] border-gray-700 text-white placeholder:text-gray-600 focus:border-[#4D00FF] focus:ring-[#4D00FF]"
+                className="bg-[#1B1B1B] border-gray-700 text-white placeholder:text-gray-600 focus:border-[#6B1421] focus:ring-[#6B1421]"
                 required
                 autoFocus
               />
@@ -90,7 +90,7 @@ export default function AdminLogin() {
             <Button
               type="submit"
               disabled={isLoading || !password}
-              className="w-full bg-[#4D00FF] hover:bg-[#4D00FF]/90 text-white font-medium py-3"
+              className="w-full bg-[#6B1421] hover:bg-[#6B1421]/90 text-white font-medium py-3"
             >
               {isLoading ? (
                 <>

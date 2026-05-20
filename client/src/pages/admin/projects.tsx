@@ -124,7 +124,7 @@ export default function AdminProjects() {
             </p>
           </div>
           <Link href="/admin/projects/new">
-            <Button className="bg-[#4D00FF] hover:bg-[#3D00CC] text-white">
+            <Button className="bg-[#6B1421] hover:bg-[#3D00CC] text-white">
               <Plus className="w-4 h-4 mr-2" />
               Add Project
             </Button>
@@ -134,20 +134,20 @@ export default function AdminProjects() {
         {/* Projects List */}
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-[#4D00FF]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
           </div>
         ) : projects.length === 0 ? (
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-12 text-center">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-12 text-center">
             <p className="text-gray-400 mb-4">No projects yet</p>
             <Link href="/admin/projects/new">
-              <Button className="bg-[#4D00FF] hover:bg-[#3D00CC] text-white">
+              <Button className="bg-[#6B1421] hover:bg-[#3D00CC] text-white">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Your First Project
               </Button>
             </Link>
           </div>
         ) : (
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 overflow-hidden">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-800">
@@ -174,10 +174,10 @@ export default function AdminProjects() {
                         <img 
                           src={project.featuredImage} 
                           alt={project.title}
-                          className="w-12 h-12 rounded-lg object-cover"
+                          className="w-12 h-12 rounded-md object-cover"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-md bg-gray-800 flex items-center justify-center">
                           <ImageIcon className="w-5 h-5 text-gray-600" />
                         </div>
                       )}
@@ -201,7 +201,7 @@ export default function AdminProjects() {
                           id: project.id, 
                           isFeatured: !project.isFeatured 
                         })}
-                        className={`p-2 rounded-lg transition-colors ${
+                        className={`p-2 rounded-md transition-colors ${
                           project.isFeatured 
                             ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20" 
                             : "bg-gray-800 text-gray-500 hover:bg-gray-700"
@@ -217,7 +217,7 @@ export default function AdminProjects() {
                           id: project.id, 
                           isVisible: !project.isVisible 
                         })}
-                        className={`p-2 rounded-lg transition-colors ${
+                        className={`p-2 rounded-md transition-colors ${
                           project.isVisible 
                             ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" 
                             : "bg-gray-800 text-gray-500 hover:bg-gray-700"
@@ -237,14 +237,14 @@ export default function AdminProjects() {
                           href={`/projects/${project.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+                          className="p-2 rounded-md bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
                           title="View live page"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </a>
                         <Link href={`/admin/projects/${project.id}`}>
                           <button
-                            className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+                            className="p-2 rounded-md bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
                             title="Edit project"
                           >
                             <Pencil className="w-4 h-4" />
@@ -252,7 +252,7 @@ export default function AdminProjects() {
                         </Link>
                         <button
                           onClick={() => setDeleteId(project.id)}
-                          className="p-2 rounded-lg bg-gray-800 text-gray-400 hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                          className="p-2 rounded-md bg-gray-800 text-gray-400 hover:text-red-500 hover:bg-red-500/10 transition-colors"
                           title="Delete project"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -268,17 +268,17 @@ export default function AdminProjects() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-6">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-6">
             <p className="text-gray-400 text-sm">Total Projects</p>
             <p className="text-3xl font-bold text-white mt-1">{projects.length}</p>
           </div>
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-6">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-6">
             <p className="text-gray-400 text-sm">Featured</p>
             <p className="text-3xl font-bold text-yellow-500 mt-1">
               {projects.filter(p => p.isFeatured).length}
             </p>
           </div>
-          <div className="bg-[#0D0D0D] rounded-xl border border-gray-800 p-6">
+          <div className="bg-[#0D0D0D] rounded-md border border-gray-800 p-6">
             <p className="text-gray-400 text-sm">Visible</p>
             <p className="text-3xl font-bold text-green-500 mt-1">
               {projects.filter(p => p.isVisible).length}

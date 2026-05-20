@@ -40,14 +40,27 @@
   
   --font-sans: 'Inter', sans-serif;
   --font-display: 'Syne', sans-serif;
-  
+
+  /* Brand — Ink & Bone (Variant A) */
+  --color-bone: #F4F1EA;
+  --color-stone: #E7E2D6;
+  --color-ink: #181612;
+  --color-ink-mid: #6F6A5F;
+  --color-ink-faint: #181612;        /* used with opacity utilities, e.g. text-[color:var(--color-ink-faint)]/55 */
+  --color-oxblood: #6B1421;
+  --color-oxblood-soft: #8C2331;
+  --color-oxblood-tint: #C58A92;     /* oxblood substitute on dark canvases — pure oxblood lacks contrast on ink */
+  --color-warm-gray: #9B948A;        /* muted text on ink — inverse of ink-mid */
+  --color-hairline: rgba(24, 22, 18, 0.12);
+  --color-signal: #1F4D3A;
+
   /* Updated radius to match iOS style (~17.5% feel) */
-  --radius: 1rem; 
+  --radius: 1rem;
 }
 
 :root {
   /* Light Mode - Default */
-  --background: 220 33% 99%; /* #FBFCFE */
+  --background: 220 33% 99%; /* #F4F1EA */
   --foreground: 0 0% 11%; /* #1B1B1B */
 
   --card: 0 0% 100%;
@@ -62,10 +75,10 @@
   --secondary: 0 0% 11%;    /* #1B1B1B (Dark Section Background) */
   --secondary-foreground: 0 0% 100%; /* White text on secondary */
 
-  --muted: 250 100% 97%; /* #F4F2FF (Light Lavender) */
+  --muted: 250 100% 97%; /* #E7E2D6 (Light Lavender) */
   --muted-foreground: 0 0% 40%;
 
-  /* Electric Blue #4d00ff */
+  /* Electric Blue #6B1421 */
   --accent: 258 100% 50%;
   --accent-foreground: 0 0% 100%;
 
@@ -102,7 +115,7 @@
   --muted: 0 0% 10%;
   --muted-foreground: 0 0% 65%;
 
-  /* Electric Blue #4d00ff */
+  /* Electric Blue #6B1421 */
   --accent: 258 100% 50%;
   --accent-foreground: 0 0% 100%;
 

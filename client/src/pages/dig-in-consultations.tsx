@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Download, Calendar, Sparkles, Brain, LineChart, BookOpen, Mail, Zap, FileText, MessageSquare, X, Check, Loader2 } from "lucide-react";
@@ -70,8 +71,8 @@ const defaultPainPoints: PainPoint[] = [
 
 const defaultConsultations: ConsultationType[] = [
   { title: "Strategic Deep Dive", slug: "strategic-deep-dive", desc: "Comprehensive analysis of your business model, market position, and growth levers.", iconName: "Sparkles", color: "bg-[#1B1B1B]" },
-  { title: "AI Workflow Optimization", slug: "ai-workflow-optimization", desc: "Tailoring AI integration to your specific team structure and operational needs.", iconName: "Brain", color: "bg-[#4D00FF]" },
-  { title: "Leadership Advisory", slug: "leadership-advisory", desc: "One-on-one guidance for executives on navigating market shifts and technology trends.", iconName: "LineChart", color: "bg-[#F4F2FF] text-[#1B1B1B] border-[#1B1B1B]/10" },
+  { title: "AI Workflow Optimization", slug: "ai-workflow-optimization", desc: "Tailoring AI integration to your specific team structure and operational needs.", iconName: "Brain", color: "bg-[#6B1421]" },
+  { title: "Leadership Advisory", slug: "leadership-advisory", desc: "One-on-one guidance for executives on navigating market shifts and technology trends.", iconName: "LineChart", color: "bg-[#E7E2D6] text-[#181612] border-[#181612]/10" },
   { title: "Custom Growth Roadmap", slug: "custom-growth-roadmap", desc: "Developing a bespoke step-by-step plan to achieve your specific business objectives.", iconName: "BookOpen", color: "bg-[#1B1B1B]" },
 ];
 
@@ -96,23 +97,23 @@ const FlipCard = ({ card, index }: { card: PainPoint; index: number }) => {
       >
         {/* Front Side */}
         <div 
-          className="absolute inset-0 w-full h-full bg-white rounded-3xl shadow-lg border border-[#1B1B1B]/5 p-6 flex flex-col justify-between"
+          className="absolute inset-0 w-full h-full bg-white rounded-md shadow-lg border border-[#181612]/5 p-6 flex flex-col justify-between"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="w-10 h-10 rounded-full bg-[#F4F2FF] flex items-center justify-center text-[#4D00FF]">
+          <div className="w-10 h-10 rounded-md bg-[#E7E2D6] flex items-center justify-center text-[#6B1421]">
             <span className="font-bold text-lg">{index + 1}</span>
           </div>
-          <h3 className="text-xl font-bold text-[#1B1B1B] leading-tight">
+          <h3 className="text-xl font-bold text-[#181612] leading-tight">
             {card.front}
           </h3>
-          <div className="w-8 h-8 rounded-full border border-[#1B1B1B]/10 flex items-center justify-center self-end text-[#1B1B1B]/40">
+          <div className="w-8 h-8 rounded-full border border-[#181612]/10 flex items-center justify-center self-end text-[#181612]/40">
             <ArrowRight className="w-4 h-4" />
           </div>
         </div>
 
         {/* Back Side */}
         <div 
-          className="absolute inset-0 w-full h-full bg-[#4D00FF] rounded-3xl shadow-xl p-6 flex flex-col justify-center text-white"
+          className="absolute inset-0 w-full h-full bg-[#6B1421] rounded-md shadow-xl p-6 flex flex-col justify-center text-white"
           style={{ 
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)"
@@ -179,7 +180,7 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           onClick={handleClose}
         >
           <motion.div
-            className="bg-white rounded-3xl p-8 md:p-10 max-w-md w-full mx-6 shadow-2xl relative"
+            className="bg-white rounded-md p-8 md:p-10 max-w-md w-full mx-6 shadow-2xl relative"
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -188,23 +189,23 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           >
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F4F2FF] flex items-center justify-center text-[#1B1B1B]/60 hover:text-[#1B1B1B] transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#E7E2D6] flex items-center justify-center text-[#181612]/60 hover:text-[#181612] transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
 
             {showSuccess ? (
               <div className="text-center py-4">
-                <div className="w-16 h-16 bg-[#4D00FF] rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-16 h-16 bg-[#6B1421] rounded-full flex items-center justify-center mx-auto mb-6">
                   <Check className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-[#1B1B1B] mb-3">You're on the list!</h3>
-                <p className="text-[#1B1B1B]/60 leading-relaxed">
+                <h3 className="text-2xl font-bold text-[#181612] mb-3">You're on the list!</h3>
+                <p className="text-[#181612]/60 leading-relaxed">
                   I'll send the consulting deck to your inbox shortly.
                 </p>
                 <Button
                   onClick={handleClose}
-                  className="mt-6 bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full px-8"
+                  className="mt-6 bg-[#6B1421] hover:bg-[#4A0E16] text-white rounded-md px-8"
                 >
                   Got it
                 </Button>
@@ -212,11 +213,11 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             ) : (
               <>
                 <div className="text-center mb-6">
-                  <div className="w-12 h-12 bg-[#F4F2FF] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Download className="w-6 h-6 text-[#4D00FF]" />
+                  <div className="w-12 h-12 bg-[#E7E2D6] rounded-md flex items-center justify-center mx-auto mb-4">
+                    <Download className="w-6 h-6 text-[#6B1421]" />
                   </div>
-                  <h3 className="text-2xl font-bold text-[#1B1B1B] mb-2">Get the Consulting Deck</h3>
-                  <p className="text-[#1B1B1B]/60 text-sm leading-relaxed">
+                  <h3 className="text-2xl font-bold text-[#181612] mb-2">Get the Consulting Deck</h3>
+                  <p className="text-[#181612]/60 text-sm leading-relaxed">
                     Enter your email and I'll send you a detailed overview of my consulting services and approach.
                   </p>
                 </div>
@@ -229,14 +230,14 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full p-4 bg-[#F4F2FF] rounded-xl border-none focus:ring-2 focus:ring-[#4D00FF] outline-none text-[#1B1B1B] placeholder:text-[#1B1B1B]/30"
+                      className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] outline-none text-[#181612] placeholder:text-[#181612]/30"
                     />
                   </div>
                   <Button
                     type="submit"
                     disabled={deckMutation.isPending}
                     size="lg"
-                    className="w-full h-14 text-lg bg-[#4D00FF] hover:bg-[#3A00CC] text-white rounded-full"
+                    className="w-full h-14 text-lg bg-[#6B1421] hover:bg-[#4A0E16] text-white rounded-md"
                   >
                     {deckMutation.isPending ? (
                       <>
@@ -275,8 +276,8 @@ const Hero = ({ content, painPoints, onOpenDeck }: { content: HeroContent; painP
   }, [content.rotatingWords.length]);
 
   return (
-    <section className="pt-32 pb-12 bg-[#F4F2FF] relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-b from-[#4D00FF]/5 to-transparent -z-10 blur-3xl rounded-full translate-x-1/4"></div>
+    <section className="pt-32 pb-12 bg-[#E7E2D6] relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-b from-[#6B1421]/5 to-transparent -z-10 blur-3xl rounded-full translate-x-1/4"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto text-center mb-16">
@@ -285,11 +286,11 @@ const Hero = ({ content, painPoints, onOpenDeck }: { content: HeroContent; painP
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1] text-[#1B1B1B]">
-              {content.title} <span className="text-[#4D00FF]">{content.highlightWord}</span> {content.subtitle}
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1] text-[#181612]">
+              {content.title} <span className="text-[#6B1421]">{content.highlightWord}</span> {content.subtitle}
             </h1>
 
-            <div className="mb-8 flex items-center justify-center gap-2 text-lg md:text-3xl font-light text-[#1B1B1B]/60 whitespace-nowrap flex-wrap md:flex-nowrap">
+            <div className="mb-8 flex items-center justify-center gap-2 text-lg md:text-3xl font-light text-[#181612]/60 flex-wrap md:flex-nowrap md:whitespace-nowrap">
               <span>Consultations that make you</span>
               <div className="h-[1.2em] overflow-hidden inline-flex items-center relative text-left">
                 <span className="invisible font-bold">{content.rotatingWords[0]}</span>
@@ -300,7 +301,7 @@ const Hero = ({ content, painPoints, onOpenDeck }: { content: HeroContent; painP
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: "-100%", opacity: 0 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="font-bold text-[#4D00FF] absolute left-0"
+                    className="font-bold text-[#6B1421] absolute left-0"
                   >
                     {content.rotatingWords[index]}
                   </motion.span>
@@ -309,11 +310,11 @@ const Hero = ({ content, painPoints, onOpenDeck }: { content: HeroContent; painP
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all rounded-full shadow-xl group cursor-pointer" onClick={onOpenDeck}>
+              <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#6B1421] text-white transition-all rounded-md shadow-xl group cursor-pointer" onClick={onOpenDeck}>
                 <Download className="mr-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
                 {content.ctaButton1Text}
               </Button>
-              <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] transition-all rounded-full cursor-pointer" onClick={() => openCalendly()}>
+              <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#181612]/20 hover:border-[#6B1421] hover:text-[#6B1421] transition-all rounded-md cursor-pointer" onClick={() => openCalendly()}>
                 <Calendar className="mr-2 h-5 w-5" />
                 {content.ctaButton2Text}
               </Button>
@@ -348,18 +349,18 @@ const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationT
         <div className="flex justify-between items-end mb-12">
           <div>
             <h2 className="text-4xl font-bold tracking-tighter mb-4">Consultations</h2>
-            <p className="text-[#1B1B1B]/60 text-lg">Tailored analysis, guidance, and strategy.</p>
+            <p className="text-[#181612]/60 text-lg">Tailored analysis, guidance, and strategy.</p>
           </div>
           <div className="hidden md:flex gap-2">
             <button 
               onClick={scrollPrev}
-              className="w-10 h-10 rounded-full border border-[#1B1B1B]/10 flex items-center justify-center hover:bg-[#1B1B1B] hover:text-white transition-colors"
+              className="w-10 h-10 rounded-md border border-[#181612]/10 flex items-center justify-center hover:bg-[#181612] hover:text-white transition-colors"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
             </button>
             <button 
               onClick={scrollNext}
-              className="w-10 h-10 rounded-full border border-[#1B1B1B]/10 flex items-center justify-center hover:bg-[#1B1B1B] hover:text-white transition-colors"
+              className="w-10 h-10 rounded-md border border-[#181612]/10 flex items-center justify-center hover:bg-[#181612] hover:text-white transition-colors"
             >
               <ArrowRight className="w-4 h-4" />
             </button>
@@ -370,25 +371,25 @@ const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationT
           <div className="flex -ml-6 py-4">
             {consultations.map((consultation, i) => {
               const IconComponent = getIconComponent(consultation.iconName);
-              const isLightBg = consultation.color.includes('bg-[#F4F2FF]');
+              const isLightBg = consultation.color.includes('bg-[#E7E2D6]');
               
               return (
                 <div key={i} className="flex-[0_0_85%] md:flex-[0_0_48%] lg:flex-[0_0_33.4%] pl-6 min-w-0">
                   <div className={`h-full rounded-[2rem] p-8 flex flex-col justify-between min-h-[320px] transition-transform hover:-translate-y-2 hover:shadow-2xl ${consultation.color} ${consultation.color.includes('border') ? 'border' : ''}`}>
                     <div>
-                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${isLightBg ? 'bg-white text-[#1B1B1B]' : 'bg-white/10 text-white'}`}>
+                      <div className={`w-16 h-16 rounded-md flex items-center justify-center mb-6 ${isLightBg ? 'bg-white text-[#181612]' : 'bg-white/10 text-white'}`}>
                         <IconComponent className="w-8 h-8" />
                       </div>
-                      <h3 className={`text-2xl font-bold mb-4 leading-tight ${isLightBg ? 'text-[#1B1B1B]' : 'text-white'}`}>
+                      <h3 className={`text-2xl font-bold mb-4 leading-tight ${isLightBg ? 'text-[#181612]' : 'text-white'}`}>
                         {consultation.title}
                       </h3>
-                      <p className={`text-lg leading-relaxed ${isLightBg ? 'text-[#1B1B1B]/70' : 'text-white/70'}`}>
+                      <p className={`text-lg leading-relaxed ${isLightBg ? 'text-[#181612]/70' : 'text-white/70'}`}>
                         {consultation.desc}
                       </p>
                     </div>
                     <div className="mt-8">
-                      <Link href={`/services/consultations/${consultation.slug}`}>
-                        <Button variant="ghost" className={`p-0 hover:bg-transparent ${isLightBg ? 'text-[#4D00FF] hover:text-[#1B1B1B]' : 'text-white hover:text-white/70'}`}>
+                      <Link href={`/dig-in-consultations/${consultation.slug}`}>
+                        <Button variant="ghost" className={`p-0 hover:bg-transparent ${isLightBg ? 'text-[#6B1421] hover:text-[#181612]' : 'text-white hover:text-white/70'}`}>
                           Learn more <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                       </Link>
@@ -460,11 +461,11 @@ const FreeValue = ({ content }: { content: FreeValueContent }) => {
     <section className="py-24 bg-[#0A0A0A]">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
-          <span className="inline-block bg-[#4D00FF] text-white font-bold uppercase tracking-widest text-xs px-4 py-2 rounded-full mb-6">
+          <span className="inline-block bg-[#6B1421] text-white font-bold uppercase tracking-widest text-xs px-4 py-2 rounded-full mb-6">
             {content.badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white">
-            {content.title} <span className="text-[#4D00FF]">{content.highlightWord}</span>
+            {content.title} <span className="text-[#6B1421]">{content.highlightWord}</span>
           </h2>
           <p className="text-white/60 text-lg mt-4 max-w-2xl mx-auto">{content.subtitle}</p>
         </div>
@@ -473,18 +474,18 @@ const FreeValue = ({ content }: { content: FreeValueContent }) => {
           {content.resources.map((resource, i) => {
             const IconComponent = getIconComponent(resource.iconName);
             return (
-              <div key={i} className="group relative bg-[#1B1B1B] p-8 rounded-3xl border border-white/10 hover:border-[#4D00FF]/50 transition-all hover:shadow-lg hover:shadow-[#4D00FF]/10 flex flex-col">
+              <div key={i} className="group relative bg-[#1B1B1B] p-8 rounded-md border border-white/10 hover:border-[#6B1421]/50 transition-all hover:shadow-lg hover:shadow-[#6B1421]/10 flex flex-col">
                 <span className="absolute top-4 right-4 bg-white/10 text-white/70 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                   {resource.tag}
                 </span>
-                <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white mb-6">
+                <div className="w-12 h-12 rounded-md bg-white/10 flex items-center justify-center text-white mb-6">
                   <IconComponent className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-white">{resource.title}</h3>
                 <p className="text-white/60 leading-relaxed mb-6 flex-1">{resource.desc}</p>
                 <Button
                   variant="outline"
-                  className="w-full border-white/20 text-white hover:bg-white hover:text-[#1B1B1B] transition-all rounded-full mt-auto"
+                  className="w-full border-white/20 text-white hover:bg-white hover:text-[#181612] transition-all rounded-full mt-auto"
                 >
                   {resource.cta}
                 </Button>
@@ -508,24 +509,24 @@ const FAQ = () => {
   ];
 
   return (
-    <section className="py-24 bg-[#F4F2FF]">
+    <section className="py-24 bg-[#E7E2D6]">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold tracking-tighter mb-4">Common Questions</h2>
-            <p className="text-[#1B1B1B]/60 text-lg">Everything you need to know about working together.</p>
+            <p className="text-[#181612]/60 text-lg">Everything you need to know about working together.</p>
           </div>
 
           <div className="space-y-4">
             {faqs.map((faq, i) => (
               <div 
                 key={i}
-                className="bg-white rounded-2xl overflow-hidden cursor-pointer"
+                className="bg-white rounded-md overflow-hidden cursor-pointer"
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
               >
                 <div className="p-6 flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-[#1B1B1B] pr-4">{faq.q}</h3>
-                  <div className={`w-8 h-8 rounded-full border border-[#1B1B1B]/10 flex items-center justify-center transition-transform ${openIndex === i ? 'rotate-45' : ''}`}>
+                  <h3 className="text-lg font-bold text-[#181612] pr-4">{faq.q}</h3>
+                  <div className={`w-8 h-8 rounded-full border border-[#181612]/10 flex items-center justify-center transition-transform ${openIndex === i ? 'rotate-45' : ''}`}>
                     <span className="text-xl leading-none">+</span>
                   </div>
                 </div>
@@ -538,7 +539,7 @@ const FAQ = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <p className="px-6 pb-6 text-[#1B1B1B]/70 leading-relaxed">{faq.a}</p>
+                      <p className="px-6 pb-6 text-[#181612]/70 leading-relaxed">{faq.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -553,23 +554,23 @@ const FAQ = () => {
 
 const CTA = () => {
   return (
-    <section className="py-10 bg-[#F4F2FF] text-center">
+    <section className="py-10 bg-[#E7E2D6] text-center">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 text-[#1B1B1B]">
-            Ready to unlock your <span className="text-[#4D00FF]">next level?</span>
+          <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 text-[#181612]">
+            Ready to unlock your <span className="text-[#6B1421]">next level?</span>
           </h2>
-          <p className="text-xl text-[#1B1B1B]/70 mb-10">
+          <p className="text-xl text-[#181612]/70 mb-10">
             Book a discovery call to discuss your challenges and explore how we can work together.
           </p>
           <Button
             size="lg"
-            className="text-lg h-16 px-12 bg-[#4D00FF] hover:bg-[#1B1B1B] text-white transition-all rounded-full shadow-xl shadow-[#4D00FF]/20 mb-6 cursor-pointer"
+            className="text-lg h-16 px-12 bg-[#6B1421] hover:bg-[#181612] text-white transition-all rounded-md shadow-xl shadow-[#6B1421]/20 mb-6 cursor-pointer"
             onClick={() => openCalendly()}
           >
             Schedule Discovery Call
           </Button>
-          <p className="text-sm font-medium text-[#1B1B1B]/50 uppercase tracking-wide">
+          <p className="text-sm font-medium text-[#181612]/50 uppercase tracking-wide">
             Join 50+ founders scaling with expert guidance
           </p>
         </div>
@@ -603,8 +604,13 @@ export default function DigInConsultations() {
   const freeValueContent = (pageContent.freeValue as FreeValueContent) || defaultFreeValueContent;
 
   return (
-    <div className="min-h-screen bg-white text-[#1B1B1B]">
-      <Navbar />
+    <div className="min-h-screen bg-white text-[#181612]">
+      <SEO
+        title="Dig-In Consultations — 1:1 Strategy Sessions"
+        description="One-on-one consultations for founders and marketers. Deep-dive sessions on SEO, content, and growth strategy tailored to your business."
+        canonical="/dig-in-consultations"
+      />
+      <Navbar theme="light" />
       <Hero content={heroContent} painPoints={painPoints} onOpenDeck={() => setShowDeckPopup(true)} />
       <ConsultationsCarousel consultations={consultations} />
       <FreeValue content={freeValueContent} />

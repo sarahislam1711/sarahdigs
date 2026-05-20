@@ -35,7 +35,7 @@ const defaultSettings: SettingsForm = {
   site_name: "Sarah Digs",
   site_tagline: "Marketing Consultant",
   site_description: "",
-  primary_color: "#4D00FF",
+  primary_color: "#6B1421",
   secondary_color: "#1B1B1B",
   logo_url: "",
   favicon_url: "",
@@ -96,7 +96,7 @@ export default function AdminSettings() {
     return (
       <AdminLayout title="Site Settings">
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D00FF]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6B1421]"></div>
         </div>
       </AdminLayout>
     );
@@ -109,7 +109,7 @@ export default function AdminSettings() {
         <Button
           onClick={() => saveMutation.mutate(formData)}
           disabled={saveMutation.isPending}
-          className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+          className="bg-[#6B1421] hover:bg-[#6B1421]/80"
           data-testid="button-save-settings"
         >
           <Save className="w-4 h-4 mr-2" />
@@ -119,19 +119,19 @@ export default function AdminSettings() {
 
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="bg-[#0D0D0D] border border-gray-800">
-          <TabsTrigger value="general" className="data-[state=active]:bg-[#4D00FF]">
+          <TabsTrigger value="general" className="data-[state=active]:bg-[#6B1421]">
             <Globe className="w-4 h-4 mr-2" />
             General
           </TabsTrigger>
-          <TabsTrigger value="branding" className="data-[state=active]:bg-[#4D00FF]">
+          <TabsTrigger value="branding" className="data-[state=active]:bg-[#6B1421]">
             <Palette className="w-4 h-4 mr-2" />
             Branding
           </TabsTrigger>
-          <TabsTrigger value="social" className="data-[state=active]:bg-[#4D00FF]">
+          <TabsTrigger value="social" className="data-[state=active]:bg-[#6B1421]">
             <Share2 className="w-4 h-4 mr-2" />
             Social
           </TabsTrigger>
-          <TabsTrigger value="advanced" className="data-[state=active]:bg-[#4D00FF]">
+          <TabsTrigger value="advanced" className="data-[state=active]:bg-[#6B1421]">
             <Code className="w-4 h-4 mr-2" />
             Advanced
           </TabsTrigger>
@@ -224,7 +224,7 @@ export default function AdminSettings() {
                     data-testid="input-logo-url"
                   />
                   {formData.logo_url && (
-                    <div className="mt-2 p-4 bg-gray-800 rounded-lg">
+                    <div className="mt-2 p-4 bg-gray-800 rounded-md">
                       <img src={formData.logo_url} alt="Logo preview" className="max-h-16" />
                     </div>
                   )}

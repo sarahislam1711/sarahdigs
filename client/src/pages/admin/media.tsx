@@ -140,7 +140,7 @@ export default function AdminMedia() {
           <Button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+            className="bg-[#6B1421] hover:bg-[#6B1421]/80"
             data-testid="button-upload-media"
           >
             {isUploading ? (
@@ -165,7 +165,7 @@ export default function AdminMedia() {
           </DialogHeader>
           {editingMedia && (
             <div className="space-y-4">
-              <div className="aspect-video bg-gray-800 rounded-lg overflow-hidden">
+              <div className="aspect-video bg-gray-800 rounded-md overflow-hidden">
                 <img
                   src={editingMedia.url}
                   alt={editingMedia.altText || editingMedia.filename}
@@ -196,7 +196,7 @@ export default function AdminMedia() {
                     id: editingMedia.id,
                     data: { altText: editingMedia.altText, caption: editingMedia.caption }
                   })}
-                  className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+                  className="bg-[#6B1421] hover:bg-[#6B1421]/80"
                 >
                   Save Changes
                 </Button>
@@ -211,7 +211,7 @@ export default function AdminMedia() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D00FF]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6B1421]"></div>
         </div>
       ) : mediaItems && mediaItems.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -307,7 +307,7 @@ export default function AdminMedia() {
             <Button
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="bg-[#4D00FF] hover:bg-[#4D00FF]/80"
+              className="bg-[#6B1421] hover:bg-[#6B1421]/80"
             >
               {isUploading ? (
                 <>

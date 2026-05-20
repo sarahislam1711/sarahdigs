@@ -1,8 +1,9 @@
 import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Check, X, ArrowRight, Zap, Target, BarChart, Rocket, TrendingDown, Banknote, Puzzle } from "lucide-react";
+import { Check, X, ArrowRight, Zap, Target, BarChart, Rocket, TrendingDown, Banknote, Puzzle, ChevronDown, ChevronRight } from "lucide-react";
 import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -54,7 +55,7 @@ const CountUp = ({ value, label }: { value: string, label: string }) => {
 
   return (
     <div ref={ref} className="text-center md:text-left">
-       <div className="text-5xl md:text-6xl font-black text-[#1B1B1B] mb-2 tabular-nums">
+       <div className="text-4xl md:text-5xl font-medium text-ink mb-2 tabular-nums tracking-tighter">
          {match ? (
            <>
              {prefix}{displayValue}{suffix}
@@ -63,7 +64,7 @@ const CountUp = ({ value, label }: { value: string, label: string }) => {
            value
          )}
        </div>
-       <div className="text-sm font-bold uppercase tracking-widest text-[#4D00FF]">{label}</div>
+       <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-oxblood">{label}</div>
     </div>
   );
 };
@@ -125,19 +126,24 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
-      <Navbar />
+    <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
+      <SEO
+        title="Contact Sarah"
+        description="Book a free strategy call or share your project. SarahDigs offers SEO audits, content strategy, and growth consulting for founders and brands."
+        canonical="/contact"
+      />
+      <Navbar theme="light" />
 
       {/* Hero Section */}
-      <section className="pt-40 pb-20 bg-gradient-to-b from-[#F4F2FF] to-[#FBFCFE] relative overflow-hidden">
+      <section className="min-h-screen pt-40 pb-20 bg-bone relative overflow-hidden flex items-center">
         {/* Faded background image */}
-        <div className="absolute top-0 right-0 w-[55%] h-[120%] hidden lg:block pointer-events-none" style={{
+        <div className="absolute top-0 right-0 w-[62%] h-[126%] hidden lg:block pointer-events-none" style={{
           backgroundImage: `url(${contactHero})`,
-          backgroundSize: '140%',
+          backgroundSize: '155%',
           backgroundPosition: 'center 50%',
           opacity: 0.35,
-          maskImage: 'radial-gradient(ellipse at 65% 50%, black 30%, transparent 75%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at 65% 50%, black 30%, transparent 75%)',
+          maskImage: 'radial-gradient(ellipse at 65% 50%, black 33%, transparent 77%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 65% 50%, black 33%, transparent 77%)',
         }} />
 
         <div className="container mx-auto px-6 relative z-10">
@@ -147,24 +153,24 @@ export default function Contact() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="text-[#4D00FF] font-bold uppercase tracking-widest text-sm mb-4 block">Let's Connect</span>
-              <h1 className="text-6xl md:text-7xl font-black tracking-tighter mb-6 leading-[0.9]">
-                Ready to start <br/>
-                <span className="text-[#4D00FF]">digging?</span>
+              <span className="text-oxblood font-semibold uppercase tracking-[0.2em] text-xs mb-5 block">let's connect</span>
+              <h1 className="text-6xl md:text-7xl font-bold tracking-tighter mb-6 leading-[0.95] lowercase">
+                ready to start <br/>
+                <span className="text-oxblood">digging?</span>
               </h1>
-              <p className="text-xl text-[#1B1B1B]/70 mb-8 max-w-lg">
-                Whether you need a quick audit or a full-scale growth excavation, I'm here to help you find the gold in your business.
+              <p className="text-lg md:text-xl text-ink-mid mb-10 max-w-lg leading-relaxed lowercase">
+                two ways to start. pick what fits where you are.
               </p>
-              <div className="flex gap-4">
-                <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#4D00FF] text-white transition-all cursor-pointer"
+              <div className="flex flex-wrap gap-4">
+                <Button size="lg" className="text-base h-14 px-8 bg-ink hover:bg-oxblood text-white transition-colors cursor-pointer rounded-md lowercase font-medium"
                   onClick={() => openCalendly()}
                 >
-                  Book a Free Call
+                  book a free call
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg h-14 px-8 border-[#1B1B1B]/20 hover:border-[#4D00FF] hover:text-[#4D00FF] cursor-pointer"
+                <Button variant="outline" size="lg" className="text-base h-14 px-8 bg-transparent border-ink/20 text-ink hover:border-oxblood hover:text-oxblood hover:bg-transparent cursor-pointer rounded-md lowercase font-medium"
                   onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  Share My Project
+                  share my project
                 </Button>
               </div>
             </motion.div>
@@ -172,67 +178,14 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* What to expect */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6">
-           <div className="text-center mb-16">
-             <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">What to expect when you work with us?</h2>
-             <p className="text-[#1B1B1B]/60 text-lg max-w-2xl mx-auto">A partnership built on transparency, data, and mutual growth.</p>
-           </div>
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
-              <div className="space-y-6">
-                 <div className="w-14 h-14 bg-[#F4F2FF] rounded-2xl flex items-center justify-center mb-6">
-                   <Target className="w-7 h-7 text-[#4D00FF]" />
-                 </div>
-                 <h3 className="text-2xl font-bold">Strategic Clarity</h3>
-                 <p className="text-[#1B1B1B]/70 leading-relaxed">
-                   Deep strategic audits and actionable roadmaps. We identify hidden leaks and uncover high-impact opportunities tailored to your business goals.
-                 </p>
-              </div>
-
-              <div className="space-y-6">
-                 <div className="w-14 h-14 bg-[#F4F2FF] rounded-2xl flex items-center justify-center mb-6">
-                   <Rocket className="w-7 h-7 text-[#4D00FF]" />
-                 </div>
-                 <h3 className="text-2xl font-bold">Ambitious Growth</h3>
-                 <p className="text-[#1B1B1B]/70 leading-relaxed">
-                   Designed for brands with $1M+ ARR ready to scale. Whether you're a SaaS, DTC, or B2B leader, we pour fuel on the fire of product-market fit.
-                 </p>
-              </div>
-
-              <div className="space-y-6">
-                 <div className="w-14 h-14 bg-[#F4F2FF] rounded-2xl flex items-center justify-center mb-6">
-                   <Check className="w-7 h-7 text-[#4D00FF]" />
-                 </div>
-                 <h3 className="text-2xl font-bold">Honest Partnership</h3>
-                 <p className="text-[#1B1B1B]/70 leading-relaxed">
-                   We value long-term strategy over quick hacks. Expect data-first decisions, iterative experiments, and a dedicated focus on sustainable results.
-                 </p>
-              </div>
-
-              <div className="space-y-6">
-                 <div className="w-14 h-14 bg-[#F4F2FF] rounded-2xl flex items-center justify-center mb-6">
-                   <BarChart className="w-7 h-7 text-[#4D00FF]" />
-                 </div>
-                 <h3 className="text-2xl font-bold">Deep Insights</h3>
-                 <p className="text-[#1B1B1B]/70 leading-relaxed">
-                   We dig deeper than surface metrics. Get comprehensive analytics and reporting that shows exactly how our strategies impact your bottom line.
-                 </p>
-              </div>
-           </div>
-        </div>
-      </section>
-
       {/* Proof */}
-      <section className="py-16 border-y border-[#1B1B1B]/10">
+      <section className="py-10 bg-bone">
         <div className="container mx-auto px-6">
-           <div className="flex flex-wrap justify-center md:justify-between gap-8 md:gap-0">
+           <div className="flex flex-wrap justify-center md:justify-around gap-10 md:gap-0 max-w-4xl mx-auto">
               {[
-                { val: "6+", label: "Years Experience" },
-                { val: "$10M+", label: "Revenue Generated" },
-                { val: "400%", label: "Avg. Traffic Growth" },
-                { val: "50+", label: "Happy Clients" }
+                { val: "20+", label: "websites shipped" },
+                { val: "3x", label: "avg. inbound after launch" },
+                { val: "6", label: "weeks strategy to live" }
               ].map((stat, i) => (
                 <CountUp key={i} value={stat.val} label={stat.label} />
               ))}
@@ -240,99 +193,189 @@ export default function Contact() {
         </div>
       </section>
 
+      {/* The approach */}
+      <section className="py-16 bg-bone">
+        <div className="container mx-auto px-6">
+           <div className="text-center mb-16">
+             <div className="flex items-center justify-center gap-3 mb-4">
+               <span className="h-px w-8 bg-oxblood/40" />
+               <span className="text-oxblood font-semibold uppercase tracking-[0.2em] text-xs">the approach</span>
+               <span className="h-px w-8 bg-oxblood/40" />
+             </div>
+             <h2 className="text-4xl md:text-5xl font-medium tracking-tighter mb-4 lowercase">what working together looks like</h2>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-14 max-w-5xl mx-auto">
+              {[
+                { num: "01", title: "we dig before we build", body: "every engagement starts with deep research. your business, your audience, your positioning. nothing gets designed until we understand what needs to exist and why." },
+                { num: "02", title: "every decision has a reason", body: "design, copy, structure, SEO. nothing is decorative. every element earns its place." },
+                { num: "03", title: "strategy leads, always", body: "we don't start with execution. we start with clarity. the build follows the thinking." },
+                { num: "04", title: "the website is the beginning", body: "we build it to grow with you. optimised for search, AI discovery, and conversion from day one." },
+              ].map(({ num, title, body }) => (
+                <div key={num} className="space-y-3">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-oxblood font-semibold tracking-tight text-base tabular-nums">{num}</span>
+                    <span className="h-px flex-1 bg-ink/10" />
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-medium tracking-tight lowercase">{title}</h3>
+                  <p className="text-ink-mid leading-relaxed">{body}</p>
+                </div>
+              ))}
+           </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-16 bg-bone">
+        <div className="container mx-auto px-6">
+           <div className="text-center mb-16">
+             <div className="flex items-center justify-center gap-3 mb-4">
+               <span className="h-px w-8 bg-oxblood/40" />
+               <span className="text-oxblood font-semibold uppercase tracking-[0.2em] text-xs">how it works</span>
+               <span className="h-px w-8 bg-oxblood/40" />
+             </div>
+             <h2 className="text-4xl md:text-5xl font-medium tracking-tighter mb-4 lowercase">what happens next.</h2>
+           </div>
+
+           <div className="max-w-6xl mx-auto relative">
+              {/* Connecting hairline behind the numbered nodes (desktop only) */}
+              <div className="hidden lg:block absolute left-0 right-0 top-[18px] h-px bg-ink/10" aria-hidden="true" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-12 relative">
+                {[
+                  { num: "01", title: "you reach out", body: "fill the brief or book a call. either works." },
+                  { num: "02", title: "we review", body: "we look at your business, site, and goals before we respond." },
+                  { num: "03", title: "we come back with a plan", body: "a clear view of what needs doing and whether we're the right fit." },
+                  { num: "04", title: "we dig in", body: "if it's a match, we start with strategy & direction. always." },
+                ].map(({ num, title, body }, i, arr) => (
+                  <div key={num} className="space-y-4 relative group transition-transform duration-300 ease-out hover:-translate-y-1 cursor-default">
+                    <div className="relative h-9 flex items-center">
+                      <span className="relative z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-bone border border-ink/15 text-oxblood font-semibold text-xs tabular-nums transition-colors duration-300 group-hover:border-oxblood group-hover:bg-oxblood group-hover:text-white">
+                        {num}
+                      </span>
+                      {i < arr.length - 1 && (
+                        <ChevronRight
+                          className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 text-ink/30 bg-bone px-0.5"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </div>
+                    <h3 className="text-lg md:text-xl font-medium tracking-tight lowercase transition-colors duration-300 group-hover:text-oxblood">{title}</h3>
+                    <p className="text-ink-mid leading-relaxed text-[15px]">{body}</p>
+                  </div>
+                ))}
+              </div>
+           </div>
+        </div>
+      </section>
+
 
       {/* CTA Form */}
-      <section id="contact-form" className="py-32 bg-[#FBFCFE] scroll-mt-24">
+      <section id="contact-form" className="py-16 bg-bone scroll-mt-24">
         <div className="container mx-auto px-6">
            <div className="max-w-3xl mx-auto">
-             <div className="text-center mb-16">
-                <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6">Let's get to work.</h2>
-                <p className="text-xl text-[#1B1B1B]/70">Tell me a bit about your project and I'll be in touch within 24 hours.</p>
+             <div className="text-center mb-14">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <span className="h-px w-8 bg-oxblood/40" />
+                  <span className="text-oxblood font-semibold uppercase tracking-[0.2em] text-xs">start the dig</span>
+                  <span className="h-px w-8 bg-oxblood/40" />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-medium tracking-tighter mb-5 lowercase">tell us about your project.</h2>
+                <p className="text-lg text-ink-mid leading-relaxed">we dig into every project. back to you within 48 hours.</p>
              </div>
-             
-             <div className="bg-[#F4F2FF] p-8 md:p-12 shadow-2xl border border-[#1B1B1B]/5 rounded-[2.5rem]">
+
+             <div className="bg-white p-8 md:p-12 shadow-xl shadow-ink/5 border border-ink/10 rounded-md">
                 <form className="space-y-8" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Name</label>
+                      <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Name</label>
                       <input 
                         type="text" 
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#4D00FF] outline-none py-4 px-6 transition-all rounded-xl placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]" 
-                        placeholder="Jane Doe" 
+                        className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
+                        placeholder="jane doe" 
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Email</label>
+                      <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Email</label>
                       <input 
                         type="email" 
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#4D00FF] outline-none py-4 px-6 transition-all rounded-xl placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]" 
+                        className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
                         placeholder="jane@company.com" 
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Company Website</label>
+                    <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Company Website</label>
                     <input 
                       type="text" 
                       value={formData.companyWebsite}
                       onChange={(e) => setFormData({ ...formData, companyWebsite: e.target.value })}
-                      className="w-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#4D00FF] outline-none py-4 px-6 transition-all rounded-xl placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]" 
+                      className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
                       placeholder="https://example.com" 
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Job</label>
-                      <select 
-                        value={formData.jobRole}
-                        onChange={(e) => setFormData({ ...formData, jobRole: e.target.value })}
-                        className="w-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#4D00FF] outline-none py-4 px-6 transition-all rounded-xl text-[#1B1B1B]"
-                      >
-                        <option>Marketing</option>
-                        <option>CEO / Founder</option>
-                        <option>Product</option>
-                        <option>Other</option>
-                      </select>
+                      <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Job</label>
+                      <div className="relative">
+                        <select
+                          value={formData.jobRole}
+                          onChange={(e) => setFormData({ ...formData, jobRole: e.target.value })}
+                          className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
+                        >
+                          <option>marketing</option>
+                          <option>ceo / founder</option>
+                          <option>product</option>
+                          <option>other</option>
+                        </select>
+                        <ChevronDown className="w-4 h-4 text-ink-mid absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Company Size</label>
-                      <select 
-                        value={formData.companySize}
-                        onChange={(e) => setFormData({ ...formData, companySize: e.target.value })}
-                        className="w-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#4D00FF] outline-none py-4 px-6 transition-all rounded-xl text-[#1B1B1B]"
-                      >
-                        <option>1-10</option>
-                        <option>10-50</option>
-                        <option>More than 50</option>
-                      </select>
+                      <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Company Size</label>
+                      <div className="relative">
+                        <select
+                          value={formData.companySize}
+                          onChange={(e) => setFormData({ ...formData, companySize: e.target.value })}
+                          className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
+                        >
+                          <option>1-10</option>
+                          <option>10-50</option>
+                          <option>more than 50</option>
+                        </select>
+                        <ChevronDown className="w-4 h-4 text-ink-mid absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Project Type</label>
-                    <select 
-                      value={formData.projectType}
-                      onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                      className="w-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#4D00FF] outline-none py-4 px-6 transition-all rounded-xl text-[#1B1B1B]"
-                    >
-                      <option>SEO & Organic Growth</option>
-                      <option>Product-Led Marketing</option>
-                      <option>Brand & Strategy</option>
-                      <option>Founder-Led Growth</option>
-                      <option>Other</option>
-                    </select>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Budget Range</label>
+                    <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Project Type</label>
+                    <div className="relative">
+                      <select
+                        value={formData.projectType}
+                        onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                        className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
+                      >
+                        <option>seo & organic growth</option>
+                        <option>product-led marketing</option>
+                        <option>brand & strategy</option>
+                        <option>founder-led growth</option>
+                        <option>other</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-ink-mid absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Budget Range</label>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {["<$5k", "$5k-10k", "$10k-25k", "$25k+"].map((range) => (
                         <label key={range} className="cursor-pointer">
@@ -344,7 +387,7 @@ export default function Contact() {
                             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                             className="peer sr-only" 
                           />
-                          <div className="bg-white py-3 px-4 rounded-xl text-center border border-transparent peer-checked:border-[#4D00FF] peer-checked:bg-[#4D00FF]/5 peer-checked:text-[#4D00FF] transition-all font-medium text-[#1B1B1B]/70">
+                          <div className="bg-bone py-3 px-4 rounded-md text-center border border-ink/15 hover:border-ink/30 peer-checked:border-oxblood peer-checked:bg-oxblood/5 peer-checked:text-oxblood transition-all font-medium text-ink-mid">
                             {range}
                           </div>
                         </label>
@@ -353,13 +396,13 @@ export default function Contact() {
                   </div>
                   
                   <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-[#1B1B1B]/80 ml-1">Message</label>
+                    <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Message</label>
                     <textarea 
                       required
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#4D00FF] outline-none py-4 px-6 min-h-[150px] resize-none transition-all rounded-xl placeholder:text-[#1B1B1B]/30 text-[#1B1B1B]" 
-                      placeholder="Tell me about your goals..."
+                      className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 min-h-[150px] resize-none transition-all rounded-md placeholder:text-ink/30 text-ink" 
+                      placeholder="tell me about your goals..."
                     ></textarea>
                   </div>
                   
@@ -367,9 +410,9 @@ export default function Contact() {
                     type="submit"
                     disabled={contactMutation.isPending}
                     size="lg" 
-                    className="w-full py-8 text-lg bg-[#1B1B1B] hover:bg-[#4D00FF] text-white hover:text-white transition-colors rounded-xl shadow-lg shadow-[#4D00FF]/20"
+                    className="w-full py-7 text-base bg-ink hover:bg-oxblood text-white hover:text-white transition-colors rounded-md shadow-lg shadow-oxblood/20 lowercase font-medium"
                   >
-                    {contactMutation.isPending ? "Sending..." : "Send me a message"}
+                    {contactMutation.isPending ? "sending..." : "send us your project"}
                   </Button>
                 </form>
              </div>
@@ -394,24 +437,24 @@ export default function Contact() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="bg-white rounded-3xl p-10 md:p-14 max-w-md mx-6 text-center shadow-2xl border border-[#1B1B1B]/5"
+              className="bg-white rounded-md p-10 md:p-14 max-w-md mx-6 text-center shadow-2xl border border-ink/10"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-16 h-16 bg-[#4D00FF] rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 bg-oxblood rounded-full flex items-center justify-center mx-auto mb-6">
                 <Check className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight text-[#1B1B1B] mb-3">
-                Message sent!
+              <h3 className="text-2xl font-medium tracking-tight text-ink mb-3 lowercase">
+                message sent!
               </h3>
-              <p className="text-[#1B1B1B]/70 text-lg mb-8 leading-relaxed">
-                Your message has been delivered successfully. I'll get back to you within 24 hours.
+              <p className="text-ink-mid text-lg mb-8 leading-relaxed lowercase">
+                your message has been delivered successfully. i'll get back to you within 24 hours.
               </p>
               <Button
                 onClick={() => setShowSuccess(false)}
                 size="lg"
-                className="bg-[#4D00FF] hover:bg-[#1B1B1B] text-white rounded-full px-10 h-12 text-base transition-colors cursor-pointer"
+                className="bg-oxblood hover:bg-ink text-white rounded-md px-10 h-12 text-base transition-colors cursor-pointer lowercase font-medium"
               >
-                Got it
+                got it
               </Button>
             </motion.div>
           </motion.div>
@@ -433,24 +476,24 @@ export default function Contact() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="bg-white rounded-3xl p-10 md:p-14 max-w-md mx-6 text-center shadow-2xl border border-[#1B1B1B]/5"
+              className="bg-white rounded-md p-10 md:p-14 max-w-md mx-6 text-center shadow-2xl border border-ink/10"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 bg-oxblood rounded-full flex items-center justify-center mx-auto mb-6">
                 <X className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight text-[#1B1B1B] mb-3">
-                Something went wrong
+              <h3 className="text-2xl font-medium tracking-tight text-ink mb-3 lowercase">
+                something went wrong
               </h3>
-              <p className="text-[#1B1B1B]/70 text-lg mb-8 leading-relaxed">
-                Your message couldn't be sent. Please try again or email me directly at sarah@sarahdigs.com.
+              <p className="text-ink-mid text-lg mb-8 leading-relaxed lowercase">
+                your message couldn't be sent. please try again or email me directly at sarah@sarahdigs.com.
               </p>
               <Button
                 onClick={() => setShowError(false)}
                 size="lg"
-                className="bg-[#1B1B1B] hover:bg-[#4D00FF] text-white rounded-full px-10 h-12 text-base transition-colors cursor-pointer"
+                className="bg-ink hover:bg-oxblood text-white rounded-md px-10 h-12 text-base transition-colors cursor-pointer lowercase font-medium"
               >
-                Try again
+                try again
               </Button>
             </motion.div>
           </motion.div>

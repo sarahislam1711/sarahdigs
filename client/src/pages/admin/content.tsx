@@ -144,7 +144,7 @@ function StatsManager() {
             <Card key={stat.id} className="bg-[#1a1a1a] border-gray-800">
               <CardContent className="flex justify-between items-center p-4">
                 <div>
-                  <p className="text-2xl font-bold text-[#4D00FF]">{stat.value}</p>
+                  <p className="text-2xl font-bold text-[#6B1421]">{stat.value}</p>
                   <p className="text-gray-400">{stat.label}</p>
                 </div>
                 <div className="flex gap-2">
@@ -302,7 +302,7 @@ function ProcessStepsManager() {
             <Card key={step.id} className="bg-[#1a1a1a] border-gray-800">
               <CardContent className="flex justify-between items-start p-4">
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[#4D00FF] flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-md bg-[#6B1421] flex items-center justify-center text-white font-bold">
                     {step.stepNumber}
                   </div>
                   <div>
@@ -740,7 +740,7 @@ function ProjectsManager() {
               <CardContent className="flex justify-between items-start p-4">
                 <div>
                   <p className="text-lg font-semibold text-white">{project.name}</p>
-                  <p className="text-[#4D00FF] text-sm">{project.industry} - {project.projectType}</p>
+                  <p className="text-[#6B1421] text-sm">{project.industry} - {project.projectType}</p>
                   <p className="text-gray-500 text-sm mt-1">{project.focus}</p>
                 </div>
                 <div className="flex gap-2">
@@ -765,19 +765,19 @@ export default function AdminContent() {
     <AdminLayout title="Site Content">
       <Tabs defaultValue="stats" className="w-full">
         <TabsList className="bg-[#1a1a1a] border-gray-800 mb-6">
-          <TabsTrigger value="stats" className="data-[state=active]:bg-[#4D00FF]" data-testid="tab-stats">
+          <TabsTrigger value="stats" className="data-[state=active]:bg-[#6B1421]" data-testid="tab-stats">
             <BarChart3 className="w-4 h-4 mr-2" />
             Stats
           </TabsTrigger>
-          <TabsTrigger value="process" className="data-[state=active]:bg-[#4D00FF]" data-testid="tab-process">
+          <TabsTrigger value="process" className="data-[state=active]:bg-[#6B1421]" data-testid="tab-process">
             <ListOrdered className="w-4 h-4 mr-2" />
             Process
           </TabsTrigger>
-          <TabsTrigger value="services" className="data-[state=active]:bg-[#4D00FF]" data-testid="tab-services">
+          <TabsTrigger value="services" className="data-[state=active]:bg-[#6B1421]" data-testid="tab-services">
             <Briefcase className="w-4 h-4 mr-2" />
             Services
           </TabsTrigger>
-          <TabsTrigger value="projects" className="data-[state=active]:bg-[#4D00FF]" data-testid="tab-projects">
+          <TabsTrigger value="projects" className="data-[state=active]:bg-[#6B1421]" data-testid="tab-projects">
             <FolderKanban className="w-4 h-4 mr-2" />
             Projects
           </TabsTrigger>

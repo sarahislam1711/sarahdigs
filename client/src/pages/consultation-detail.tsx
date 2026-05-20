@@ -1,6 +1,7 @@
 import { useRoute, Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Calendar, ArrowLeft, User, Code, Megaphone, Briefcase, Clock, Star, Phone } from "lucide-react";
 import { openCalendly } from "@/lib/calendly";
@@ -101,7 +102,7 @@ const personas = [
 ];
 
 export default function ConsultationDetail() {
-  const [match, params] = useRoute("/services/consultations/:slug");
+  const [match, params] = useRoute("/dig-in-consultations/:slug");
   
   if (!match) return null;
 
@@ -110,10 +111,10 @@ export default function ConsultationDetail() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#FBFCFE] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F4F1EA] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Consultation Not Found</h1>
-          <Link href="/services/consultations">
+          <Link href="/dig-in-consultations">
             <Button>Return to Consultations</Button>
           </Link>
         </div>
@@ -121,13 +122,29 @@ export default function ConsultationDetail() {
     );
   }
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sarahdigs.com/" },
+      { "@type": "ListItem", position: 2, name: "Consultations", item: "https://www.sarahdigs.com/dig-in-consultations" },
+      { "@type": "ListItem", position: 3, name: data.title, item: `https://www.sarahdigs.com/dig-in-consultations/${slug}` },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-[#FBFCFE] text-[#1B1B1B] font-sans selection:bg-[#4D00FF] selection:text-white">
+    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+      <SEO
+        title={data.title}
+        description={data.subtitle}
+        canonical={`/dig-in-consultations/${slug}`}
+        jsonLd={breadcrumbJsonLd}
+      />
       <Navbar />
-      
+
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-6">
-          <Link href="/services/consultations" className="inline-flex items-center text-[#1B1B1B]/60 hover:text-[#4D00FF] mb-8 transition-colors">
+          <Link href="/dig-in-consultations" className="inline-flex items-center text-[#181612]/60 hover:text-[#6B1421] mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Consultations
           </Link>
@@ -135,10 +152,10 @@ export default function ConsultationDetail() {
           <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="mb-16">
-              <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 text-[#1B1B1B]">
+              <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 text-[#181612]">
                 {data.title}
               </h1>
-              <div className="inline-block bg-[#F4F2FF] text-[#4D00FF] px-5 py-2.5 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm border border-[#4D00FF]/20">
+              <div className="inline-block bg-[#E7E2D6] text-[#6B1421] px-5 py-2.5 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm border border-[#6B1421]/20">
                 {data.subtitle}
               </div>
             </div>
@@ -149,16 +166,16 @@ export default function ConsultationDetail() {
                 
                 {/* Who is this for */}
                 <div>
-                  <h3 className="text-2xl font-bold mb-6 text-[#1B1B1B]">Who is this for?</h3>
+                  <h3 className="text-2xl font-bold mb-6 text-[#181612]">Who is this for?</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {personas.map((persona, i) => (
-                      <div key={i} className="bg-white p-6 rounded-2xl border border-[#1B1B1B]/10 flex flex-col gap-3 hover:border-[#4D00FF]/30 transition-colors">
-                        <div className="w-10 h-10 rounded-full bg-[#F4F2FF] flex items-center justify-center text-[#4D00FF]">
+                      <div key={i} className="bg-white p-6 rounded-md border border-[#181612]/10 flex flex-col gap-3 hover:border-[#6B1421]/30 transition-colors">
+                        <div className="w-10 h-10 rounded-md bg-[#E7E2D6] flex items-center justify-center text-[#6B1421]">
                           {persona.icon}
                         </div>
                         <div>
                           <h4 className="font-bold text-lg mb-1">{persona.title}</h4>
-                          <p className="text-[#1B1B1B]/70 text-sm leading-relaxed">{persona.desc}</p>
+                          <p className="text-[#181612]/70 text-sm leading-relaxed">{persona.desc}</p>
                         </div>
                       </div>
                     ))}
@@ -166,24 +183,24 @@ export default function ConsultationDetail() {
                 </div>
 
                 <div className="prose prose-lg max-w-none">
-                  <h3 className="text-2xl font-bold mb-4 text-[#1B1B1B]">What you get</h3>
-                  <p className="text-[#1B1B1B]/80 leading-relaxed text-lg mb-6">
+                  <h3 className="text-2xl font-bold mb-4 text-[#181612]">What you get</h3>
+                  <p className="text-[#181612]/80 leading-relaxed text-lg mb-6">
                     {data.description}
                   </p>
-                  <div className="bg-white rounded-3xl p-8 border border-[#1B1B1B]/10 shadow-sm mb-8">
-                    <h4 className="font-bold text-lg mb-4 uppercase tracking-wider text-[#4D00FF]">Outcomes</h4>
+                  <div className="bg-white rounded-md p-8 border border-[#181612]/10 shadow-sm mb-8">
+                    <h4 className="font-bold text-lg mb-4 uppercase tracking-wider text-[#6B1421]">Outcomes</h4>
                     <ul className="space-y-4">
                       {data.outcomes.map((outcome, i) => (
                         <li key={i} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-6 h-6 text-[#4D00FF] shrink-0 mt-0.5" />
-                          <span className="text-lg text-[#1B1B1B]/80">{outcome}</span>
+                          <CheckCircle2 className="w-6 h-6 text-[#6B1421] shrink-0 mt-0.5" />
+                          <span className="text-lg text-[#181612]/80">{outcome}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                   <div className="bg-[#F4F2FF] rounded-3xl p-8 border border-[#4D00FF]/10">
-                     <h4 className="font-bold text-lg mb-2 uppercase tracking-wider text-[#4D00FF]">The Benefit</h4>
-                    <p className="text-xl font-medium text-[#1B1B1B]">
+                   <div className="bg-[#E7E2D6] rounded-md p-8 border border-[#6B1421]/10">
+                     <h4 className="font-bold text-lg mb-2 uppercase tracking-wider text-[#6B1421]">The Benefit</h4>
+                    <p className="text-xl font-medium text-[#181612]">
                       {data.benefit}
                     </p>
                   </div>
@@ -191,23 +208,24 @@ export default function ConsultationDetail() {
 
                 {/* Expertise */}
                 <div>
-                  <h3 className="text-2xl font-bold mb-6 text-[#1B1B1B]">Why work with me?</h3>
-                  <div className="bg-[#1B1B1B] text-white rounded-3xl p-8 relative overflow-hidden">
+                  <h3 className="text-2xl font-bold mb-6 text-[#181612]">Why work with me?</h3>
+                  <div className="bg-[#1B1B1B] text-white rounded-md p-8 relative overflow-hidden">
                      {/* Abstract bg shape */}
-                    <div className="absolute top-0 right-0 w-full h-full opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#4D00FF] via-transparent to-transparent" />
+                    <div className="absolute top-0 right-0 w-full h-full opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#6B1421] via-transparent to-transparent" />
                     
                     <div className="relative z-10 space-y-6">
                       <p className="text-lg leading-relaxed text-white/90">
                         I've spent over a decade not just advising, but <strong>doing</strong>. I've led growth for startups, optimized enterprise-level SEO strategies, and built products from scratch. I don't give you theory; I give you what works in the trenches.
                       </p>
                       <div className="flex flex-wrap gap-4">
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">6+ Years Experience</div>
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">$10M+ Revenue Generated</div>
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">50+ Happy Clients</div>
+                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">27x Avg Organic Traffic Growth</div>
+                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">3x Inbound Leads After Launch</div>
+                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">6 Weeks Strategy to Live</div>
+                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">8+ Years Experience</div>
                       </div>
                       <div className="pt-6 border-t border-white/10">
                         <div className="flex items-center gap-4">
-                          <div className="flex text-[#4D00FF]">
+                          <div className="flex text-[#6B1421]">
                             {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-current" />)}
                           </div>
                           <p className="text-sm text-white/60 italic">"The most actionable hour I've spent on my business this year." — Sarah J., Founder</p>
@@ -221,47 +239,47 @@ export default function ConsultationDetail() {
 
               {/* Sidebar / CTA */}
               <div className="lg:col-span-1">
-                <div className="sticky top-28 z-10 bg-white border border-[#1B1B1B]/10 rounded-3xl p-8 shadow-xl">
+                <div className="sticky top-28 z-10 bg-white border border-[#181612]/10 rounded-md p-8 shadow-xl">
                   <div className="mb-6 text-center">
                     <h3 className="text-2xl font-bold mb-2">Pricing Options</h3>
-                    <p className="text-[#1B1B1B]/60 text-sm">Choose the duration that fits your needs</p>
+                    <p className="text-[#181612]/60 text-sm">Choose the duration that fits your needs</p>
                   </div>
 
                   <div className="space-y-4 mb-8">
                     {data.pricingOptions.map((option, i) => (
-                      <div key={i} className="border border-[#1B1B1B]/10 rounded-xl p-4 hover:border-[#4D00FF] hover:bg-[#F4F2FF] transition-all cursor-pointer group">
+                      <div key={i} className="border border-[#181612]/10 rounded-md p-4 hover:border-[#6B1421] hover:bg-[#E7E2D6] transition-all cursor-pointer group">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="font-bold text-lg group-hover:text-[#4D00FF]">{option.duration}</span>
+                          <span className="font-bold text-lg group-hover:text-[#6B1421]">{option.duration}</span>
                           <span className="font-bold text-xl">{option.price}</span>
                         </div>
-                        <p className="text-sm text-[#1B1B1B]/60">{option.desc}</p>
+                        <p className="text-sm text-[#181612]/60">{option.desc}</p>
                       </div>
                     ))}
                   </div>
                   
                   <div className="space-y-4">
-                    <Button className="w-full h-14 text-lg bg-[#1B1B1B] text-white hover:bg-[#4D00FF] hover:text-white transition-colors rounded-xl font-bold shadow-lg cursor-pointer" onClick={() => openCalendly()}>
+                    <Button className="w-full h-14 text-lg bg-[#1B1B1B] text-white hover:bg-[#6B1421] hover:text-white transition-colors rounded-md font-bold shadow-lg cursor-pointer" onClick={() => openCalendly()}>
                       Book a Session
                       <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                     
                      <div className="relative py-4">
                         <div className="absolute inset-0 flex items-center">
-                          <span className="w-full border-t border-[#1B1B1B]/10" />
+                          <span className="w-full border-t border-[#181612]/10" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                          <span className="bg-white px-2 text-[#1B1B1B]/40 font-bold tracking-widest">Or</span>
+                          <span className="bg-white px-2 text-[#181612]/40 font-bold tracking-widest">Or</span>
                         </div>
                       </div>
 
-                    <Button variant="outline" className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover-elevate active-elevate-2 border [border-color:var(--button-outline)] shadow-xs active:shadow-none min-h-9 px-4 py-2 w-full h-14 border-[#1B1B1B]/20 text-[#1B1B1B] hover:bg-[#1B1B1B]/5 hover:text-[#4D00FF] rounded-xl text-[16px]">
+                    <Button variant="outline" className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover-elevate active-elevate-2 border [border-color:var(--button-outline)] shadow-xs active:shadow-none min-h-9 px-4 py-2 w-full h-14 border-[#181612]/20 text-[#181612] hover:bg-[#181612]/5 hover:text-[#6B1421] rounded-md text-[16px]">
                       <Phone className="mr-2 w-5 h-5" />
                       Free Discovery Call
                     </Button>
                   </div>
 
                   <div className="mt-6 text-center">
-                    <p className="text-[#1B1B1B]/40 text-xs leading-relaxed">
+                    <p className="text-[#181612]/40 text-xs leading-relaxed">
                       Not ready to commit? The discovery call is 15 minutes to see if we're a good fit. No sales pressure.
                     </p>
                   </div>

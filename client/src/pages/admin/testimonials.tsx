@@ -266,7 +266,7 @@ export default function AdminTestimonials() {
                   <div className="flex gap-4">
                     <div className="flex items-start gap-3 text-gray-600">
                       <GripVertical className="w-5 h-5 mt-1" />
-                      <span className="text-sm font-mono bg-gray-800 px-2 py-1 rounded">
+                      <span className="text-sm font-mono bg-gray-800 px-2 py-1 rounded-md">
                         #{testimonial.displayOrder || 0}
                       </span>
                     </div>
@@ -277,11 +277,11 @@ export default function AdminTestimonials() {
                             <img 
                               src={testimonial.clientImageUrl} 
                               alt={testimonial.clientName}
-                              className="w-12 h-12 rounded-full object-cover"
+                              className="w-12 h-12 rounded-md object-cover"
                             />
                           ) : (
-                            <div className="w-12 h-12 rounded-full bg-[#4D00FF]/20 flex items-center justify-center">
-                              <span className="text-[#4D00FF] font-bold text-lg">
+                            <div className="w-12 h-12 rounded-md bg-[#6B1421]/20 flex items-center justify-center">
+                              <span className="text-[#6B1421] font-bold text-lg">
                                 {testimonial.clientName.charAt(0)}
                               </span>
                             </div>
@@ -295,7 +295,7 @@ export default function AdminTestimonials() {
                         </div>
                         <div className="flex items-center gap-2">
                           {!testimonial.isVisible && (
-                            <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded">
+                            <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-md">
                               Hidden
                             </span>
                           )}
@@ -321,8 +321,8 @@ export default function AdminTestimonials() {
                           </Button>
                         </div>
                       </div>
-                      <div className="relative pl-4 border-l-2 border-[#4D00FF]/30">
-                        <Quote className="absolute -left-3 -top-1 w-5 h-5 text-[#4D00FF] bg-[#1a1a1a]" />
+                      <div className="relative pl-4 border-l-2 border-[#6B1421]/30">
+                        <Quote className="absolute -left-3 -top-1 w-5 h-5 text-[#6B1421] bg-[#1a1a1a]" />
                         <p className="text-gray-300 italic leading-relaxed">
                           "{testimonial.quote}"
                         </p>

@@ -71,12 +71,12 @@ export default function CookieConsent() {
           className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
         >
           <div className="max-w-4xl mx-auto">
-            <div className="bg-[#1B1B1B] border border-gray-800 rounded-2xl p-6 shadow-2xl shadow-black/50">
+            <div className="bg-[#1B1B1B] border border-gray-800 rounded-md p-6 shadow-2xl shadow-black/50">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                 {/* Icon */}
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-[#4D00FF]/10 rounded-full flex items-center justify-center">
-                    <Cookie className="w-6 h-6 text-[#4D00FF]" />
+                  <div className="w-12 h-12 bg-[#6B1421]/10 rounded-md flex items-center justify-center">
+                    <Cookie className="w-6 h-6 text-[#6B1421]" />
                   </div>
                 </div>
 
@@ -90,7 +90,7 @@ export default function CookieConsent() {
                     By clicking "Accept", you consent to our use of analytics cookies.{" "}
                     <a 
                       href="/privacy" 
-                      className="text-[#4D00FF] hover:underline"
+                      className="text-[#6B1421] hover:underline"
                     >
                       Learn more
                     </a>
@@ -101,13 +101,13 @@ export default function CookieConsent() {
                 <div className="flex items-center gap-3 w-full md:w-auto">
                   <button
                     onClick={handleDecline}
-                    className="flex-1 md:flex-none px-5 py-2.5 text-sm font-medium text-gray-400 hover:text-white border border-gray-700 hover:border-gray-600 rounded-lg transition-colors"
+                    className="flex-1 md:flex-none px-5 py-2.5 text-sm font-medium text-gray-400 hover:text-white border border-gray-700 hover:border-gray-600 rounded-md transition-colors"
                   >
                     Decline
                   </button>
                   <button
                     onClick={handleAccept}
-                    className="flex-1 md:flex-none px-5 py-2.5 text-sm font-medium text-white bg-[#4D00FF] hover:bg-[#3D00CC] rounded-lg transition-colors"
+                    className="flex-1 md:flex-none px-5 py-2.5 text-sm font-medium text-white bg-[#6B1421] hover:bg-[#3D00CC] rounded-md transition-colors"
                   >
                     Accept
                   </button>

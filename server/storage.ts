@@ -84,6 +84,8 @@ export interface IStorage {
 
   createContactInquiry(inquiry: InsertContactInquiry): Promise<ContactInquiry>;
   createCustomPlanInquiry(inquiry: InsertCustomPlanInquiry): Promise<CustomPlanInquiry>;
+  getContactInquiries(): Promise<ContactInquiry[]>;
+  getCustomPlanInquiries(): Promise<CustomPlanInquiry[]>;
 
   getProjects(): Promise<Project[]>;
   getVisibleProjects(): Promise<Project[]>;
@@ -334,6 +336,14 @@ export class DatabaseStorage implements IStorage {
   async createCustomPlanInquiry(inquiry: InsertCustomPlanInquiry): Promise<CustomPlanInquiry> {
     const [result] = await db.insert(customPlanInquiries).values(inquiry).returning();
     return result;
+  }
+
+  async getContactInquiries(): Promise<ContactInquiry[]> {
+    return await db.select().from(contactInquiries).orderBy(desc(contactInquiries.createdAt));
+  }
+
+  async getCustomPlanInquiries(): Promise<CustomPlanInquiry[]> {
+    return await db.select().from(customPlanInquiries).orderBy(desc(customPlanInquiries.createdAt));
   }
 
   async getProjects(): Promise<Project[]> {

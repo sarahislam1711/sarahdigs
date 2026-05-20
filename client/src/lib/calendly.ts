@@ -26,10 +26,14 @@ if (typeof window !== "undefined") {
   });
 }
 
-export function openCalendly() {
+export function openCalendly(options?: { tier?: string }) {
+  const url = options?.tier
+    ? `${CALENDLY_URL}?a1=${encodeURIComponent(options.tier)}`
+    : CALENDLY_URL;
+
   if (window.Calendly) {
-    window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+    window.Calendly.initPopupWidget({ url });
   } else {
-    window.open(CALENDLY_URL, "_blank");
+    window.open(url, "_blank");
   }
 }
