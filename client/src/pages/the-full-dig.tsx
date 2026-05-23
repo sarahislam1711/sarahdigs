@@ -106,7 +106,7 @@ const Stat = ({ value, label }: { value: string; label: string }) => {
 
   return (
     <div ref={ref} className="text-center md:text-left">
-      <div className="font-display font-extrabold text-5xl md:text-7xl text-oxblood-tint tabular-nums tracking-tighter mb-3 lowercase">
+      <div className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-oxblood-tint tabular-nums tracking-tighter mb-3 lowercase">
         {match ? <>{prefix}{display}{suffix}</> : value}
       </div>
       <div className="text-bone text-sm leading-relaxed max-w-[180px] mx-auto md:mx-0 lowercase opacity-90">
@@ -504,7 +504,7 @@ export default function TheFullDig() {
               </h2>
 
               {/* Stats row */}
-              <div className="grid grid-cols-3 gap-6 md:gap-8">
+              <div className="grid grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                 <Stat value="20+" label="websites shipped." />
                 <Stat value="3x" label="avg inbound after launch." />
                 <Stat value="6" label="weeks strategy to live." />
