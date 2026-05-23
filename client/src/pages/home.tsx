@@ -996,7 +996,7 @@ const SelectedWork = () => {
                     >
                       {/* Thumbnail */}
                       <div
-                        className="relative aspect-[16/8] overflow-hidden"
+                        className="relative aspect-[4/3] sm:aspect-[16/9] md:aspect-[16/8] overflow-hidden"
                         style={{ background: project.gradient }}
                       >
                         <div

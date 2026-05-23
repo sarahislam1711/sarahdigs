@@ -375,7 +375,7 @@ const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationT
               
               return (
                 <div key={i} className="flex-[0_0_85%] md:flex-[0_0_48%] lg:flex-[0_0_33.4%] pl-6 min-w-0">
-                  <div className={`h-full rounded-[2rem] p-8 flex flex-col justify-between min-h-[320px] transition-transform hover:-translate-y-2 hover:shadow-2xl ${consultation.color} ${consultation.color.includes('border') ? 'border' : ''}`}>
+                  <div className={`h-full rounded-[2rem] p-6 md:p-8 flex flex-col justify-between min-h-[280px] sm:min-h-[320px] transition-transform hover:-translate-y-2 hover:shadow-2xl ${consultation.color} ${consultation.color.includes('border') ? 'border' : ''}`}>
                     <div>
                       <div className={`w-16 h-16 rounded-md flex items-center justify-center mb-6 ${isLightBg ? 'bg-white text-[#181612]' : 'bg-white/10 text-white'}`}>
                         <IconComponent className="w-8 h-8" />

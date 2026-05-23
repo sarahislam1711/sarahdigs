@@ -40,9 +40,9 @@ const Hero = () => {
             </motion.div>
           </div>
           <div className="lg:w-1/2 w-full">
-            <div className="relative aspect-square md:aspect-video lg:aspect-square bg-white rounded-md shadow-2xl border border-[#181612]/5 p-8 flex items-center justify-center overflow-hidden">
+            <div className="relative aspect-3/2 sm:aspect-video lg:aspect-square bg-white rounded-md shadow-2xl border border-[#181612]/5 p-6 md:p-8 flex items-center justify-center overflow-hidden">
               {/* Animated Modular Blocks Visual */}
-              <div className="grid grid-cols-2 gap-4 w-full max-w-md relative z-10">
+              <div className="grid grid-cols-2 gap-3 md:gap-4 w-full max-w-xs md:max-w-md relative z-10">
                 <motion.div 
                   initial={{ x: -50, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}

@@ -77,7 +77,7 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
             </div>
 
             {/* Visual/Logo Column */}
-            <div className="w-full lg:w-1/3 aspect-square lg:aspect-[4/5] bg-[#E7E2D6] rounded-[2rem] flex items-center justify-center relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500 border border-[#181612]/5">
+            <div className="w-full lg:w-1/3 aspect-[3/2] md:aspect-square lg:aspect-[4/5] bg-[#E7E2D6] rounded-[2rem] flex items-center justify-center relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500 border border-[#181612]/5">
                 <div className="absolute inset-0 bg-[#6B1421]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 {/* Placeholder for logo/image */}
                 <div className="text-[#6B1421] opacity-80 p-8 bg-white rounded-md shadow-sm">
