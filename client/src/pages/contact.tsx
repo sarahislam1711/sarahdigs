@@ -128,14 +128,14 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="Contact Sarah"
+        title="contact | sarahdigs"
         description="Book a free strategy call or share your project. SarahDigs offers SEO audits, content strategy, and growth consulting for founders and brands."
         canonical="/contact"
       />
       <Navbar theme="light" />
 
       {/* Hero Section */}
-      <section className="min-h-screen pt-40 pb-20 bg-bone relative overflow-hidden flex items-center">
+      <section className="min-h-screen pt-24 pb-20 bg-bone relative overflow-hidden flex items-center">
         {/* Faded background image */}
         <div className="absolute top-0 right-0 w-[62%] h-[126%] hidden lg:block pointer-events-none" style={{
           backgroundImage: `url(${contactHero})`,
@@ -153,12 +153,12 @@ export default function Contact() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="text-oxblood font-semibold uppercase tracking-[0.2em] text-xs mb-5 block">let's connect</span>
-              <h1 className="text-6xl md:text-7xl font-bold tracking-tighter mb-6 leading-[0.95] lowercase">
+              <span className="text-oxblood font-semibold uppercase tracking-[0.2em] text-xs mb-6 block">let's connect</span>
+              <h1 className="text-7xl md:text-8xl lg:text-[6rem] font-bold tracking-tighter mb-8 leading-[0.95] lowercase">
                 ready to start <br/>
                 <span className="text-oxblood">digging?</span>
               </h1>
-              <p className="text-lg md:text-xl text-ink-mid mb-10 max-w-lg leading-relaxed lowercase">
+              <p className="text-xl md:text-2xl text-ink-mid mb-10 max-w-lg leading-snug lowercase">
                 two ways to start. pick what fits where you are.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -170,7 +170,7 @@ export default function Contact() {
                 <Button variant="outline" size="lg" className="text-base h-14 px-8 bg-transparent border-ink/20 text-ink hover:border-oxblood hover:text-oxblood hover:bg-transparent cursor-pointer rounded-md lowercase font-medium"
                   onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  share my project
+                  share your project
                 </Button>
               </div>
             </motion.div>
@@ -193,32 +193,40 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* The approach */}
-      <section className="py-16 bg-bone">
+      {/* The approach — numbered editorial grid, no card chrome */}
+      <section className="py-16 md:py-20 bg-bone">
         <div className="container mx-auto px-6">
-           <div className="text-center mb-16">
+           <div className="text-center mb-10 md:mb-12">
              <div className="flex items-center justify-center gap-3 mb-4">
                <span className="h-px w-8 bg-oxblood/40" />
                <span className="text-oxblood font-semibold uppercase tracking-[0.2em] text-xs">the approach</span>
                <span className="h-px w-8 bg-oxblood/40" />
              </div>
-             <h2 className="text-4xl md:text-5xl font-medium tracking-tighter mb-4 lowercase">what working together looks like</h2>
+             <h2 className="text-4xl md:text-5xl font-medium tracking-tighter lowercase">what working together looks like</h2>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-14 max-w-5xl mx-auto">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 lg:gap-x-16 gap-y-8 md:gap-y-10 max-w-5xl mx-auto">
               {[
-                { num: "01", title: "we dig before we build", body: "every engagement starts with deep research. your business, your audience, your positioning. nothing gets designed until we understand what needs to exist and why." },
-                { num: "02", title: "every decision has a reason", body: "design, copy, structure, SEO. nothing is decorative. every element earns its place." },
-                { num: "03", title: "strategy leads, always", body: "we don't start with execution. we start with clarity. the build follows the thinking." },
-                { num: "04", title: "the website is the beginning", body: "we build it to grow with you. optimised for search, AI discovery, and conversion from day one." },
+                { num: "i.", title: "we dig before we build", body: "every project starts with research on your business, audience & positioning. nothing gets designed until we understand why it should exist." },
+                { num: "ii.", title: "every decision has a reason", body: "design, copy, structure, SEO. nothing is decorative. every element earns its place." },
+                { num: "iii.", title: "strategy leads, always", body: "we don't start with execution. we start with clarity. the build follows the thinking." },
+                { num: "iv.", title: "the website is the beginning", body: "we build it to grow with you. optimised for search, AI discovery, and conversion from day one." },
               ].map(({ num, title, body }) => (
-                <div key={num} className="space-y-3">
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-oxblood font-semibold tracking-tight text-base tabular-nums">{num}</span>
-                    <span className="h-px flex-1 bg-ink/10" />
+                <div
+                  key={title}
+                  className="group flex gap-4 rounded-md px-5 py-5 -mx-5 bg-oxblood/[0.03] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-oxblood/[0.06] cursor-default"
+                >
+                  <span className="font-display font-medium italic text-oxblood text-xl md:text-2xl tracking-tight leading-none pt-1 shrink-0 transition-colors duration-300 group-hover:text-ink">
+                    {num}
+                  </span>
+                  <div className="space-y-2">
+                    <h3 className="font-display font-medium text-lg md:text-xl tracking-tight lowercase leading-snug transition-colors duration-300 group-hover:text-oxblood">
+                      {title}
+                    </h3>
+                    <p className="text-ink-mid leading-snug text-[15px] lowercase">
+                      {body}
+                    </p>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-medium tracking-tight lowercase">{title}</h3>
-                  <p className="text-ink-mid leading-relaxed">{body}</p>
                 </div>
               ))}
            </div>
@@ -284,7 +292,7 @@ export default function Contact() {
                 <p className="text-lg text-ink-mid leading-relaxed">we dig into every project. back to you within 48 hours.</p>
              </div>
 
-             <div className="bg-white p-8 md:p-12 shadow-xl shadow-ink/5 border border-ink/10 rounded-md">
+             <div className="bg-stone p-8 md:p-12 border border-ink/15 rounded-md shadow-xl shadow-ink/10">
                 <form className="space-y-8" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
@@ -294,7 +302,7 @@ export default function Contact() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
+                        className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
                         placeholder="jane doe" 
                       />
                     </div>
@@ -305,7 +313,7 @@ export default function Contact() {
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
+                        className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
                         placeholder="jane@company.com" 
                       />
                     </div>
@@ -317,7 +325,7 @@ export default function Contact() {
                       type="text" 
                       value={formData.companyWebsite}
                       onChange={(e) => setFormData({ ...formData, companyWebsite: e.target.value })}
-                      className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
+                      className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
                       placeholder="https://example.com" 
                     />
                   </div>
@@ -329,7 +337,7 @@ export default function Contact() {
                         <select
                           value={formData.jobRole}
                           onChange={(e) => setFormData({ ...formData, jobRole: e.target.value })}
-                          className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
+                          className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
                         >
                           <option>marketing</option>
                           <option>ceo / founder</option>
@@ -345,7 +353,7 @@ export default function Contact() {
                         <select
                           value={formData.companySize}
                           onChange={(e) => setFormData({ ...formData, companySize: e.target.value })}
-                          className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
+                          className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
                         >
                           <option>1-10</option>
                           <option>10-50</option>
@@ -362,7 +370,7 @@ export default function Contact() {
                       <select
                         value={formData.projectType}
                         onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                        className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
+                        className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 pl-5 pr-12 transition-all rounded-md text-ink appearance-none cursor-pointer"
                       >
                         <option>seo & organic growth</option>
                         <option>product-led marketing</option>
@@ -387,7 +395,7 @@ export default function Contact() {
                             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                             className="peer sr-only" 
                           />
-                          <div className="bg-bone py-3 px-4 rounded-md text-center border border-ink/15 hover:border-ink/30 peer-checked:border-oxblood peer-checked:bg-oxblood/5 peer-checked:text-oxblood transition-all font-medium text-ink-mid">
+                          <div className="bg-[#FBF9F3] py-3 px-4 rounded-md text-center border border-ink/15 hover:border-ink/30 peer-checked:border-oxblood peer-checked:bg-oxblood/5 peer-checked:text-oxblood transition-all font-medium text-ink-mid">
                             {range}
                           </div>
                         </label>
@@ -401,7 +409,7 @@ export default function Contact() {
                       required
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full bg-bone border border-ink/10 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 min-h-[150px] resize-none transition-all rounded-md placeholder:text-ink/30 text-ink" 
+                      className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 min-h-[150px] resize-none transition-all rounded-md placeholder:text-ink/30 text-ink" 
                       placeholder="tell me about your goals..."
                     ></textarea>
                   </div>

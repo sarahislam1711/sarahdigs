@@ -45,12 +45,12 @@
   --color-bone: #F4F1EA;
   --color-stone: #E7E2D6;
   --color-ink: #181612;
-  --color-ink-mid: #6F6A5F;
+  --color-ink-mid: #4A463E;
   --color-ink-faint: #181612;        /* used with opacity utilities, e.g. text-[color:var(--color-ink-faint)]/55 */
   --color-oxblood: #6B1421;
   --color-oxblood-soft: #8C2331;
   --color-oxblood-tint: #C58A92;     /* oxblood substitute on dark canvases — pure oxblood lacks contrast on ink */
-  --color-warm-gray: #9B948A;        /* muted text on ink — inverse of ink-mid */
+  --color-warm-gray: #B8B2A6;        /* muted text on ink — lighter for legibility on dark slabs */
   --color-hairline: rgba(24, 22, 18, 0.12);
   --color-signal: #1F4D3A;
 

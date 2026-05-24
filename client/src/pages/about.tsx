@@ -1,462 +1,353 @@
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Briefcase, Calendar, Layers, Search, LineChart, Globe, FileText, Terminal, BarChart4, Tags, MessageSquare, MessageCircle, Mic, CheckSquare, Building2, Landmark } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-import stockImage from '@/assets/IMG_6700.jpg';
+import sarahPhoto from "@/assets/Sarah - about.png";
 
-interface HeroContent {
-  title: string;
-  name: string;
-  intro: string;
-  tagline1: string;
-  tagline2: string;
-  tagline3: string;
-  imageUrl?: string;
-  backgroundImage?: string;
-}
+const beliefs = [
+  {
+    num: "i.",
+    title: "a website is not a brochure.",
+    body: "it's an experience. every scroll, every interaction, every page should feel intentional. like your brand walked into the room.",
+  },
+  {
+    num: "ii.",
+    title: "design without strategy is decoration.",
+    body: "we don't design to impress other designers. we design to make your audience understand your business and want to be part of it.",
+  },
+  {
+    num: "iii.",
+    title: "the details are the design.",
+    body: "the way a page loads. the way text breathes. the way a hover feels. these things are invisible when done right, and obvious when they're not.",
+  },
+];
 
-interface StoryContent {
-  paragraph1: string;
-  paragraph2: string;
-  paragraph3: string;
-}
+const metrics = [
+  { value: "20+", label: "brands launched" },
+  { value: "100%", label: "hands-on, no agency layers" },
+  { value: "6 wks", label: "strategy to live website" },
+];
 
-interface CtaContent {
-  title: string;
-  subtitle: string;
-  buttonText: string;
-}
-
-const defaultHero: HeroContent = {
-  title: "Meet",
-  name: "Sarah!",
-  intro: "I'm Sarah, a marketing consultant who digs deep into search, data, and user behavior to help brands grow organically. I keep things simple, strategic, and rooted in what actually works.",
-  tagline1: "Depth over Speed",
-  tagline2: "Data over Guesswork",
-  tagline3: "Clarity over Jargon",
-};
-
-const defaultStory: StoryContent = {
-  paragraph1: "I didn't start as a consultant. I started in the trenches of digital marketing, managing campaigns for fast-paced startups where every dollar spent needed to show a return.",
-  paragraph2: "Over the last 8 years, I've worked with everything from scrappy SaaS startups to established e-commerce giants. I noticed a pattern: most companies were sitting on a goldmine of data but were too busy chasing the shiny \"hack\" to notice it.",
-  paragraph3: "That's why I started SarahDigs. I wanted to offer a different kind of partnership—one that values depth, honesty, and excavation. I don't just hand you a report and walk away. I dig in with you to build a foundation that lasts.",
-};
-
-const defaultCta: CtaContent = {
-  title: "Ready to Dig Deep?",
-  subtitle: "Let's uncover the opportunities hidden in your data. No fluff, just growth.",
-  buttonText: "Let's dig",
-};
-
-const AboutHero = ({ content }: { content: HeroContent }) => {
-  const heroImage = stockImage;
-  
+export default function About() {
   return (
-    <section className="pt-40 pb-20 bg-[#F4F1EA] relative overflow-hidden">
-      {/* Background image on the right half */}
-      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none" style={{
-        backgroundImage: `url(${heroImage})`,
-        backgroundSize: '115%',
-        backgroundPosition: 'center 35%',
-        opacity: 0.85,
-      }} />
-      <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block pointer-events-none bg-gradient-to-r from-[#F4F1EA] to-transparent" />
+    <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
+      <SEO
+        title="about | sarahdigs"
+        description="sarahdigs is a creative website studio that designs websites people remember. small studio, fewer clients, deeper work."
+        canonical="/about"
+      />
+      <Navbar theme="light" />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
-          <div className="lg:w-1/2">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-4xl sm:text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] flex flex-wrap items-center gap-3 md:gap-6"
-            >
-              {content.title} <br/>{content.name}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl md:text-2xl font-light text-[#181612]/80 leading-relaxed max-w-lg relative"
-            >
-              {content.intro}
-
-              {/* Mobile Layout - Horizontal Stack below text */}
-              <div className="flex flex-wrap gap-2 mt-6 md:hidden">
-                <motion.div
-                  animate={{ y: [0, -5, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="bg-[#6B1421] text-white px-3 py-2 rounded-md shadow-lg text-[10px] font-bold uppercase tracking-wider"
-                >
-                   {content.tagline1}
-                </motion.div>
-                <motion.div
-                  animate={{ y: [0, 5, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-                  className="bg-[#1B1B1B] text-white px-3 py-2 rounded-md shadow-lg text-[10px] font-bold uppercase tracking-wider"
-                >
-                   {content.tagline2}
-                </motion.div>
-                <motion.div
-                  animate={{ y: [0, -3, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-                  className="bg-white border border-[#181612]/10 text-[#6B1421] px-3 py-2 rounded-md shadow-lg text-[10px] font-bold uppercase tracking-wider"
-                >
-                   {content.tagline3}
-                </motion.div>
-              </div>
-            </motion.p>
+      {/* 01 — OPENING */}
+      <section className="bg-bone pt-32 pb-20 md:pt-40 md:pb-28 relative">
+        {/* Top meta rail */}
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="flex items-center justify-between border-b border-ink/10 pb-4 mb-12 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
+            <span>sarahdigs · creative website studio</span>
+            <span className="hidden md:inline">about the studio</span>
+            <span>2026</span>
           </div>
-          <div className="lg:w-1/2 relative hidden lg:block">
-            {/* Bubbles Visual - floating over background image area */}
-            <div className="relative h-[400px] flex items-end">
-               <div className="absolute bottom-16 left-6 flex flex-col gap-3 z-20">
-                <motion.div
-                  animate={{ x: [0, 5, 0], y: [0, -5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="bg-[#6B1421] text-white px-4 py-2 rounded-md shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start"
-                >
-                   {content.tagline1}
-                </motion.div>
+        </div>
 
-                <motion.div
-                  animate={{ x: [0, -5, 0], y: [0, 5, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  className="bg-[#1B1B1B] text-white px-4 py-2 rounded-md shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap ml-6"
-                >
-                   {content.tagline2}
-                </motion.div>
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            {/* Anchor pill */}
+            <div className="inline-flex items-center gap-2.5 mb-10 bg-oxblood text-bone rounded-full pl-3 pr-4 py-2">
+              <span className="relative inline-flex w-2 h-2">
+                <span className="absolute inset-0 rounded-full bg-bone opacity-75 animate-ping" />
+                <span className="relative inline-block w-2 h-2 rounded-full bg-bone" />
+              </span>
+              <span className="text-[11px] md:text-xs font-semibold uppercase tracking-[0.22em]">
+                now booking q3 2026 projects
+              </span>
+            </div>
 
-                <motion.div
-                  animate={{ x: [0, 5, 0], y: [0, 5, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="bg-white border border-[#181612]/10 text-[#6B1421] px-4 py-2 rounded-md shadow-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start ml-2"
-                >
-                   {content.tagline3}
-                </motion.div>
+            <h1 className="font-display font-semibold tracking-tighter text-5xl md:text-7xl lg:text-[5.5rem] leading-none lowercase mb-8">
+              most websites are<br />
+              <span className="text-oxblood font-bold">decoration</span>
+            </h1>
+            <p className="font-display text-3xl md:text-4xl text-ink font-medium italic lowercase leading-snug max-w-3xl mb-12 md:mb-14">
+              we treat them like <span className="text-oxblood">sales tools</span> instead.
+            </p>
+
+            {/* Stat row — proof beneath the claim */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-8 sm:gap-x-8 border-t border-ink/10 pt-8">
+              {metrics.map((s) => (
+                <div key={s.label} className="flex flex-col gap-2">
+                  <span className="font-display font-extrabold text-oxblood text-3xl md:text-4xl tabular-nums tracking-tighter leading-none">
+                    {s.value}
+                  </span>
+                  <span className="text-[11px] md:text-xs font-mono uppercase tracking-[0.22em] text-ink-mid leading-snug">
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          02 — SARAH'S STORY (full-bleed photo background, overlaid block)
+      ============================================================ */}
+      <section className="relative bg-ink text-bone overflow-hidden">
+        {/* Full-bleed portrait — visible on right half, untinted */}
+        <div className="absolute inset-y-0 right-0 w-full md:w-3/5 lg:w-1/2 overflow-hidden flex items-center justify-center">
+          <img
+            src={sarahPhoto}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full max-h-[90%] object-contain object-center"
+          />
+        </div>
+        {/* Left-side ink slab — solid on left, clean cut off where photo begins */}
+        <div
+          className="absolute inset-y-0 left-0 w-full md:w-2/5 lg:w-1/2 bg-ink pointer-events-none"
+          aria-hidden="true"
+        />
+        {/* Soft edge fade so the cut isn't a hard vertical line */}
+        <div
+          className="hidden md:block absolute inset-y-0 pointer-events-none"
+          style={{
+            left: "calc(40% - 60px)",
+            width: "120px",
+            background:
+              "linear-gradient(to right, rgba(24,22,18,1) 0%, rgba(24,22,18,0) 100%)",
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="hidden lg:block absolute inset-y-0 pointer-events-none"
+          style={{
+            left: "calc(50% - 60px)",
+            width: "120px",
+            background:
+              "linear-gradient(to right, rgba(24,22,18,1) 0%, rgba(24,22,18,0) 100%)",
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative container mx-auto px-6 lg:px-12 max-w-7xl py-8 md:py-10 lg:py-12">
+          <div className="grid grid-cols-12 gap-x-6 lg:gap-x-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="col-span-12 lg:col-span-8 max-w-2xl"
+            >
+              {/* Section marker */}
+              <div className="flex items-baseline gap-4 mb-10">
+                <span className="font-display font-extrabold text-oxblood-tint text-[2.5rem] md:text-5xl tabular-nums tracking-tighter leading-none">
+                  02
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-bone/70 pb-1">
+                  behind the dig
+                </span>
               </div>
+
+              <h2 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl leading-[1.05] lowercase mb-10 text-bone">
+                a website should feel like<br />
+                <span className="italic text-oxblood-tint">walking into the business.</span>
+              </h2>
+
+              {/* Body copy with editorial sub-leads */}
+              <div className="space-y-6 text-base md:text-lg leading-relaxed text-bone lowercase max-w-xl">
+                <p>
+                  i spent years watching businesses pour money into websites that looked like everyone else's. clean enough. functional enough. forgettable.
+                </p>
+                <p>
+                  the problem was never the technology. it was that nobody stopped to ask what the website should actually make people feel.
+                </p>
+                <p>
+                  i started sarahdigs because i believe a website should communicate who you are, what you stand for, and why someone should choose you. without saying a word.
+                </p>
+                <p>
+                  my team and i dig into your brand, your audience, and your vision. then we design something that makes people stay, explore, and trust you before they ever get on a call.
+                </p>
+              </div>
+
+              {/* Signature */}
+              <div className="mt-12 flex items-center gap-4">
+                <span className="font-display font-medium italic text-oxblood-tint text-2xl md:text-3xl tracking-tight">
+                  sarah
+                </span>
+                <span className="h-px w-12 bg-oxblood-tint/40" />
+                <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-bone/60">
+                  founder, sarahdigs
+                </span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+      </section>
+
+      {/* ============================================================
+          03 — NON-NEGOTIABLES (manifesto spread)
+          Compact — fits in one viewport. Sidebar headline + dense list.
+      ============================================================ */}
+      <section className="bg-bone py-12 md:py-16">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="grid grid-cols-12 gap-x-6 lg:gap-x-10 gap-y-8 lg:gap-y-0">
+            {/* Sidebar headline — wider column, 2-line headline */}
+            <div className="col-span-12 lg:col-span-5">
+              <div>
+                <div className="flex items-baseline gap-3 mb-5">
+                  <span className="font-display font-extrabold text-oxblood text-3xl md:text-4xl tabular-nums tracking-tighter leading-none">
+                    03
+                  </span>
+                  <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid pb-1">
+                    the manifesto
+                  </span>
+                </div>
+                <h2 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl leading-[0.95] lowercase mb-4">
+                  <span className="block">our</span>
+                  <span className="text-oxblood italic whitespace-nowrap">non-negotiables</span>
+                </h2>
+                <p className="text-ink-mid text-sm leading-relaxed max-w-xs lowercase">
+                  three things we will never compromise on.
+                </p>
+              </div>
+            </div>
+
+            {/* Belief column — compact rows */}
+            <div className="col-span-12 lg:col-span-6 space-y-5 md:space-y-6">
+              {beliefs.map((b, i) => (
+                <motion.article
+                  key={b.num}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: i * 0.07, ease: "easeOut" }}
+                  className="group grid grid-cols-12 gap-3 md:gap-5"
+                >
+                  {/* Roman numeral */}
+                  <div className="col-span-2 md:col-span-1">
+                    <span className="font-display font-medium italic text-oxblood text-xl md:text-2xl tracking-tight leading-none transition-colors duration-300 group-hover:text-ink">
+                      {b.num}
+                    </span>
+                  </div>
+
+                  {/* Title + body */}
+                  <div className="col-span-10 md:col-span-11 space-y-1.5">
+                    <h3 className="font-display font-medium text-base md:text-xl tracking-tight lowercase leading-tight">
+                      {b.title}
+                    </h3>
+                    <p className="text-ink-mid text-sm md:text-[15px] leading-snug lowercase max-w-lg">
+                      {b.body}
+                    </p>
+                  </div>
+                </motion.article>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-};
+      </section>
 
-const WhyTrustMe = () => {
-  return (
-    <section className="py-24 bg-white border-b border-[#181612]/10">
-      <div className="container mx-auto px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421]">Why Trust Me?</span>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mt-4 mb-8">
-            I bridge the gap between technical complexity and human connection.
-          </h2>
-          <p className="text-lg text-[#181612]/70 leading-relaxed">
-            I help ambitious brands who are tired of surface-level tactics. My method works because I don't just look at the "what" (metrics), I uncover the "why" (behavior). By combining technical SEO precision with deep user empathy, I build growth engines that are sustainable, scalable, and surprisingly simple.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const MyStory = ({ content }: { content: StoryContent }) => {
-  return (
-    <section className="py-24 bg-[#F4F1EA]">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-start gap-16">
-          <div className="lg:w-1/3 lg:sticky lg:top-32">
-            <motion.h2 
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               viewport={{ once: true }}
-               className="text-7xl md:text-8xl font-black tracking-tighter leading-[0.85]"
+      {/* ============================================================
+          04 — HOW WE WORK (column callout, magazine pull-quote style)
+      ============================================================ */}
+      <section className="bg-bone py-16 md:py-20">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="grid grid-cols-12 gap-x-6 lg:gap-x-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              className="col-span-12"
             >
-              My<br/>Story
-            </motion.h2>
-          </div>
-           <div className="lg:w-2/3 text-lg text-[#181612]/80 leading-relaxed space-y-6">
-              <p>{content.paragraph1}</p>
-              <p>{content.paragraph2}</p>
-              <p>{content.paragraph3}</p>
-           </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const ClientStories = () => {
-  const clients = [
-     {
-       name: "TechFlow SaaS",
-       desc: "Scaled organic traffic from 5k to 50k monthly visitors in 12 months.",
-       tags: ["SaaS", "SEO"],
-       slug: "techflow"
-     },
-     {
-       name: "FinSmart",
-       desc: "Built a content engine that generates 100+ qualified leads per month.",
-       tags: ["Fintech", "Content"],
-       slug: "finsmart"
-     }
-  ];
-
-  return (
-    <section className="py-24 bg-white border-b border-[#181612]/10">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold tracking-tighter mb-12">Digging for results</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-           {clients.map((client, i) => (
-             <Link key={i} href={`/projects/${client.slug}`}>
-               <div className="group bg-[#F4F1EA] border border-[#181612]/10 p-8 rounded-md hover:border-[#6B1421] transition-all hover:shadow-lg cursor-pointer relative overflow-hidden h-full">
-                 <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                   <ArrowUpRight className="w-6 h-6 text-[#6B1421]" />
-                 </div>
-                 <div className="mb-6 flex gap-2">
-                   {client.tags.map(tag => (
-                     <span key={tag} className="text-xs font-bold uppercase tracking-wider bg-[#E7E2D6] text-[#6B1421] px-3 py-1 rounded-full">{tag}</span>
-                   ))}
-                 </div>
-                 <h3 className="text-2xl font-bold mb-4">{client.name}</h3>
-                 <p className="text-[#181612]/70 leading-relaxed mb-8">
-                   {client.desc}
-                 </p>
-                 <div className="text-sm font-bold uppercase tracking-widest text-[#181612] group-hover:text-[#6B1421] transition-colors flex items-center gap-2 mt-auto">
-                   View Story <ArrowRight className="w-4 h-4" />
-                 </div>
-               </div>
-             </Link>
-           ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Expertise = () => {
-  const areas = [
-    {
-      icon: <Search className="w-6 h-6" />,
-      title: "Conversion Rate Optimization",
-      desc: "Helped 30+ SaaS companies increase conversion rates by an average of 40% through data-driven A/B testing and user journey mapping."
-    },
-    {
-      icon: <Layers className="w-6 h-6" />,
-      title: "Technical SEO Recovery",
-      desc: "Recovered a major brand from years' worth of penalties, restoring and surpassing previous traffic levels within 6 months."
-    },
-    {
-      icon: <FileText className="w-6 h-6" />,
-      title: "Content Strategy",
-      desc: "Designed content engines for 50+ startups that reduced CAC by 30% while doubling organic lead volume."
-    }
-  ];
-
-  return (
-    <section className="py-24 bg-[#F4F1EA] border-b border-[#181612]/10">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row gap-16">
-          <div className="lg:w-1/3">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421]">Expertise</span>
-            <h2 className="text-4xl font-bold tracking-tighter mt-4 mb-6">Specific expertise, concrete results.</h2>
-            <p className="text-[#181612]/70 leading-relaxed">
-              I don't do "general marketing". I specialize in the channels and strategies that drive sustainable, long-term growth.
-            </p>
-          </div>
-          <div className="lg:w-2/3 space-y-8">
-            {areas.map((area, i) => (
-              <div key={i} className="flex gap-6 items-start p-6 bg-white rounded-md border border-[#181612]/5">
-                <div className="bg-[#E7E2D6] text-[#6B1421] p-3 rounded-md">{area.icon}</div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2">{area.title}</h3>
-                  <p className="text-[#181612]/70 leading-relaxed">{area.desc}</p>
-                </div>
+              <div className="flex items-baseline gap-4 mb-8">
+                <span className="font-display font-extrabold text-oxblood text-[2.5rem] md:text-5xl tabular-nums tracking-tighter leading-none">
+                  04
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid pb-1">
+                  how we work
+                </span>
               </div>
-            ))}
+
+              {/* Big pull-quote-style statement */}
+              <blockquote className="font-display font-semibold tracking-tighter text-4xl md:text-5xl leading-[1.05] lowercase max-w-5xl">
+                small studio.{" "}
+                <span className="text-oxblood italic">fewer clients.</span>{" "}
+                deeper work.
+              </blockquote>
+              <p className="mt-8 text-ink-mid text-base md:text-lg leading-relaxed max-w-2xl lowercase">
+                every client gets direct access to sarah. every project gets the kind of attention that makes the difference between a website that exists and one that people remember.
+              </p>
+            </motion.div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-};
+      </section>
 
-const Timeline = () => {
-  const milestones = [
-    { year: "2019", title: "Started in digital marketing", desc: "Cut my teeth in paid ads and social." },
-    { year: "2020", title: "Specialized in SEO & Content", desc: "Discovered the power of organic growth." },
-    { year: "2021", title: "Agency Life", desc: "Worked with SaaS, e-commerce, and diverse clients." },
-    { year: "2023", title: "Head of Growth", desc: "Led organic growth for multiple 7-figure brands." },
-    { year: "2025", title: "Launched SarahDigs", desc: "Bringing my excavation method to the world." }
-  ];
-
-  return (
-    <section className="py-24 bg-[#E7E2D6]">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421]">The Path</span>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-[#181612] mt-4">My Journey</h2>
+      {/* 05 — PULL QUOTE (simple, pre-revamp style, on bone) */}
+      <section className="bg-bone py-20 md:py-28">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <motion.figure
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="border-l-2 border-oxblood pl-6 md:pl-10 max-w-4xl"
+          >
+            <blockquote className="font-display font-medium text-2xl md:text-4xl leading-snug tracking-tight text-ink lowercase">
+              &ldquo;sarah didn't design us a website. she figured out what we actually sell, then built something that says it better than we ever could.&rdquo;
+            </blockquote>
+            <figcaption className="mt-8 flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.28em] text-ink-mid">
+              <span className="h-px w-6 bg-oxblood" />
+              <span>casey smith · vp of marketing, bloom health</span>
+            </figcaption>
+          </motion.figure>
         </div>
+      </section>
 
-        {/* Desktop: horizontal */}
-        <div className="hidden md:block relative">
-          <div className="absolute top-[52px] left-0 right-0 h-[2px] bg-[#6B1421]/15"></div>
-          <div className="grid grid-cols-5 gap-6 relative">
-            {milestones.map((m, i) => (
-              <div key={i} className="flex flex-col items-center text-center group">
-                <span className="text-[#6B1421] font-bold text-2xl mb-4">{m.year}</span>
-                <div className="w-5 h-5 rounded-full bg-[#6B1421] border-4 border-[#E7E2D6] relative z-10 mb-6 group-hover:scale-125 transition-transform"></div>
-                <div className="bg-white border border-[#181612]/10 rounded-md p-5 h-full hover:border-[#6B1421]/40 hover:shadow-lg transition-all">
-                  <h3 className="font-bold text-[#181612] mb-2 text-sm">{m.title}</h3>
-                  <p className="text-[#181612]/60 text-xs leading-relaxed">{m.desc}</p>
-                </div>
+      {/* 06 — CTA (ink card, distinct from other sections) */}
+      <section className="bg-bone py-16 md:py-20">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="bg-ink text-bone rounded-md p-10 md:p-16 lg:p-20 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+          >
+            <div className="lg:col-span-8">
+              <div className="flex items-center gap-3 mb-5">
+                <span className="h-px w-8 bg-oxblood-tint/50" />
+                <span className="text-oxblood-tint font-semibold uppercase tracking-[0.22em] text-xs">
+                  the invitation
+                </span>
               </div>
-            ))}
-          </div>
+              <h2 className="font-display font-semibold tracking-tighter text-3xl md:text-4xl lg:text-5xl leading-[1.05] lowercase">
+                if this sounds like the way you want to build,{" "}
+                <span className="text-oxblood-tint italic">let's talk</span>
+              </h2>
+            </div>
+
+            <div className="lg:col-span-4 flex lg:justify-end">
+              <Link href="/contact" className="w-full lg:w-auto">
+                <Button
+                  size="lg"
+                  className="group w-full lg:w-auto text-base h-14 px-8 bg-oxblood-tint hover:bg-oxblood text-ink hover:text-bone rounded-md cursor-pointer lowercase font-semibold gap-2 transition-colors"
+                >
+                  share your project
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
         </div>
+      </section>
 
-        {/* Mobile: vertical */}
-        <div className="md:hidden relative pl-8">
-          <div className="absolute top-0 bottom-0 left-[11px] w-[2px] bg-[#6B1421]/15"></div>
-          <div className="space-y-8">
-            {milestones.map((m, i) => (
-              <div key={i} className="relative flex items-start gap-6">
-                <div className="absolute left-[-21px] top-1 w-4 h-4 rounded-full bg-[#6B1421] border-[3px] border-[#E7E2D6] z-10"></div>
-                <div className="bg-white border border-[#181612]/10 rounded-md p-5 flex-1">
-                  <span className="text-[#6B1421] font-bold text-sm">{m.year}</span>
-                  <h3 className="font-bold text-[#181612] mt-1 mb-1">{m.title}</h3>
-                  <p className="text-[#181612]/60 text-sm leading-relaxed">{m.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Tools = () => {
-  const tools = [
-    { name: "Ahrefs", icon: <Search className="w-8 h-8" />, url: "https://ahrefs.com" },
-    { name: "SEMRush", icon: <BarChart4 className="w-8 h-8" />, url: "https://semrush.com" },
-    { name: "Tag Manager", icon: <Tags className="w-8 h-8" />, url: "https://tagmanager.google.com" },
-    { name: "Webflow", icon: <Globe className="w-8 h-8" />, url: "https://webflow.com" },
-    { name: "WordPress", icon: <Landmark className="w-8 h-8" />, url: "https://wordpress.org" },
-    { name: "Screaming Frog", icon: <Terminal className="w-8 h-8" />, url: "https://screamingfrog.co.uk" },
-    { name: "ChatGPT", icon: <MessageSquare className="w-8 h-8" />, url: "https://chat.openai.com" },
-    { name: "Claude", icon: <MessageCircle className="w-8 h-8" />, url: "https://claude.ai" },
-    { name: "Elevenlabs", icon: <Mic className="w-8 h-8" />, url: "https://elevenlabs.io" },
-    { name: "Notion", icon: <FileText className="w-8 h-8" />, url: "https://notion.so" },
-  ];
-
-  // Duplicate for seamless loop
-  const allTools = [...tools, ...tools];
-
-  return (
-    <section className="py-24 bg-[#F4F1EA] border-t border-[#181612]/10 overflow-hidden">
-       <div className="container mx-auto px-6">
-         <h2 className="text-4xl font-bold tracking-tighter text-center mb-16">Tools of the trade</h2>
-       </div>
-       
-       {/* Marquee container */}
-       <div className="relative w-full overflow-hidden">
-         <motion.div
-           className="flex gap-8"
-           animate={{
-             x: [0, -50 * tools.length * 2],
-           }}
-           transition={{
-             x: {
-               repeat: Infinity,
-               repeatType: "loop",
-               duration: 30,
-               ease: "linear",
-             },
-           }}
-           style={{ width: "fit-content" }}
-         >
-           {allTools.map((tool, i) => (
-             <a 
-               key={i}
-               href={tool.url}
-               target="_blank"
-               rel="noopener noreferrer"
-               className="flex flex-col items-center gap-4 min-w-[120px] group"
-             >
-               <div className="w-20 h-20 bg-[#F5F5F5] rounded-md flex items-center justify-center text-[#181612]/50 group-hover:text-[#6B1421] group-hover:bg-[#E7E2D6] transition-all shadow-sm">
-                 {tool.icon}
-               </div>
-               <span className="text-sm text-[#181612]/60 group-hover:text-[#6B1421] font-medium whitespace-nowrap transition-colors">{tool.name}</span>
-             </a>
-           ))}
-         </motion.div>
-       </div>
-    </section>
-  );
-};
-
-const FinalCTA = ({ content }: { content: CtaContent }) => {
-  return (
-    <section className="py-32 bg-[#1B1B1B] text-white text-center">
-       <div className="container mx-auto px-6">
-          <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-6">{content.title}</h2>
-          <p className="text-xl text-white/70 max-w-xl mx-auto mb-10">{content.subtitle}</p>
-          <Link href="/contact">
-            <Button size="lg" className="text-lg h-16 px-10 bg-[#6B1421] hover:bg-white hover:text-[#6B1421] transition-all rounded-md">
-              {content.buttonText}
-            </Button>
-          </Link>
-       </div>
-    </section>
-  );
-};
-
-export default function About() {
-  const { data: pageContent } = useQuery<Record<string, any>>({
-    queryKey: ["/api/page-content", "about"],
-    queryFn: async () => {
-      const res = await fetch("/api/page-content/about");
-      if (!res.ok) return {};
-      return res.json();
-    },
-  });
-
-  const heroContent = (pageContent?.hero as HeroContent) || defaultHero;
-  const storyContent = (pageContent?.story as StoryContent) || defaultStory;
-  const ctaContent = (pageContent?.cta as CtaContent) || defaultCta;
-
-  return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
-      <SEO
-        title="About Sarah Islam"
-        description="Marketing consultant with 8+ years helping founders and brands grow through SEO, content strategy, and data-driven marketing."
-        canonical="/about"
-        ogType="profile"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: "Sarah Islam",
-          jobTitle: "Marketing Consultant",
-          url: "https://www.sarahdigs.com/about",
-          worksFor: { "@type": "Organization", name: "SarahDigs" },
-        }}
-      />
-      <Navbar theme="light" />
-      <AboutHero content={heroContent} />
-      <WhyTrustMe />
-      <MyStory content={storyContent} />
-      <ClientStories />
-      <Expertise />
-      <Timeline />
-      <Tools />
-      <FinalCTA content={ctaContent} />
       <Footer />
     </div>
   );

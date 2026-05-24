@@ -86,6 +86,8 @@ export interface IStorage {
   createCustomPlanInquiry(inquiry: InsertCustomPlanInquiry): Promise<CustomPlanInquiry>;
   getContactInquiries(): Promise<ContactInquiry[]>;
   getCustomPlanInquiries(): Promise<CustomPlanInquiry[]>;
+  updateContactInquiryStatus(id: string, status: string): Promise<ContactInquiry>;
+  updateCustomPlanInquiryStatus(id: string, status: string): Promise<CustomPlanInquiry>;
 
   getProjects(): Promise<Project[]>;
   getVisibleProjects(): Promise<Project[]>;
@@ -344,6 +346,22 @@ export class DatabaseStorage implements IStorage {
 
   async getCustomPlanInquiries(): Promise<CustomPlanInquiry[]> {
     return await db.select().from(customPlanInquiries).orderBy(desc(customPlanInquiries.createdAt));
+  }
+
+  async updateContactInquiryStatus(id: string, status: string): Promise<ContactInquiry> {
+    const [result] = await db.update(contactInquiries)
+      .set({ status })
+      .where(eq(contactInquiries.id, id))
+      .returning();
+    return result;
+  }
+
+  async updateCustomPlanInquiryStatus(id: string, status: string): Promise<CustomPlanInquiry> {
+    const [result] = await db.update(customPlanInquiries)
+      .set({ status })
+      .where(eq(customPlanInquiries.id, id))
+      .returning();
+    return result;
   }
 
   async getProjects(): Promise<Project[]> {

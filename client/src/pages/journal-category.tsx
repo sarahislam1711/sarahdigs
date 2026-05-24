@@ -69,7 +69,7 @@ export default function JournalCategory() {
   return (
     <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
       <SEO
-        title={`${category.name} — Journal`}
+        title={`${category.name} | journal | sarahdigs`}
         description={description}
         canonical={`/journal/${category.slug}`}
         jsonLd={breadcrumbJsonLd}
@@ -112,7 +112,7 @@ export default function JournalCategory() {
               <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
             </div>
           ) : categoryPosts.length === 0 ? (
-            <div className="text-center py-20 text-[#181612]/50">
+            <div className="text-center py-20 text-[#181612]/70">
               <p className="text-lg">No posts in this category yet. Check back soon!</p>
             </div>
           ) : (
@@ -138,7 +138,7 @@ export default function JournalCategory() {
                         </p>
                       </div>
 
-                      <div className="mt-8 pt-6 border-t border-[#181612]/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#181612]/50">
+                      <div className="mt-8 pt-6 border-t border-[#181612]/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#181612]/70">
                         <span>{formatDate(post.publishedAt)}</span>
                         <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#6B1421] group-hover:text-white transition-all">
                           <ArrowUpRight className="w-4 h-4" />

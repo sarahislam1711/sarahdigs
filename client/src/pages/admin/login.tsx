@@ -55,24 +55,24 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1B1B1B] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F4F1EA] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-[#0D0D0D] border border-gray-800 rounded-md p-8">
+        <div className="bg-white border border-[#181612]/10 rounded-md p-8 shadow-xl shadow-[#181612]/5">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#6B1421]/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Lock className="w-8 h-8 text-[#6B1421]" />
             </div>
-            <h1 className="font-['Syne'] text-2xl font-bold text-white mb-2">
-              Admin Login
+            <h1 className="font-['Syne'] text-2xl font-bold text-[#181612] mb-2 lowercase">
+              admin login
             </h1>
-            <p className="text-gray-500 text-sm">
-              Enter your admin password to continue
+            <p className="text-[#6F6A5F] text-sm lowercase">
+              enter your admin password to continue
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-300">
+              <Label htmlFor="password" className="text-[#181612]">
                 Password
               </Label>
               <Input
@@ -80,8 +80,8 @@ export default function AdminLogin() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter admin password"
-                className="bg-[#1B1B1B] border-gray-700 text-white placeholder:text-gray-600 focus:border-[#6B1421] focus:ring-[#6B1421]"
+                placeholder="enter admin password"
+                className="bg-[#FBF9F3] border-[#181612]/15 text-[#181612] placeholder:text-[#181612]/30 focus:border-[#6B1421] focus:ring-[#6B1421]"
                 required
                 autoFocus
               />
@@ -90,15 +90,15 @@ export default function AdminLogin() {
             <Button
               type="submit"
               disabled={isLoading || !password}
-              className="w-full bg-[#6B1421] hover:bg-[#6B1421]/90 text-white font-medium py-3"
+              className="w-full bg-[#6B1421] hover:bg-[#8C2331] text-white font-medium py-3 lowercase"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Signing in...
+                  signing in...
                 </>
               ) : (
-                "Sign In"
+                "sign in"
               )}
             </Button>
           </form>
@@ -106,9 +106,9 @@ export default function AdminLogin() {
           <div className="mt-6 text-center">
             <a
               href="/"
-              className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
+              className="text-[#6F6A5F] hover:text-[#6B1421] text-sm transition-colors lowercase"
             >
-              ← Back to website
+              ← back to website
             </a>
           </div>
         </div>

@@ -11,9 +11,17 @@ import type { BlogPost, Category } from "@shared/schema";
 
 const JournalHero = () => {
   return (
-    <section className="pt-40 pb-20 bg-[#F4F1EA]">
+    <section className="pt-32 pb-20 bg-[#F4F1EA]">
+      {/* Top meta rail */}
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+        <div className="flex items-center justify-between border-b border-ink/10 pb-4 mb-12 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
+          <span>sarahdigs · creative website studio</span>
+          <span className="hidden md:inline">writing</span>
+          <span>2026</span>
+        </div>
+      </div>
       <div className="container mx-auto px-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -60,7 +68,7 @@ const FeaturedPieces = () => {
 
   if (isLoading) {
     return (
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-bone">
         <div className="container mx-auto px-6">
           <div className="flex justify-center items-center py-20">
             <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
@@ -72,12 +80,12 @@ const FeaturedPieces = () => {
 
   if (!featured.length) {
     return (
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-bone">
         <div className="container mx-auto px-6">
           <div className="flex justify-between items-end mb-12">
             <h2 className="font-bold uppercase tracking-widest text-[#181612] text-[19px]">Featured Pieces</h2>
           </div>
-          <div className="text-center py-12 text-[#181612]/50">
+          <div className="text-center py-12 text-[#181612]/70">
             <p className="text-lg">No posts yet. Check back soon!</p>
           </div>
         </div>
@@ -86,7 +94,7 @@ const FeaturedPieces = () => {
   }
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-12 bg-bone">
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-12">
           <h2 className="font-bold uppercase tracking-widest text-[#181612] text-[19px]">Featured Pieces</h2>
@@ -116,7 +124,7 @@ const FeaturedPieces = () => {
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
                   <ArrowUpRight className="absolute top-6 right-6 w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0" />
                 </div>
-                <div className="flex items-center gap-4 text-xs font-medium text-[#181612]/50 mb-3 uppercase tracking-wider">
+                <div className="flex items-center gap-4 text-xs font-medium text-[#181612]/70 mb-3 uppercase tracking-wider">
                   <span>{formatDate(post.publishedAt)}</span>
                   <span className="w-1 h-1 bg-[#1B1B1B]/20 rounded-full"></span>
                   <span>{getReadTime(post.content)}</span>
@@ -165,7 +173,7 @@ const AllPosts = () => {
   if (isLoading || !allPosts.length) return null;
 
   return (
-    <section className="py-12 bg-white border-t border-[#181612]/5">
+    <section className="py-12 bg-bone border-t border-[#181612]/10">
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-12">
           <h2 className="font-bold uppercase tracking-widest text-[#181612] text-[19px]">All Posts</h2>
@@ -193,7 +201,7 @@ const AllPosts = () => {
                     </p>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-[#181612]/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#181612]/50">
+                  <div className="mt-8 pt-6 border-t border-[#181612]/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#181612]/70">
                     <span>{formatDate(post.publishedAt)}</span>
                     <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#6B1421] group-hover:text-white transition-all">
                       <ArrowUpRight className="w-4 h-4" />
@@ -253,7 +261,7 @@ const SectionsGrid = () => {
 
   if (isLoading) {
     return (
-      <section className="py-24 bg-white border-t border-[#181612]/5">
+      <section className="py-24 bg-bone border-t border-[#181612]/10">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#6B1421]">Category</span></h2>
           <div className="flex justify-center items-center py-20">
@@ -266,10 +274,10 @@ const SectionsGrid = () => {
 
   if (!categories || categories.length === 0) {
     return (
-      <section className="py-24 bg-white border-t border-[#181612]/5">
+      <section className="py-24 bg-bone border-t border-[#181612]/10">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#6B1421]">Category</span></h2>
-          <div className="text-center py-12 text-[#181612]/50">
+          <div className="text-center py-12 text-[#181612]/70">
             <p className="text-lg">No categories yet. Check back soon!</p>
           </div>
         </div>
@@ -278,7 +286,7 @@ const SectionsGrid = () => {
   }
 
   return (
-    <section className="py-24 bg-white border-t border-[#181612]/5">
+    <section className="py-24 bg-bone border-t border-[#181612]/10">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#6B1421]">Category</span></h2>
         
@@ -338,7 +346,7 @@ const Newsletter = () => {
             <input 
               type="email" 
               placeholder="Your email address" 
-              className="flex-1 px-6 py-4 rounded-md border border-[#181612]/10 bg-white focus:outline-none focus:border-[#6B1421] transition-colors"
+              className="flex-1 px-6 py-4 rounded-md border border-[#181612]/15 bg-[#FBF9F3] focus:outline-none focus:border-oxblood transition-colors"
             />
             <Button size="lg" className="rounded-md px-8 h-auto py-4 bg-[#1B1B1B] hover:bg-[#6B1421] text-white text-lg">
               Subscribe
@@ -354,7 +362,7 @@ export default function Journal() {
   return (
     <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
       <SEO
-        title="Journal"
+        title="journal | sarahdigs"
         description="Essays, frameworks, and field notes on SEO, content strategy, and growth marketing from Sarah Islam."
         canonical="/journal"
         ogType="website"

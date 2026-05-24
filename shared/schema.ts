@@ -52,6 +52,12 @@ export const categories = pgTable("categories", {
   slug: varchar("slug").unique().notNull(),
   description: text("description"),
   parentId: varchar("parent_id"),
+  // These columns exist in the production DB — kept in sync to prevent
+  // drizzle-kit push from dropping them.
+  iconName: varchar("icon_name"),
+  bgColor: varchar("bg_color"),
+  textColor: varchar("text_color"),
+  displayOrder: integer("display_order").default(0),
 });
 
 // Tags table
@@ -124,7 +130,7 @@ export const contactInquiries = pgTable("contact_inquiries", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// Projects table for portfolio
+// Projects table for portfolio (auction-catalog style)
 export const projects = pgTable("projects", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: varchar("name").notNull(),
@@ -138,6 +144,24 @@ export const projects = pgTable("projects", {
   imageUrl: text("image_url"),
   displayOrder: integer("display_order").default(0),
   isVisible: boolean("is_visible").default(true),
+
+  // Case-study fields (v1 — minimal, aligned across editor/db/public page)
+  year: integer("year"),                          // e.g. 2025
+  serviceTags: text("service_tags").array(),       // catchy per-project service labels
+  problem: text("problem"),                        // the one-liner / what they came with
+  approach: text("approach"),                      // (legacy narrative — kept, optional)
+  metricValue: varchar("metric_value"),            // headline metric for index card, e.g. "+312%"
+  metricLabel: varchar("metric_label"),            // e.g. "organic traffic"
+  status: varchar("status").default("live"),       // "live" | "coming_soon"
+
+  // Standalone case-study (rich, visual)
+  role: varchar("role"),                           // meta: e.g. "design & build"
+  timeline: varchar("timeline"),                   // meta: e.g. "6 weeks"
+  processSteps: jsonb("process_steps"),            // [{title, description}]
+  beforeStates: text("before_states").array(),     // short "before" phrases
+  afterStates: text("after_states").array(),       // short "after" phrases
+  metrics: jsonb("metrics"),                        // [{value, label}] — multiple results
+
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -173,6 +197,8 @@ export const services = pgTable("services", {
   finalCtaSubtitle: text("final_cta_subtitle"),
   finalCtaButtonText: varchar("final_cta_button_text"),
   finalCtaMicroProof: text("final_cta_micro_proof"),
+  // Exists in production DB — kept in sync to prevent drizzle-kit push from dropping it.
+  heroBackgroundImage: text("hero_background_image"),
   displayOrder: integer("display_order").default(0),
   isVisible: boolean("is_visible").default(true),
   createdAt: timestamp("created_at").defaultNow().notNull(),

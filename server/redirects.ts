@@ -24,6 +24,10 @@ export const redirects: RedirectRule[] = [
   { from: "/services/product", to: "/the-full-dig" },
   { from: "/services/brand", to: "/the-full-dig" },
   { from: "/services/founder", to: "/the-full-dig" },
+  // Retired placeholder project case studies — flow into the work index.
+  { from: "/projects/techflow", to: "/projects" },
+  { from: "/projects/finsmart", to: "/projects" },
+  { from: "/projects/lumina", to: "/projects" },
   // Flattened canonical routes — drop the /services/ prefix.
   { from: "/services/dig-on-demand", to: "/dig-on-demand" },
   { from: "/services/consultations", to: "/dig-in-consultations" },

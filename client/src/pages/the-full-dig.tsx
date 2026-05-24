@@ -106,7 +106,7 @@ const Stat = ({ value, label }: { value: string; label: string }) => {
 
   return (
     <div ref={ref} className="text-center md:text-left">
-      <div className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-oxblood-tint tabular-nums tracking-tighter mb-3 lowercase">
+      <div className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-oxblood-tint tabular-nums tracking-tight mb-3 lowercase">
         {match ? <>{prefix}{display}{suffix}</> : value}
       </div>
       <div className="text-bone text-sm leading-relaxed max-w-[180px] mx-auto md:mx-0 lowercase opacity-90">
@@ -128,7 +128,7 @@ const tiers = [
       },
       {
         heading: "design",
-        items: ["ux design", "visual design", "responsive layouts", "interaction design"],
+        items: ["ux design", "visual design", "responsive layouts"],
       },
       {
         heading: "build",
@@ -145,7 +145,7 @@ const tiers = [
     name: "the deep dig",
     tagline: "the full system.",
     inherits: "everything in the dig, plus:",
-    includes: ["seo structure", "ai search optimization", "conversion optimization", "analytics setup"],
+    includes: ["seo structure", "ai search optimization", "conversion optimization"],
     forWho: "businesses ready to be found and convert",
     outcomes: ["a website built to be found", "a system that converts", "analytics that prove it"],
     popular: true,
@@ -156,7 +156,7 @@ const tiers = [
     name: "the full dig",
     tagline: "the long game.",
     inherits: "everything in the deep dig, plus:",
-    includes: ["monthly strategy retainer", "performance tracking", "ongoing growth optimization"],
+    includes: ["analytics setup", "monthly strategy retainer", "performance tracking", "ongoing growth optimization"],
     forWho: "teams who want hands-on growth partners",
     outcomes: ["a growth engine, not a project", "a retained partner on call", "compounding results over time"],
     popular: false,
@@ -176,7 +176,7 @@ export default function TheFullDig() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="The Full Dig · sarahdigs"
+        title="the full dig | sarahdigs"
         description="Research, design, build, and optimization — done together, in the right order. The flagship sarahdigs service for founders who want a website that works."
         canonical="/the-full-dig"
       />
@@ -240,8 +240,8 @@ export default function TheFullDig() {
               a website
             </div>
             <h1 className="font-display font-semibold tracking-tighter text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.05] lowercase mb-6">
-              designed to <span className="text-oxblood font-bold">impress.</span><br />
-              built to <span className="text-oxblood font-bold">sell.</span>
+              designed to <span className="text-oxblood font-bold">impress</span><br />
+              built to <span className="text-oxblood font-bold">sell</span>
             </h1>
             <p className="text-base md:text-lg text-ink-mid lowercase leading-snug">
               exceptional design. real business results.<br />one service. three depths.
@@ -293,7 +293,7 @@ export default function TheFullDig() {
                 <span>the problem</span>
               </div>
               <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-[0.95] lowercase text-ink">
-                what's <span className="text-oxblood">broken.</span>
+                what's <span className="text-oxblood">broken</span>
               </h2>
             </div>
 
@@ -303,7 +303,7 @@ export default function TheFullDig() {
                 <span>the fix</span>
               </div>
               <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-[0.95] lowercase text-ink">
-                what we <span className="text-oxblood">build.</span>
+                what we <span className="text-oxblood">build</span>
               </h2>
             </div>
           </motion.div>
@@ -504,7 +504,7 @@ export default function TheFullDig() {
               </h2>
 
               {/* Stats row */}
-              <div className="grid grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 md:gap-6 lg:gap-8">
                 <Stat value="20+" label="websites shipped." />
                 <Stat value="3x" label="avg inbound after launch." />
                 <Stat value="6" label="weeks strategy to live." />
@@ -547,20 +547,22 @@ export default function TheFullDig() {
 
       {/* 07 — THE NOT SURE MOMENT */}
       <section className="bg-stone py-16 md:py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto">
-            {/* LEFT half — dig-in consultation path */}
-            <div className="lg:pr-12 lg:border-r lg:border-ink/15 pb-12 lg:pb-0">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="h-px w-8 bg-oxblood/40" />
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-y-0">
+            {/* LEFT — primary path: dig-in consultation (heavier, larger, recommended) */}
+            <div className="lg:col-span-6 lg:pr-10 lg:border-r lg:border-ink/15">
+              <div className="flex items-baseline gap-4 mb-6">
+                <span className="font-display font-extrabold text-oxblood text-4xl md:text-5xl tabular-nums tracking-tighter leading-none">
+                  01
+                </span>
                 <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
-                  not sure where to start
+                  recommended
                 </span>
               </div>
-              <h2 className="font-display font-bold tracking-tighter text-3xl md:text-4xl leading-none mb-5 lowercase">
-                not every project<br />needs the full dig.
+              <h2 className="font-display font-bold tracking-tighter text-3xl md:text-5xl leading-none mb-5 lowercase">
+                not every project<br />needs <span className="text-oxblood italic">the full dig.</span>
               </h2>
-              <p className="text-ink-mid text-base leading-relaxed mb-8 max-w-md lowercase">
+              <p className="text-ink-mid text-base md:text-lg leading-relaxed mb-8 max-w-md lowercase">
                 if you're still figuring out what you need, the dig-in consultation is the right first step. a focused call, a written action plan, and a clear view of what to do next.
               </p>
               <Button
@@ -572,26 +574,38 @@ export default function TheFullDig() {
               </Button>
             </div>
 
-            {/* RIGHT half — custom dig path, mirrors left structure (no card chrome) */}
-            <div className="lg:pl-12 pt-12 lg:pt-0 border-t border-ink/15 lg:border-t-0">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="h-px w-8 bg-oxblood/40" />
-                <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
-                  another way in
-                </span>
-              </div>
-              <h2 className="font-display font-bold tracking-tighter text-3xl md:text-4xl leading-none mb-5 lowercase">
-                know your scope?<br />build it your way.
-              </h2>
-              <p className="text-ink-mid text-base leading-relaxed mb-8 max-w-md lowercase">
-                if you already know what you need but it doesn't fit a package, the custom dig lets us scope a build around your exact situation.
-              </p>
+            {/* RIGHT — secondary path: custom dig (card, oxblood-tinted, interactive) */}
+            <div className="lg:col-span-6 lg:pl-10 pt-10 lg:pt-0 flex">
               <a
                 href="/dig-on-demand"
-                className="group inline-flex items-center gap-3 text-base h-14 px-8 bg-transparent border border-ink/25 text-ink hover:border-oxblood hover:text-oxblood transition-colors rounded-md cursor-pointer lowercase font-medium"
+                className="group relative w-full bg-oxblood/6 border border-oxblood/20 rounded-md p-8 md:p-10 transition-all duration-300 hover:bg-oxblood/10 hover:border-oxblood/40 hover:-translate-y-1 overflow-hidden"
               >
-                explore custom dig
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                {/* corner accent */}
+                <span
+                  className="absolute top-0 right-0 w-16 h-16 overflow-hidden pointer-events-none"
+                  aria-hidden="true"
+                >
+                  <span className="absolute top-0 right-0 w-24 h-px bg-oxblood/30 origin-top-right rotate-45 translate-y-4" />
+                </span>
+
+                <div className="flex items-center gap-2 mb-5 text-[10px] font-mono uppercase tracking-[0.28em] text-oxblood">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
+                  <span>02 · alternative</span>
+                </div>
+
+                <h2 className="font-display font-semibold tracking-tighter text-2xl md:text-3xl leading-snug mb-4 lowercase text-ink group-hover:text-oxblood transition-colors">
+                  know your scope?<br />build it your way.
+                </h2>
+                <p className="text-ink-mid text-base leading-relaxed mb-8 max-w-sm lowercase">
+                  if you already know what you need but it doesn't fit a package, the custom dig lets us scope a build around your exact situation.
+                </p>
+
+                <span className="inline-flex items-center gap-3 text-sm text-oxblood font-medium lowercase">
+                  explore custom dig
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-oxblood/30 group-hover:border-oxblood group-hover:bg-oxblood group-hover:text-white transition-all">
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </span>
+                </span>
               </a>
             </div>
           </div>
@@ -601,11 +615,11 @@ export default function TheFullDig() {
       {/* 08 — FINAL CTA */}
       <section className="bg-bone py-20 md:py-24">
         <div className="container mx-auto px-6 text-center max-w-3xl">
-          <h2 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl leading-[1.05] mb-5 lowercase">
-            ready to dig <span className="text-oxblood font-bold">in.</span>
+          <h2 className="font-display font-semibold tracking-tighter text-6xl md:text-7xl lg:text-8xl leading-[1] mb-5 lowercase">
+            ready to dig <span className="text-oxblood font-bold">in?</span>
           </h2>
           <p className="text-ink-mid text-base md:text-lg mb-8 leading-relaxed lowercase">
-            two website builds open between now and september.
+            30 minutes. one clear plan. no pitch.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -617,7 +631,7 @@ export default function TheFullDig() {
               book a dig-in call <ArrowRight className="w-4 h-4" />
             </Button>
             <a
-              href="/contact"
+              href="/contact#contact-form"
               className="inline-flex items-center justify-center text-base h-14 px-8 bg-transparent border border-ink/25 text-ink hover:border-oxblood hover:text-oxblood transition-colors rounded-md cursor-pointer lowercase font-medium gap-2 w-full sm:w-auto min-w-60"
             >
               fill the project brief <ArrowRight className="w-4 h-4" />
