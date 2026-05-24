@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import AdminLayout from "@/components/layout/admin-layout";
 import type { ContactInquiry, CustomPlanInquiry } from "@shared/schema";
-import { Mail, Inbox } from "lucide-react";
+import { Mail, Inbox, Check, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type TabKey = "contact" | "custom-plan";
@@ -125,18 +125,73 @@ export default function AdminInquiries() {
   );
 }
 
+function StatusToggle({ row, kind }: { row: any; kind: TabKey }) {
+  const queryClient = useQueryClient();
+  const isOpen = row.status === "open";
+  const endpoint =
+    kind === "contact"
+      ? `/api/admin/inquiries/contact/${row.id}`
+      : `/api/admin/inquiries/custom-plan/${row.id}`;
+  const queryKey =
+    kind === "contact"
+      ? ["/api/admin/inquiries/contact"]
+      : ["/api/admin/inquiries/custom-plan"];
+
+  const mutation = useMutation({
+    mutationFn: async (status: string) => {
+      const res = await fetch(endpoint, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error("failed");
+      return res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+  });
+
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        mutation.mutate(isOpen ? "new" : "open");
+      }}
+      disabled={mutation.isPending}
+      className={cn(
+        "shrink-0 inline-flex items-center gap-1.5 text-[11px] font-medium lowercase px-3 py-1.5 rounded-md border transition-colors",
+        isOpen
+          ? "bg-[#1F4D3A]/10 border-[#1F4D3A]/30 text-[#1F4D3A]"
+          : "bg-[#FBF9F3] border-[#181612]/15 text-[#6F6A5F] hover:border-[#6B1421]/40 hover:text-[#6B1421]"
+      )}
+      data-testid={`status-toggle-${row.id}`}
+    >
+      {isOpen ? (
+        <>
+          <Check className="w-3.5 h-3.5" /> open
+        </>
+      ) : (
+        <>mark as open</>
+      )}
+    </button>
+  );
+}
+
 function InquiryRow({ row, kind }: { row: any; kind: TabKey }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="bg-[#FBF9F3] border border-[#181612]/10 rounded-md overflow-hidden transition-colors hover:border-[#6B1421]/40">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full p-5 text-left flex items-start justify-between gap-4"
-        data-testid={`inquiry-${row.id}`}
-      >
-        <div className="min-w-0 flex-1">
+    <div className={cn(
+      "bg-[#FBF9F3] border rounded-md overflow-hidden transition-colors",
+      row.status === "open" ? "border-[#1F4D3A]/30" : "border-[#181612]/10 hover:border-[#6B1421]/40"
+    )}>
+      <div className="w-full p-5 flex items-start justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="min-w-0 flex-1 text-left"
+          data-testid={`inquiry-${row.id}`}
+        >
           <div className="flex items-center gap-3 mb-1.5 flex-wrap">
             <h3 className="text-base font-semibold text-[#181612] truncate">
               {row.name}
@@ -155,11 +210,18 @@ function InquiryRow({ row, kind }: { row: any; kind: TabKey }) {
             )}
             <span className="text-xs lowercase">{formatDate(row.createdAt)}</span>
           </div>
+        </button>
+        <div className="flex items-center gap-3 shrink-0">
+          <StatusToggle row={row} kind={kind} />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="text-xs text-[#6F6A5F] lowercase hover:text-[#181612] transition-colors"
+          >
+            {open ? "collapse" : "expand"}
+          </button>
         </div>
-        <span className="text-xs text-[#6F6A5F] shrink-0 lowercase">
-          {open ? "collapse" : "expand"}
-        </span>
-      </button>
+      </div>
 
       {open && (
         <div className="border-t border-[#181612]/10 p-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 bg-[#F4F1EA]/60">

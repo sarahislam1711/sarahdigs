@@ -76,10 +76,25 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Serve hashed build assets with a long cache, but never cache index.html —
+  // otherwise the browser keeps loading a stale index.html (and old JS) until
+  // a hard refresh. index.html must always revalidate so new builds show up.
+  app.use(
+    express.static(distPath, {
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith("index.html")) {
+          res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        } else {
+          // hashed asset filenames are safe to cache long-term
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        }
+      },
+    })
+  );
 
-  // fall through to index.html if the file doesn't exist
+  // SPA fallback — always serve a fresh index.html (no caching)
   app.use("*", (_req, res) => {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }

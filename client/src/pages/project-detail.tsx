@@ -4,356 +4,325 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useRoute, Link } from "wouter";
-import { 
-  ArrowUpRight, 
-  TrendingUp, 
-  Users, 
-  BarChart3, 
-  ArrowRight, 
-  ArrowLeft,
-  CheckCircle2,
-  Clock,
-  Target
-} from "lucide-react";
+import { ArrowUpRight, ArrowRight, ArrowLeft, Loader2, Check } from "lucide-react";
 import NotFound from "@/pages/not-found";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { openCalendly } from "@/lib/calendly";
+import type { Project } from "@shared/schema";
 
-// Mock data for projects
-const projectsData = {
-  "techflow": {
-    name: "TechFlow",
-    website: "techflow.io",
-    industry: "B2B SaaS",
-    type: "SEO Strategy",
-    icon: TrendingUp,
-    hero: {
-      description: "Enterprise Project Management Software",
-      oneLiner: "Recovering organic traffic after a failed site migration and scaling lead generation.",
-      highlight: "From 5k to 50k monthly visitors."
-    },
-    situation: {
-      title: "The Migration Disaster",
-      description: "TechFlow migrated their site from WordPress to Webflow without a proper redirect strategy. Organic traffic tanked by 60% overnight. Leads dried up, and the sales team was panicking. They needed a fix, fast."
-    },
-    approach: {
-      title: "Technical Triage & Content Velocity",
-      steps: [
-        "Comprehensive Technical Audit to fix broken redirects and 404s.",
-        "Restructuring site architecture to match user intent.",
-        "Launching a high-velocity content engine targeting bottom-of-funnel keywords.",
-        "Building high-quality backlinks from industry relevant domains."
-      ]
-    },
-    timeline: [
-      { phase: "Month 1", title: "Triage", desc: "Fixed 400+ broken links, implemented 301 redirects, fixed canonical tags." },
-      { phase: "Month 2", title: "Foundation", desc: "Keyword research, content strategy, competitor analysis." },
-      { phase: "Month 3-6", title: "Velocity", desc: "Published 40+ articles, started link building campaign." },
-      { phase: "Month 6-12", title: "Scale", desc: "Optimization, updating old content, expanding into new topic clusters." },
-      { phase: "Month 12-18", title: "Expansion", desc: "Launched international subdomains and localized content." },
-      { phase: "Year 2", title: "Dominance", desc: "Achieved #1 ranking for primary category keywords globally." }
-    ],
-    results: [
-      { label: "Organic Traffic", value: "+450%" },
-      { label: "Qualified Leads", value: "3x" },
-      { label: "CAC Reduction", value: "-40%" }
-    ],
-    images: [
-      "bg-[#E7E2D6]", // Placeholder colors for now
-      "bg-[#F4F1EA]",
-      "bg-[#1B1B1B]"
-    ]
-  },
-  "finsmart": {
-    name: "FinSmart",
-    website: "finsmart.io",
-    industry: "Fintech",
-    type: "Content Engine",
-    icon: Users,
-    hero: {
-      description: "Personal Finance Dashboard for Gen Z",
-      oneLiner: "Building a content machine to capture high-intent bottom-of-funnel keywords.",
-      highlight: "150+ Qualified Leads Per Month from Zero."
-    },
-    situation: {
-      title: "Zero Authority in a Crowded Market",
-      description: "FinSmart was a new player in a market dominated by giants like NerdWallet. They had zero domain authority and no organic traffic. Paid ads were too expensive (CPC > $20)."
-    },
-    approach: {
-      title: "The 'Alternative To' Strategy",
-      steps: [
-        "Focused entirely on 'Best X for Y' and 'Competitor vs FinSmart' keywords.",
-        "Created in-depth, unbiased comparison guides.",
-        "Leveraged user-generated content and case studies.",
-        "Built a digital PR campaign to earn high-authority trust signals."
-      ]
-    },
-    timeline: [
-      { phase: "Month 1", title: "Research", desc: "Identified low-difficulty, high-intent keywords competitors ignored." },
-      { phase: "Month 2-3", title: "Build", desc: "Created 20 'Power Pages' targeting comparison terms." },
-      { phase: "Month 4", title: "Distribute", desc: "Digital PR push, community engagement on Reddit/Twitter." },
-      { phase: "Month 6", title: "Dominate", desc: "Ranking #1-3 for main competitor comparison terms." },
-      { phase: "Month 9", title: "Authority", desc: "Secured placements in major financial publications." },
-      { phase: "Year 1", title: "Retention", desc: "Launched email nurture sequences for organic leads." }
-    ],
-    results: [
-      { label: "Monthly Leads", value: "150+" },
-      { label: "Cost Per Lead", value: "-85%" },
-      { label: "Domain Authority", value: "0 -> 45" }
-    ],
-    images: [
-      "bg-[#E7E2D6]",
-      "bg-[#F4F1EA]",
-      "bg-[#1B1B1B]"
-    ]
-  }
-};
+type Step = { title: string; description: string };
+type Metric = { value: string; label: string };
 
 export default function ProjectDetail() {
   const [, params] = useRoute("/projects/:slug");
   const slug = params?.slug;
-  const [currentSlide, setCurrentSlide] = useState(0);
 
-  if (!slug || !projectsData[slug as keyof typeof projectsData]) {
-    return <NotFound />;
+  const { data: project, isLoading, isError } = useQuery<Project>({
+    queryKey: ["/api/projects", slug],
+    queryFn: async () => {
+      const res = await fetch(`/api/projects/${slug}`);
+      if (!res.ok) throw new Error("not found");
+      return res.json();
+    },
+    enabled: !!slug,
+  });
+
+  const { data: allProjects = [] } = useQuery<Project[]>({
+    queryKey: ["/api/projects"],
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-bone flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-oxblood" />
+      </div>
+    );
   }
+  if (isError || !project) return <NotFound />;
 
-  const project = projectsData[slug as keyof typeof projectsData];
-  const Icon = project.icon;
+  const ordered = [...allProjects]
+    .filter((p) => p.isVisible !== false)
+    .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+  const idx = ordered.findIndex((p) => p.slug === project.slug);
+  const prev = idx > 0 ? ordered[idx - 1] : null;
+  const next = idx >= 0 && idx < ordered.length - 1 ? ordered[idx + 1] : null;
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % project.images.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + project.images.length) % project.images.length);
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sarahdigs.com/" },
-      { "@type": "ListItem", position: 2, name: "Projects", item: "https://www.sarahdigs.com/projects" },
-      { "@type": "ListItem", position: 3, name: project.name, item: `https://www.sarahdigs.com/projects/${slug}` },
-    ],
-  };
+  const cleanUrl = project.website?.replace(/^https?:\/\//, "");
+  const steps = (project.processSteps as Step[] | null) ?? [];
+  const metrics = (project.metrics as Metric[] | null) ?? [];
+  const before = project.beforeStates ?? [];
+  const after = project.afterStates ?? [];
+  const tags = project.serviceTags ?? [];
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+    <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title={`${project.name} — ${project.type}`}
-        description={project.hero.oneLiner}
-        canonical={`/projects/${slug}`}
-        ogType="article"
-        jsonLd={breadcrumbJsonLd}
+        title={`${project.name} | sarahdigs`}
+        description={project.problem || `${project.name} — a case study by sarahdigs.`}
+        canonical={`/projects/${project.slug}`}
       />
-      <Navbar />
+      <Navbar theme="light" />
 
-      {/* Hero Section */}
-      <section className="pt-40 pb-20 bg-[#F4F1EA]">
-        <div className="container mx-auto px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col md:flex-row gap-12 items-start md:items-center mb-24"
+      {/* ── HERO ── */}
+      <section className="bg-bone pt-32 pb-12 md:pt-40 md:pb-16">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 text-sm font-medium text-ink-mid hover:text-oxblood transition-colors lowercase mb-10"
           >
-            <div className="w-24 h-24 bg-white rounded-md border border-[#181612]/10 flex items-center justify-center shadow-lg shrink-0">
-              <Icon className="w-10 h-10 text-[#6B1421]" />
-            </div>
-            <div>
-               <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[0.95] mb-4">
+            <ArrowLeft className="w-4 h-4" /> back to the work
+          </Link>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            {/* name + tags */}
+            <div className="lg:col-span-7">
+              {project.industry && (
+                <span className="inline-block bg-oxblood text-bone text-[10px] font-mono font-semibold uppercase tracking-[0.18em] px-3 py-1.5 rounded-full mb-6">
+                  {project.industry}
+                </span>
+              )}
+              <h1 className="font-display font-semibold tracking-tighter text-5xl md:text-7xl leading-[0.95] lowercase mb-5">
                 {project.name}
-               </h1>
-               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 text-[#181612]/60 text-lg">
-                 <span>{project.hero.description}</span>
-                 <span className="hidden md:block w-1 h-1 bg-[#1B1B1B]/20 rounded-full"></span>
-                 <a href={`https://${project.website}`} target="_blank" rel="noreferrer" className="hover:text-[#6B1421] transition-colors flex items-center gap-1">
-                   {project.website} <ArrowUpRight className="w-4 h-4" />
-                 </a>
-               </div>
+              </h1>
+              {project.problem && (
+                <p className="text-lg md:text-xl text-ink-mid lowercase leading-snug max-w-xl">
+                  {project.problem}
+                </p>
+              )}
+            </div>
+
+            {/* meta sidebar */}
+            <div className="lg:col-span-5 lg:pt-2">
+              <dl className="space-y-4 text-sm">
+                {project.year && (
+                  <div className="flex justify-between border-b border-ink/10 pb-3">
+                    <dt className="font-mono uppercase tracking-[0.18em] text-[11px] text-ink-mid">year</dt>
+                    <dd className="lowercase">{project.year}</dd>
+                  </div>
+                )}
+                {project.role && (
+                  <div className="flex justify-between border-b border-ink/10 pb-3">
+                    <dt className="font-mono uppercase tracking-[0.18em] text-[11px] text-ink-mid">role</dt>
+                    <dd className="lowercase">{project.role}</dd>
+                  </div>
+                )}
+                {project.timeline && (
+                  <div className="flex justify-between border-b border-ink/10 pb-3">
+                    <dt className="font-mono uppercase tracking-[0.18em] text-[11px] text-ink-mid">timeline</dt>
+                    <dd className="lowercase">{project.timeline}</dd>
+                  </div>
+                )}
+                {cleanUrl && (
+                  <div className="flex justify-between border-b border-ink/10 pb-3">
+                    <dt className="font-mono uppercase tracking-[0.18em] text-[11px] text-ink-mid">live</dt>
+                    <dd>
+                      <a
+                        href={project.website?.startsWith("http") ? project.website : `https://${project.website}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 lowercase hover:text-oxblood transition-colors"
+                      >
+                        {cleanUrl} <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── HERO IMAGE ── */}
+      <section className="bg-bone pb-16 md:pb-24">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="rounded-md overflow-hidden border border-ink/10 bg-stone aspect-video">
+            {project.imageUrl ? (
+              <img src={project.imageUrl} alt={project.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full" style={{ background: "linear-gradient(135deg, #6B1421 0%, #4A0E16 100%)" }} />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SERVICES SHOWCASE ── */}
+      {tags.length > 0 && (
+        <section className="bg-bone pb-16 md:pb-20">
+          <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12">
+              <div className="lg:col-span-4">
+                <h2 className="font-display font-semibold tracking-tighter text-3xl md:text-4xl leading-none lowercase">
+                  what we<br /><span className="text-oxblood">built.</span>
+                </h2>
+              </div>
+              <div className="lg:col-span-8">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                  {tags.map((tag) => (
+                    <li key={tag} className="flex items-center gap-3 py-3 border-b border-ink/10">
+                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-oxblood/10 shrink-0">
+                        <Check className="w-3.5 h-3.5 text-oxblood" strokeWidth={3} />
+                      </span>
+                      <span className="text-base md:text-lg lowercase">{tag}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── PROCESS ── */}
+      {steps.length > 0 && (
+        <section className="bg-stone py-16 md:py-24">
+          <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+            <div className="flex items-center gap-3 mb-12">
+              <span className="h-px w-8 bg-oxblood/40" />
+              <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">the process</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+              {steps.map((s, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
+                  className="space-y-3"
+                >
+                  <span className="font-display font-extrabold text-oxblood text-3xl md:text-4xl tabular-nums tracking-tighter leading-none">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="font-display font-medium text-xl tracking-tight lowercase">{s.title}</h3>
+                  <p className="text-ink-mid text-[15px] leading-snug lowercase">{s.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── BEFORE / AFTER ── */}
+      {(before.length > 0 || after.length > 0) && (
+        <section className="bg-bone py-16 md:py-24">
+          <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+              {/* BEFORE panel — muted stone */}
+              <div className="bg-stone rounded-md p-8 md:p-10">
+                <span className="block text-[11px] font-mono uppercase tracking-[0.28em] text-ink-mid mb-6">before</span>
+                <ul className="space-y-4">
+                  {before.map((b, i) => (
+                    <li key={i} className="font-display font-medium text-xl md:text-2xl tracking-tight lowercase text-ink-mid leading-snug">
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* AFTER panel — ink slab with oxblood-tint */}
+              <div className="bg-ink text-bone rounded-md p-8 md:p-10">
+                <span className="block text-[11px] font-mono uppercase tracking-[0.28em] text-oxblood-tint mb-6">after</span>
+                <ul className="space-y-4">
+                  {after.map((a, i) => (
+                    <li key={i} className="flex items-start gap-3 font-display font-medium text-xl md:text-2xl tracking-tight lowercase leading-snug">
+                      <Check className="w-5 h-5 text-oxblood-tint mt-1 shrink-0" strokeWidth={2.5} />
+                      <span>{a}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── RESULTS ── */}
+      {metrics.length > 0 && (
+        <section className="bg-ink text-bone py-16 md:py-24">
+          <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+            <div className="flex items-center gap-3 mb-12">
+              <span className="h-px w-8 bg-oxblood-tint/40" />
+              <span className="text-oxblood-tint font-semibold uppercase tracking-[0.22em] text-xs">the results</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+              {metrics.map((m, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+                >
+                  <span className="block font-display font-extrabold text-oxblood-tint text-5xl md:text-7xl tabular-nums tracking-tighter leading-none mb-3">
+                    {m.value}
+                  </span>
+                  <span className="block text-sm md:text-base text-bone lowercase opacity-90">{m.label}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── PREV / NEXT ── */}
+      {(prev || next) && (
+        <section className="bg-bone py-12 md:py-16 border-t border-ink/10">
+          <div className="container mx-auto px-6 lg:px-12 max-w-7xl grid grid-cols-2 gap-6">
+            <div>
+              {prev && (
+                <Link href={`/projects/${prev.slug}`} className="group block">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-ink-mid inline-flex items-center gap-2 mb-2">
+                    <ArrowLeft className="w-3 h-3" /> previous
+                  </span>
+                  <span className="block font-display font-medium text-xl md:text-2xl tracking-tight lowercase group-hover:text-oxblood transition-colors">
+                    {prev.name}
+                  </span>
+                </Link>
+              )}
+            </div>
+            <div className="text-right">
+              {next && (
+                <Link href={`/projects/${next.slug}`} className="group block">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-ink-mid inline-flex items-center gap-2 mb-2 justify-end w-full">
+                    next <ArrowRight className="w-3 h-3" />
+                  </span>
+                  <span className="block font-display font-medium text-xl md:text-2xl tracking-tight lowercase group-hover:text-oxblood transition-colors">
+                    {next.name}
+                  </span>
+                </Link>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── CTA ── */}
+      <section className="bg-bone py-16 md:py-20">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="bg-ink text-bone rounded-md p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center"
+          >
+            <div className="lg:col-span-8">
+              <h2 className="font-display font-semibold tracking-tighter text-3xl md:text-4xl leading-[1.05] lowercase">
+                want something like{" "}
+                <span className="text-oxblood-tint italic">this?</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-4 flex lg:justify-end">
+              <Button
+                size="lg"
+                onClick={() => openCalendly({ tier: "dig-in consultation" })}
+                className="group w-full lg:w-auto text-base h-14 px-8 bg-oxblood-tint hover:bg-oxblood text-ink hover:text-bone rounded-md cursor-pointer lowercase font-semibold gap-2 transition-colors"
+              >
+                book a dig-in
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </Button>
             </div>
           </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-4xl"
-          >
-            <p className="text-2xl md:text-4xl font-medium leading-tight">
-              {project.hero.oneLiner} <br /> <span className="bg-[#6B1421]/10 text-[#6B1421] px-2 rounded-md decoration-clone">{project.hero.highlight}</span>
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Situation & Approach */}
-      <section className="py-24 bg-white border-t border-[#181612]/5">
-        <div className="container mx-auto px-6">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-              {/* Situation */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-              >
-                 <div className="flex items-center gap-3 mb-6">
-                   <div className="w-10 h-10 rounded-md bg-[#E7E2D6] flex items-center justify-center text-[#6B1421]">
-                      <Target className="w-5 h-5" />
-                   </div>
-                   <h2 className="text-2xl font-bold uppercase tracking-wide">The Situation</h2>
-                 </div>
-                 <h3 className="text-3xl font-bold mb-6">{project.situation.title}</h3>
-                 <p className="text-xl text-[#181612]/70 leading-relaxed">
-                   {project.situation.description}
-                 </p>
-              </motion.div>
-
-              {/* Approach */}
-              <motion.div
-                 initial={{ opacity: 0, x: 20 }}
-                 whileInView={{ opacity: 1, x: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: 0.2 }}
-              >
-                 <div className="flex items-center gap-3 mb-6">
-                   <div className="w-10 h-10 rounded-md bg-[#1B1B1B] flex items-center justify-center text-white">
-                      <CheckCircle2 className="w-5 h-5" />
-                   </div>
-                   <h2 className="text-2xl font-bold uppercase tracking-wide">Our Approach</h2>
-                 </div>
-                 <h3 className="text-3xl font-bold mb-6">{project.approach.title}</h3>
-                 <ul className="space-y-4">
-                   {project.approach.steps.map((step, i) => (
-                     <li key={i} className="flex items-start gap-4 text-lg text-[#181612]/80">
-                       <span className="w-1.5 h-1.5 rounded-full bg-[#6B1421] mt-2.5 shrink-0"></span>
-                       {step}
-                     </li>
-                   ))}
-                 </ul>
-              </motion.div>
-           </div>
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="py-24 bg-[#E7E2D6]">
-        <div className="container mx-auto px-6">
-           <div className="text-center mb-16">
-             <h2 className="text-3xl font-bold tracking-tight flex items-center justify-center gap-3">
-               <Clock className="w-6 h-6 text-[#6B1421]" /> Project Timeline
-             </h2>
-           </div>
-
-           <div className="relative py-12">
-              {/* Main Line */}
-              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-[#1B1B1B]/10 -translate-y-1/2 hidden md:block"></div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-6 gap-4 relative">
-                {project.timeline.map((item, i) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className={`relative flex flex-col ${i % 2 === 0 ? 'md:flex-col-reverse md:mb-12' : 'md:flex-col md:mt-12'}`}
-                  >
-                     {/* Main Axis Dot */}
-                     <div className={`w-4 h-4 rounded-full bg-[#F4F1EA] border-[3px] border-[#6B1421] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:block z-10`}></div>
-
-                     {/* Mobile Layout */}
-                     <div className="md:hidden pl-8 border-l-2 border-[#181612]/10 pb-12 relative">
-                        <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-[#6B1421] border-2 border-white"></div>
-                        <span className="text-xs font-bold uppercase tracking-widest text-[#6B1421] mb-2 block">{item.phase}</span>
-                        <h4 className="text-xl font-bold mb-2">{item.title}</h4>
-                        <p className="text-[#181612]/70 text-sm leading-relaxed">{item.desc}</p>
-                     </div>
-
-                     {/* Desktop Content */}
-                     <div className={`hidden md:flex flex-col items-center text-center p-4 bg-white rounded-md shadow-sm border border-[#181612]/5 hover:shadow-md transition-all relative z-20 max-w-[200px] mx-auto ${i % 2 === 0 ? 'mb-8' : 'mt-8'}`}>
-                        {/* Connection Dot on Card */}
-                        <div className={`absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#6B1421] ${i % 2 === 0 ? 'top-[-6px]' : 'bottom-[-6px]'}`}></div>
-                        
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#6B1421] mb-1 block">{item.phase}</span>
-                        <h4 className="text-lg font-bold mb-1 leading-tight">{item.title}</h4>
-                        <p className="text-[#181612]/70 text-xs leading-snug">{item.desc}</p>
-                     </div>
-                  </motion.div>
-                ))}
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* Key Results & Slideshow */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row gap-16">
-             {/* Results */}
-             <div className="lg:w-1/3 space-y-8">
-               <h2 className="text-4xl font-bold tracking-tighter mb-8">Key Results</h2>
-               <div className="space-y-6">
-                 {project.results.map((result, i) => (
-                   <motion.div 
-                     key={i}
-                     initial={{ opacity: 0, x: -20 }}
-                     whileInView={{ opacity: 1, x: 0 }}
-                     viewport={{ once: true }}
-                     transition={{ delay: i * 0.1 }}
-                     className="bg-[#F4F1EA] p-8 rounded-md border border-[#181612]/5"
-                   >
-                      <div className="text-sm font-bold uppercase tracking-widest text-[#181612]/50 mb-2">{result.label}</div>
-                      <div className="text-4xl md:text-5xl font-bold text-[#6B1421]">{result.value}</div>
-                   </motion.div>
-                 ))}
-               </div>
-             </div>
-
-             {/* Slideshow */}
-             <div className="lg:w-2/3">
-               <div className="relative rounded-md overflow-hidden aspect-[4/3] bg-[#E7E2D6] group">
-                 {/* Images (Placeholder colors for now) */}
-                 <motion.div 
-                   key={currentSlide}
-                   initial={{ opacity: 0 }}
-                   animate={{ opacity: 1 }}
-                   transition={{ duration: 0.5 }}
-                   className={`w-full h-full ${project.images[currentSlide]} flex items-center justify-center`}
-                 >
-                    <span className="text-[#181612]/20 text-2xl font-bold">Project Image {currentSlide + 1}</span>
-                 </motion.div>
-
-                 {/* Controls */}
-                 <div className="absolute bottom-8 right-8 flex gap-4">
-                    <button 
-                      onClick={prevSlide}
-                      className="w-14 h-14 rounded-md bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-white hover:text-[#6B1421] transition-all shadow-lg"
-                    >
-                       <ArrowLeft className="w-6 h-6" />
-                    </button>
-                    <button 
-                      onClick={nextSlide}
-                      className="w-14 h-14 rounded-md bg-[#1B1B1B]/90 backdrop-blur-sm text-white flex items-center justify-center hover:bg-[#6B1421] transition-all shadow-lg"
-                    >
-                       <ArrowRight className="w-6 h-6" />
-                    </button>
-                 </div>
-
-                 {/* Indicators */}
-                 <div className="absolute bottom-8 left-8 flex gap-2">
-                   {project.images.map((_, i) => (
-                     <div 
-                       key={i} 
-                       className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'w-8 bg-[#1B1B1B]' : 'bg-[#1B1B1B]/20'}`}
-                     ></div>
-                   ))}
-                 </div>
-               </div>
-             </div>
-          </div>
         </div>
       </section>
 

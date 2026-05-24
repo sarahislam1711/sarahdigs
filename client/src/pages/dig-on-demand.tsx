@@ -12,6 +12,14 @@ import { useToast } from "@/hooks/use-toast";
 const Hero = () => {
   return (
     <section className="pt-32 pb-12 bg-[#E7E2D6] relative overflow-hidden">
+      {/* Top meta rail */}
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+        <div className="flex items-center justify-between border-b border-ink/10 pb-4 mb-10 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
+          <span>sarahdigs · creative website studio</span>
+          <span className="hidden md:inline">vol. 03 · custom dig</span>
+          <span>2026</span>
+        </div>
+      </div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <div className="lg:w-1/2 text-center lg:text-left">
@@ -98,7 +106,7 @@ const WhatYouGet = () => {
   ];
 
   return (
-    <section className="py-8 bg-white">
+    <section className="py-8 bg-bone">
       <div className="container mx-auto px-6">
         <div className="text-center mb-8">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
@@ -281,7 +289,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
            <p className="text-xl text-[#181612]/70">Tell me your goals, challenges, and what you want to improve — I'll create a custom strategy just for you.</p>
         </div>
 
-        <div className="bg-white p-8 md:p-12 rounded-md shadow-2xl border border-[#181612]/10">
+        <div className="bg-transparent p-8 md:p-12 rounded-md border border-[#181612]/15">
            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -291,7 +299,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                      required
                      value={formData.name}
                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                     className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421]" 
+                     className="w-full p-4 bg-[#FBF9F3] rounded-md border border-[#181612]/15 focus:ring-2 focus:ring-oxblood focus:border-transparent" 
                      placeholder="John Doe"
                    />
                 </div>
@@ -302,7 +310,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                      required
                      value={formData.email}
                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                     className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421]" 
+                     className="w-full p-4 bg-[#FBF9F3] rounded-md border border-[#181612]/15 focus:ring-2 focus:ring-oxblood focus:border-transparent" 
                      placeholder="john@company.com"
                    />
                 </div>
@@ -314,7 +322,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                    required
                    value={formData.businessDescription}
                    onChange={(e) => setFormData({ ...formData, businessDescription: e.target.value })}
-                   className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] min-h-[100px]" 
+                   className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-oxblood min-h-[100px]" 
                    placeholder="Briefly describe your product/service..."
                  ></textarea>
               </div>
@@ -325,7 +333,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                    required
                    value={formData.mainChallenge}
                    onChange={(e) => setFormData({ ...formData, mainChallenge: e.target.value })}
-                   className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] min-h-[100px]" 
+                   className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-oxblood min-h-[100px]" 
                    placeholder="e.g. Traffic but no conversions, no clear strategy..."
                  ></textarea>
               </div>
@@ -350,7 +358,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                       required
                       value={formData.budgetRange}
                       onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                      className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] appearance-none text-[#181612]"
+                      className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-oxblood appearance-none text-[#181612]"
                     >
                         <option value="" disabled>Select your budget</option>
                         <option value="2k-5k">$2,000 - $5,000</option>
@@ -359,7 +367,7 @@ const ConversionForm = ({ selectedModules }: { selectedModules: string[] }) => {
                         <option value="20k+">$20,000+</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                        <svg className="w-4 h-4 text-[#181612]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg className="w-4 h-4 text-[#181612]/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                  </div>
               </div>
@@ -403,7 +411,7 @@ export default function DigOnDemand() {
   return (
     <div className="min-h-screen bg-[#E7E2D6] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
       <SEO
-        title="Custom Dig — Async Marketing Audits"
+        title="custom dig | sarahdigs"
         description="Async, on-demand marketing audits and growth diagnostics. Get expert SEO and content strategy without retainers."
         canonical="/dig-on-demand"
       />

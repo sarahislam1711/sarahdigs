@@ -169,7 +169,7 @@ export default function ConsultationDetail() {
                   <h3 className="text-2xl font-bold mb-6 text-[#181612]">Who is this for?</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {personas.map((persona, i) => (
-                      <div key={i} className="bg-white p-6 rounded-md border border-[#181612]/10 flex flex-col gap-3 hover:border-[#6B1421]/30 transition-colors">
+                      <div key={i} className="bg-transparent p-6 rounded-md border border-[#181612]/15 flex flex-col gap-3 hover:border-[#6B1421]/30 transition-colors">
                         <div className="w-10 h-10 rounded-md bg-[#E7E2D6] flex items-center justify-center text-[#6B1421]">
                           {persona.icon}
                         </div>
@@ -187,7 +187,7 @@ export default function ConsultationDetail() {
                   <p className="text-[#181612]/80 leading-relaxed text-lg mb-6">
                     {data.description}
                   </p>
-                  <div className="bg-white rounded-md p-8 border border-[#181612]/10 shadow-sm mb-8">
+                  <div className="bg-transparent rounded-md p-8 border border-[#181612]/15 mb-8">
                     <h4 className="font-bold text-lg mb-4 uppercase tracking-wider text-[#6B1421]">Outcomes</h4>
                     <ul className="space-y-4">
                       {data.outcomes.map((outcome, i) => (
@@ -239,7 +239,7 @@ export default function ConsultationDetail() {
 
               {/* Sidebar / CTA */}
               <div className="lg:col-span-1">
-                <div className="sticky top-28 z-10 bg-white border border-[#181612]/10 rounded-md p-8 shadow-xl">
+                <div className="sticky top-28 z-10 bg-stone border border-[#181612]/15 rounded-md p-8">
                   <div className="mb-6 text-center">
                     <h3 className="text-2xl font-bold mb-2">Pricing Options</h3>
                     <p className="text-[#181612]/60 text-sm">Choose the duration that fits your needs</p>

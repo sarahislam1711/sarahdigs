@@ -47,7 +47,11 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
+      // Was Infinity, which meant data never refreshed within a session —
+      // admin edits didn't show on public pages until a hard refresh.
+      // 30s keeps things snappy while letting fresh data surface on navigation.
+      staleTime: 30_000,
+      refetchOnMount: true,
       retry: false,
     },
     mutations: {

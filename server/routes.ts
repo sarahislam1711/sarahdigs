@@ -286,6 +286,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/admin/inquiries/contact/:id", isAuthenticated, async (req, res) => {
+    try {
+      const result = await storage.updateContactInquiryStatus(req.params.id, req.body.status);
+      res.json(result);
+    } catch (error) {
+      console.error("Error updating contact inquiry:", error);
+      res.status(400).json({ error: "Failed to update inquiry" });
+    }
+  });
+
+  app.patch("/api/admin/inquiries/custom-plan/:id", isAuthenticated, async (req, res) => {
+    try {
+      const result = await storage.updateCustomPlanInquiryStatus(req.params.id, req.body.status);
+      res.json(result);
+    } catch (error) {
+      console.error("Error updating custom plan inquiry:", error);
+      res.status(400).json({ error: "Failed to update inquiry" });
+    }
+  });
+
   app.get("/api/admin/media", isAuthenticated, async (req, res) => {
     try {
       const mediaItems = await storage.getMedia();
@@ -515,6 +535,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/projects", async (req, res) => {
     try {
+      res.setHeader("Cache-Control", "no-store, must-revalidate");
       const projectsList = await storage.getVisibleProjects();
       res.json(projectsList);
     } catch (error) {
@@ -525,6 +546,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/projects/:slug", async (req, res) => {
     try {
+      res.setHeader("Cache-Control", "no-store, must-revalidate");
       const project = await storage.getProjectBySlug(req.params.slug);
       if (!project || !project.isVisible) {
         return res.status(404).json({ error: "Project not found" });

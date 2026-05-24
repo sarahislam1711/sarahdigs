@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Link, useLocation } from "wouter";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { FileText, Inbox, LogOut } from "lucide-react";
+import { FileText, Inbox, LogOut, FolderOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import type { User, ContactInquiry, CustomPlanInquiry } from "@shared/schema";
@@ -15,11 +15,12 @@ interface AdminLayoutProps {
 interface NavItem {
   href: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
 }
 
 const navItems: NavItem[] = [
   { href: "/admin/posts", label: "journal", icon: FileText },
+  { href: "/admin/projects", label: "projects", icon: FolderOpen },
   { href: "/admin/inquiries", label: "inquiries", icon: Inbox },
 ];
 
@@ -43,8 +44,12 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
     enabled: isAuthenticated,
     refetchInterval: 60_000,
   });
+  // Only count inquiries that haven't been marked "open" yet, so the bubble
+  // reflects unhandled requests.
+  const countNew = (rows?: { status?: string | null }[]) =>
+    (rows ?? []).filter((r) => r.status !== "open").length;
   const totalInquiries =
-    (contactInquiriesQ.data?.length ?? 0) + (customInquiriesQ.data?.length ?? 0);
+    countNew(contactInquiriesQ.data) + countNew(customInquiriesQ.data);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {

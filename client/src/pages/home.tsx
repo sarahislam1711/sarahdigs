@@ -644,7 +644,7 @@ const Hero = () => {
             className="flex flex-col md:flex-row justify-between gap-8 md:items-end w-full"
           >
             <p className="font-display text-2xl md:text-3xl font-medium leading-snug tracking-tight text-[#181612] max-w-3xl lowercase">
-              websites people remember. and keep coming back to.
+              building websites people remember. and keep coming back to.
             </p>
           </motion.div>
         </div>
@@ -924,7 +924,7 @@ const Testimonials = () => {
                 className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.33%] min-w-0 pl-4"
               >
                 <ScrollReveal delay={i * 0.08} className="h-full">
-                  <figure className="h-full bg-[#FBF9F3] border border-[#181612]/10 rounded-md p-8 md:p-10 flex flex-col justify-between shadow-[0_2px_12px_rgba(24,22,18,0.04)] transition-all duration-300 hover:bg-white hover:border-[#8C2331]/40 hover:shadow-[0_8px_24px_rgba(24,22,18,0.07)]">
+                  <figure className="h-full bg-[#FBF9F3] border border-[#181612]/10 rounded-md p-8 md:p-10 flex flex-col justify-between shadow-[0_2px_12px_rgba(24,22,18,0.04)] transition-all duration-300 hover:bg-[#FBF9F3] hover:border-[#8C2331]/40 hover:shadow-[0_8px_24px_rgba(24,22,18,0.07)]">
                     <blockquote className="font-display text-lg leading-snug mb-8 text-[#181612] lowercase">
                       "{item.quote}"
                     </blockquote>
@@ -948,21 +948,21 @@ const Testimonials = () => {
 const SelectedWork = () => {
   const projects = [
     {
-      slug: "techflow",
-      client: "techflow",
-      headline: "the migration that didn't break growth.",
-      emphasis: "growth",
-      metricValue: "+450%",
+      slug: "places",
+      client: "places",
+      headline: "real estate, turned into a brand.",
+      emphasis: "brand",
+      metricValue: "+312%",
       metricLabel: "organic traffic",
       gradient: "linear-gradient(135deg, #6B1421 0%, #4A0E16 100%)",
     },
     {
-      slug: "finsmart",
-      client: "finsmart",
-      headline: "from zero to category contender.",
-      emphasis: "contender",
-      metricValue: "150+",
-      metricLabel: "qualified leads / month",
+      slug: "the-20s-edit",
+      client: "the 20s edit",
+      headline: "an editorial brand people stay on.",
+      emphasis: "stay",
+      metricValue: "3x",
+      metricLabel: "avg session time",
       gradient: "linear-gradient(135deg, #E7E2D6 0%, #C58A92 100%)",
     },
   ];
@@ -988,15 +988,13 @@ const SelectedWork = () => {
                     href={`/projects/${project.slug}`}
                     className="group block transition-colors hover:bg-[#E7E2D6]/40"
                   >
-                    <div
-                      className={cn(
-                        "grid grid-cols-1 md:grid-cols-2 items-stretch",
-                        reversed && "md:[direction:rtl]"
-                      )}
-                    >
+                    <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
                       {/* Thumbnail */}
                       <div
-                        className="relative aspect-[4/3] sm:aspect-[16/9] md:aspect-[16/8] overflow-hidden"
+                        className={cn(
+                          "relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:min-h-[280px] overflow-hidden",
+                          reversed && "md:order-2"
+                        )}
                         style={{ background: project.gradient }}
                       >
                         <div
@@ -1011,8 +1009,10 @@ const SelectedWork = () => {
 
                       {/* Text */}
                       <div
-                        className="flex flex-col justify-center p-6 md:p-8"
-                        style={{ direction: "ltr" }}
+                        className={cn(
+                          "flex flex-col justify-center p-6 md:p-8 min-w-0",
+                          reversed && "md:order-1"
+                        )}
                       >
                         <span className="text-xs text-[#6F6A5F] lowercase mb-2 block">
                           {project.client}

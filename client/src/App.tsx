@@ -32,6 +32,8 @@ import AdminPosts from "@/pages/admin/posts";
 import PostEditor from "@/pages/admin/post-editor";
 import AdminPreview from "@/pages/admin/preview";
 import AdminInquiries from "@/pages/admin/inquiries";
+import AdminProjects from "@/pages/admin/projects";
+import ProjectEditor from "@/pages/admin/project-editor";
 import { useEffect } from "react";
 
 function ScrollToTop() {
@@ -73,6 +75,8 @@ function Router() {
         <Route path="/admin/posts"><PageTransition><AdminPosts /></PageTransition></Route>
         <Route path="/admin/posts/:id"><PageTransition><PostEditor /></PageTransition></Route>
         <Route path="/admin/inquiries"><PageTransition><AdminInquiries /></PageTransition></Route>
+        <Route path="/admin/projects"><PageTransition><AdminProjects /></PageTransition></Route>
+        <Route path="/admin/projects/:id"><PageTransition><ProjectEditor /></PageTransition></Route>
         <Route path="/admin/preview/:slug"><PageTransition><AdminPreview /></PageTransition></Route>
 
         {/* Public service routes - after admin */}

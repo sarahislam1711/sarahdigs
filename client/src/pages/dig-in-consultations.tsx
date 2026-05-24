@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
@@ -6,24 +6,9 @@ import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowRight, Download, Calendar, Sparkles, Brain, LineChart, BookOpen, Mail, Zap, FileText, MessageSquare, X, Check, Loader2 } from "lucide-react";
+import { ArrowRight, ArrowDown, Sparkles, Brain, LineChart, BookOpen, Mail, Zap, FileText, MessageSquare, X, Check, Loader2 } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
-import type { PageContent } from "@shared/schema";
 import { openCalendly } from "@/lib/calendly";
-
-interface HeroContent {
-  title: string;
-  highlightWord: string;
-  subtitle: string;
-  rotatingWords: string[];
-  ctaButton1Text: string;
-  ctaButton2Text: string;
-}
-
-interface PainPoint {
-  front: string;
-  back: string;
-}
 
 interface ConsultationType {
   title: string;
@@ -53,100 +38,64 @@ const getIconComponent = (iconName: string): React.ElementType => {
   return Sparkles;
 };
 
-const defaultHeroContent: HeroContent = {
-  title: "Expert Guidance to",
-  highlightWord: "Future-Proof",
-  subtitle: "Your Strategy.",
-  rotatingWords: ["Future-Proof", "Strategic", "Data-Driven", "AI-Ready", "Actionable"],
-  ctaButton1Text: "Get Consulting Deck",
-  ctaButton2Text: "Book a Session",
-};
-
-const defaultPainPoints: PainPoint[] = [
-  { front: "Unsure where to focus", back: "I analyze your current state and identify the highest-impact opportunities." },
-  { front: "Missed growth opportunities", back: "We uncover hidden revenue channels and optimize your existing funnel." },
-  { front: "Inefficient processes", back: "I streamline your workflows with AI and automation for maximum output." },
-  { front: "Strategy feels stagnant", back: "We inject fresh perspectives and data-backed tactics to reignite growth." },
-];
-
 const defaultConsultations: ConsultationType[] = [
   { title: "Strategic Deep Dive", slug: "strategic-deep-dive", desc: "Comprehensive analysis of your business model, market position, and growth levers.", iconName: "Sparkles", color: "bg-[#1B1B1B]" },
   { title: "AI Workflow Optimization", slug: "ai-workflow-optimization", desc: "Tailoring AI integration to your specific team structure and operational needs.", iconName: "Brain", color: "bg-[#6B1421]" },
   { title: "Leadership Advisory", slug: "leadership-advisory", desc: "One-on-one guidance for executives on navigating market shifts and technology trends.", iconName: "LineChart", color: "bg-[#E7E2D6] text-[#181612] border-[#181612]/10" },
-  { title: "Custom Growth Roadmap", slug: "custom-growth-roadmap", desc: "Developing a bespoke step-by-step plan to achieve your specific business objectives.", iconName: "BookOpen", color: "bg-[#1B1B1B]" },
 ];
 
-// Flip Card Component with proper 3D animation
-const FlipCard = ({ card, index }: { card: PainPoint; index: number }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+// ──────────────────────────────────────────────────────────────────────────────
+// Lead magnet popup
+// TODO (lead-magnet email automation):
+//   When email tool is set up (Resend / Postmark / SendGrid):
+//   1. Replace this popup's POST to /api/contact with a dedicated /api/lead-magnet route
+//   2. Backend should send the appropriate resource based on `kind`:
+//      - kind="article" → email the "how I think about websites" article
+//      - kind="sample"  → email the sanitized sample action plan
+//   3. Upload the actual resources somewhere linkable (Drive / public URL)
+//   4. Remove this TODO once wired
+// ──────────────────────────────────────────────────────────────────────────────
+type LeadMagnetKind = "article" | "sample";
 
-  return (
-    <div 
-      className="h-52 cursor-pointer"
-      style={{ perspective: "1000px" }}
-      onClick={() => setIsFlipped(!isFlipped)}
-      onMouseEnter={() => setIsFlipped(true)}
-      onMouseLeave={() => setIsFlipped(false)}
-    >
-      <motion.div
-        className="relative w-full h-full"
-        initial={false}
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        {/* Front Side */}
-        <div 
-          className="absolute inset-0 w-full h-full bg-white rounded-md shadow-lg border border-[#181612]/5 p-6 flex flex-col justify-between"
-          style={{ backfaceVisibility: "hidden" }}
-        >
-          <div className="w-10 h-10 rounded-md bg-[#E7E2D6] flex items-center justify-center text-[#6B1421]">
-            <span className="font-bold text-lg">{index + 1}</span>
-          </div>
-          <h3 className="text-xl font-bold text-[#181612] leading-tight">
-            {card.front}
-          </h3>
-          <div className="w-8 h-8 rounded-full border border-[#181612]/10 flex items-center justify-center self-end text-[#181612]/40">
-            <ArrowRight className="w-4 h-4" />
-          </div>
-        </div>
-
-        {/* Back Side */}
-        <div 
-          className="absolute inset-0 w-full h-full bg-[#6B1421] rounded-md shadow-xl p-6 flex flex-col justify-center text-white"
-          style={{ 
-            backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)"
-          }}
-        >
-          <h3 className="text-lg font-bold mb-4">How I guide you:</h3>
-          <p className="text-white/90 leading-relaxed">
-            {card.back}
-          </p>
-        </div>
-      </motion.div>
-    </div>
-  );
+const LEAD_MAGNETS: Record<LeadMagnetKind, { title: string; description: string; successMessage: string }> = {
+  article: {
+    title: "get the article",
+    description: "drop your email and i'll send you a short read on how sarahdigs approaches website strategy, design, and growth.",
+    successMessage: "the article is on its way to your inbox.",
+  },
+  sample: {
+    title: "get the sample plan",
+    description: "drop your email and i'll send you a sanitized example of the kind of action plan you'll receive after a dig-in session.",
+    successMessage: "the sample plan is on its way to your inbox.",
+  },
 };
 
-const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const LeadMagnetPopup = ({
+  isOpen,
+  kind,
+  onClose,
+}: {
+  isOpen: boolean;
+  kind: LeadMagnetKind | null;
+  onClose: () => void;
+}) => {
   const [email, setEmail] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const deckMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: async (userEmail: string) => {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "Consulting Deck Request",
+          name: kind === "article" ? "Lead Magnet: Article" : "Lead Magnet: Sample Plan",
           email: userEmail,
           companyWebsite: "",
           jobRole: "Not specified",
           companySize: "Not specified",
-          projectType: "Consulting Deck Request",
+          projectType: kind === "article" ? "Lead Magnet — Article" : "Lead Magnet — Sample Plan",
           budget: "Not specified",
-          message: `User requested the consulting deck. Email: ${userEmail}`,
+          message: `User requested the "${kind}" lead magnet from the dig-in consultations page. Email: ${userEmail}`,
         }),
       });
       if (!response.ok) throw new Error("Failed to submit");
@@ -160,18 +109,20 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    deckMutation.mutate(email);
+    mutation.mutate(email);
   };
 
   const handleClose = () => {
     setShowSuccess(false);
-    deckMutation.reset();
+    mutation.reset();
     onClose();
   };
 
+  const content = kind ? LEAD_MAGNETS[kind] : null;
+
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && content && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
           initial={{ opacity: 0 }}
@@ -180,7 +131,7 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           onClick={handleClose}
         >
           <motion.div
-            className="bg-white rounded-md p-8 md:p-10 max-w-md w-full mx-6 shadow-2xl relative"
+            className="bg-bone rounded-md p-8 md:p-10 max-w-md w-full mx-6 shadow-2xl border border-ink/10 relative"
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -189,72 +140,68 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           >
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#E7E2D6] flex items-center justify-center text-[#181612]/60 hover:text-[#181612] transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-stone flex items-center justify-center text-ink-mid hover:text-ink transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
 
             {showSuccess ? (
               <div className="text-center py-4">
-                <div className="w-16 h-16 bg-[#6B1421] rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Check className="w-8 h-8 text-white" />
+                <div className="w-16 h-16 bg-oxblood rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Check className="w-8 h-8 text-bone" />
                 </div>
-                <h3 className="text-2xl font-bold text-[#181612] mb-3">You're on the list!</h3>
-                <p className="text-[#181612]/60 leading-relaxed">
-                  I'll send the consulting deck to your inbox shortly.
-                </p>
+                <h3 className="font-display font-bold text-2xl text-ink mb-3 lowercase">you're on the list</h3>
+                <p className="text-ink-mid leading-relaxed lowercase">{content.successMessage}</p>
                 <Button
                   onClick={handleClose}
-                  className="mt-6 bg-[#6B1421] hover:bg-[#4A0E16] text-white rounded-md px-8"
+                  className="mt-6 bg-oxblood hover:bg-oxblood-soft text-bone rounded-md px-8 lowercase font-medium"
                 >
-                  Got it
+                  got it
                 </Button>
               </div>
             ) : (
               <>
-                <div className="text-center mb-6">
-                  <div className="w-12 h-12 bg-[#E7E2D6] rounded-md flex items-center justify-center mx-auto mb-4">
-                    <Download className="w-6 h-6 text-[#6B1421]" />
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3 text-oxblood text-[10px] font-mono uppercase tracking-[0.22em]">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
+                    <span>free</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#181612] mb-2">Get the Consulting Deck</h3>
-                  <p className="text-[#181612]/60 text-sm leading-relaxed">
-                    Enter your email and I'll send you a detailed overview of my consulting services and approach.
-                  </p>
+                  <h3 className="font-display font-bold text-2xl text-ink mb-3 lowercase">{content.title}</h3>
+                  <p className="text-ink-mid text-sm leading-relaxed lowercase">{content.description}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      className="w-full p-4 bg-[#E7E2D6] rounded-md border-none focus:ring-2 focus:ring-[#6B1421] outline-none text-[#181612] placeholder:text-[#181612]/30"
-                    />
-                  </div>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@company.com"
+                    className="w-full p-4 bg-[#FBF9F3] border border-ink/15 rounded-md focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none text-ink placeholder:text-ink/30 transition-all"
+                  />
                   <Button
                     type="submit"
-                    disabled={deckMutation.isPending}
+                    disabled={mutation.isPending}
                     size="lg"
-                    className="w-full h-14 text-lg bg-[#6B1421] hover:bg-[#4A0E16] text-white rounded-md"
+                    className="w-full h-14 bg-oxblood hover:bg-oxblood-soft text-bone rounded-md lowercase font-medium gap-2"
                   >
-                    {deckMutation.isPending ? (
+                    {mutation.isPending ? (
                       <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Sending...
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        sending...
                       </>
                     ) : (
                       <>
-                        Send me the deck
-                        <ArrowRight className="ml-2 h-5 w-5" />
+                        send it to me <ArrowRight className="h-4 w-4" />
                       </>
                     )}
                   </Button>
                 </form>
 
-                {deckMutation.isError && (
-                  <p className="text-red-500 text-sm text-center mt-3">Something went wrong. Please try again.</p>
+                {mutation.isError && (
+                  <p className="text-red-500 text-sm text-center mt-3 lowercase">
+                    something went wrong. please try again.
+                  </p>
                 )}
               </>
             )}
@@ -265,132 +212,205 @@ const ConsultingDeckPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   );
 };
 
-const Hero = ({ content, painPoints, onOpenDeck }: { content: HeroContent; painPoints: PainPoint[]; onOpenDeck: () => void }) => {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % content.rotatingWords.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [content.rotatingWords.length]);
+// ──────────────────────────────────────────────────────────────────────────────
+// SECTION 1 — HERO
+// ──────────────────────────────────────────────────────────────────────────────
+const Hero = () => {
+  const scrollToHow = () =>
+    document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section className="pt-32 pb-12 bg-[#E7E2D6] relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-b from-[#6B1421]/5 to-transparent -z-10 blur-3xl rounded-full translate-x-1/4"></div>
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-6xl mx-auto text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1] text-[#181612]">
-              {content.title} <span className="text-[#6B1421]">{content.highlightWord}</span> {content.subtitle}
-            </h1>
-
-            <div className="mb-8 flex items-center justify-center gap-2 text-lg md:text-3xl font-light text-[#181612]/60 flex-wrap md:flex-nowrap md:whitespace-nowrap">
-              <span>Consultations that make you</span>
-              <div className="h-[1.2em] overflow-hidden inline-flex items-center relative text-left">
-                <span className="invisible font-bold">{content.rotatingWords[0]}</span>
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={content.rotatingWords[index]}
-                    initial={{ y: "100%", opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: "-100%", opacity: 0 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="font-bold text-[#6B1421] absolute left-0"
-                  >
-                    {content.rotatingWords[index]}
-                  </motion.span>
-                </AnimatePresence>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Button size="lg" className="text-lg h-14 px-8 bg-[#1B1B1B] hover:bg-[#6B1421] text-white transition-all rounded-md shadow-xl group cursor-pointer" onClick={onOpenDeck}>
-                <Download className="mr-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
-                {content.ctaButton1Text}
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg h-14 px-8 border-[#181612]/20 hover:border-[#6B1421] hover:text-[#6B1421] transition-all rounded-md cursor-pointer" onClick={() => openCalendly()}>
-                <Calendar className="mr-2 h-5 w-5" />
-                {content.ctaButton2Text}
-              </Button>
-            </div>
-          </motion.div>
+    <section className="h-screen bg-bone relative flex flex-col overflow-hidden">
+      {/* Top meta rail */}
+      <div className="container mx-auto px-6 lg:px-12 max-w-7xl pt-24 md:pt-28">
+        <div className="flex items-center justify-between border-b border-ink/10 pb-4 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
+          <span>sarahdigs · creative website studio</span>
+          <span className="hidden md:inline">vol. 02 · dig-in</span>
+          <span>2026</span>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {painPoints.map((card, i) => (
-            <FlipCard key={i} card={card} index={i} />
-          ))}
+      {/* Centered content */}
+      <div className="container mx-auto px-6 lg:px-12 max-w-7xl flex-1 flex items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="text-center w-full max-w-5xl mx-auto"
+        >
+          {/* Anchor pill — centered */}
+          <div className="inline-flex items-center gap-2.5 mb-8 bg-oxblood text-bone rounded-full pl-3 pr-4 py-2">
+            <span className="relative inline-flex w-2 h-2">
+              <span className="absolute inset-0 rounded-full bg-bone opacity-75 animate-ping" />
+              <span className="relative inline-block w-2 h-2 rounded-full bg-bone" />
+            </span>
+            <span className="text-[11px] md:text-xs font-semibold uppercase tracking-[0.22em]">
+              the dig-in consultation
+            </span>
+          </div>
+
+          <h1 className="font-display font-semibold tracking-tighter text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] lowercase mb-8">
+            you know <span className="text-oxblood italic font-bold">something's off.</span>
+            <br />
+            you just don't know what to fix first.
+          </h1>
+
+          <p className="font-display text-xl md:text-2xl text-ink font-medium italic lowercase leading-snug max-w-2xl mx-auto mb-12">
+            a focused call. a custom <span className="text-oxblood">action plan</span> delivered after. clear direction for your business.
+          </p>
+
+          {/* CTA + secondary scroll link */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
+            <Button
+              size="lg"
+              onClick={() => openCalendly({ tier: "dig-in consultation" })}
+              className="text-base h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2"
+            >
+              book a dig-in <ArrowRight className="w-4 h-4" />
+            </Button>
+            <button
+              onClick={scrollToHow}
+              className="text-ink hover:text-oxblood transition-colors text-sm font-medium lowercase inline-flex items-center gap-2 cursor-pointer"
+            >
+              or see how it works <ArrowDown className="w-4 h-4" />
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom scroll indicator */}
+      <div className="container mx-auto px-6 lg:px-12 max-w-7xl pb-8">
+        <div className="flex items-center justify-between border-t border-ink/10 pt-5 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
+          <span>start here ↓</span>
+          <span className="hidden md:inline">section 01 / 07</span>
+          <span className="inline-flex items-center gap-2">
+            <span className="relative inline-flex w-1.5 h-1.5">
+              <span className="absolute inset-0 rounded-full bg-oxblood opacity-75 animate-ping" />
+              <span className="relative inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
+            </span>
+            booking now
+          </span>
         </div>
       </div>
     </section>
   );
 };
 
-const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationType[] }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false });
+// ──────────────────────────────────────────────────────────────────────────────
+// SECTION 2 — SOUNDS FAMILIAR (pain points)
+// ──────────────────────────────────────────────────────────────────────────────
+const SOUNDS_FAMILIAR = [
+  {
+    num: "01",
+    headline: "your website isn't bringing in business.",
+    body: "we dig in & figure out whether it's positioning, design, visibility or all three.",
+  },
+  {
+    num: "02",
+    headline: "you're about to invest in a rebuild and don't want to waste money.",
+    body: "we help you understand exactly what you need before you commit to anything.",
+  },
+  {
+    num: "03",
+    headline: "you don't know if the problem is your website, your marketing, or both.",
+    body: "we diagnose what's actually broken and give you a clear order of operations.",
+  },
+];
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
-
+const SoundsFamiliar = () => {
   return (
-    <section className="pt-12 pb-24 bg-white">
-      <div className="container mx-auto px-6">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <h2 className="text-4xl font-bold tracking-tighter mb-4">Consultations</h2>
-            <p className="text-[#181612]/60 text-lg">Tailored analysis, guidance, and strategy.</p>
+    <section className="bg-bone py-16 md:py-20">
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+        <div className="mb-12 md:mb-14">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-px w-8 bg-oxblood/40" />
+            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
+              sounds familiar?
+            </span>
           </div>
-          <div className="hidden md:flex gap-2">
-            <button 
-              onClick={scrollPrev}
-              className="w-10 h-10 rounded-md border border-[#181612]/10 flex items-center justify-center hover:bg-[#181612] hover:text-white transition-colors"
-            >
-              <ArrowRight className="w-4 h-4 rotate-180" />
-            </button>
-            <button 
-              onClick={scrollNext}
-              className="w-10 h-10 rounded-md border border-[#181612]/10 flex items-center justify-center hover:bg-[#181612] hover:text-white transition-colors"
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+          <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase max-w-3xl">
+            3 reasons people book a <span className="text-oxblood">dig-in</span>
+          </h2>
         </div>
 
-        <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
-          <div className="flex -ml-6 py-4">
+        {/* Connected sequence of numbered statements */}
+        <div className="h-px bg-oxblood/30" />
+        {SOUNDS_FAMILIAR.map((item, i) => (
+          <motion.div
+            key={item.num}
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
+            className="group grid grid-cols-12 gap-4 md:gap-8 py-7 md:py-9 border-b border-ink/10 transition-colors duration-300 hover:border-oxblood/40"
+          >
+            <div className="col-span-12 md:col-span-2">
+              <span className="font-display font-extrabold text-oxblood text-3xl md:text-4xl tabular-nums tracking-tighter leading-none block transition-colors duration-300 group-hover:text-ink">
+                {item.num}
+              </span>
+            </div>
+            <div className="col-span-12 md:col-span-10 space-y-2 md:space-y-3">
+              <h3 className="font-display font-medium text-xl md:text-2xl tracking-tight lowercase leading-tight">
+                {item.headline}
+              </h3>
+              <p className="text-ink-mid text-[15px] md:text-base leading-relaxed lowercase max-w-2xl">
+                {item.body}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+// ──────────────────────────────────────────────────────────────────────────────
+// CONSULTATIONS CAROUSEL (kept from original, brand-aligned)
+// ──────────────────────────────────────────────────────────────────────────────
+const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationType[] }) => {
+  const [emblaRef] = useEmblaCarousel({ align: "start", loop: false });
+
+  return (
+    <section className="pt-12 pb-24 bg-bone">
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-px w-8 bg-oxblood/40" />
+            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
+              consultation types
+            </span>
+          </div>
+          <h2 className="font-display font-bold tracking-tighter text-3xl md:text-4xl lowercase max-w-3xl">
+            every session, tailored.
+          </h2>
+        </div>
+
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex -ml-6">
             {consultations.map((consultation, i) => {
               const IconComponent = getIconComponent(consultation.iconName);
-              const isLightBg = consultation.color.includes('bg-[#E7E2D6]');
-              
+              const isLightBg = consultation.color.includes("bg-[#E7E2D6]") || consultation.color.includes("bg-bone") || consultation.color.includes("bg-stone");
               return (
                 <div key={i} className="flex-[0_0_85%] md:flex-[0_0_48%] lg:flex-[0_0_33.4%] pl-6 min-w-0">
-                  <div className={`h-full rounded-[2rem] p-6 md:p-8 flex flex-col justify-between min-h-[280px] sm:min-h-[320px] transition-transform hover:-translate-y-2 hover:shadow-2xl ${consultation.color} ${consultation.color.includes('border') ? 'border' : ''}`}>
+                  <div className={`h-full rounded-md p-6 md:p-8 flex flex-col justify-between min-h-[280px] sm:min-h-80 transition-transform hover:-translate-y-2 hover:shadow-2xl ${consultation.color} ${consultation.color.includes("border") ? "border" : ""}`}>
                     <div>
-                      <div className={`w-16 h-16 rounded-md flex items-center justify-center mb-6 ${isLightBg ? 'bg-white text-[#181612]' : 'bg-white/10 text-white'}`}>
-                        <IconComponent className="w-8 h-8" />
+                      <div className={`w-12 h-12 rounded-md flex items-center justify-center mb-6 ${isLightBg ? "bg-ink text-bone" : "bg-white/10 text-white"}`}>
+                        <IconComponent className="w-6 h-6" />
                       </div>
-                      <h3 className={`text-2xl font-bold mb-4 leading-tight ${isLightBg ? 'text-[#181612]' : 'text-white'}`}>
+                      <h3 className={`font-display font-bold text-2xl tracking-tight lowercase mb-3 ${isLightBg ? "text-ink" : "text-bone"}`}>
                         {consultation.title}
                       </h3>
-                      <p className={`text-lg leading-relaxed ${isLightBg ? 'text-[#181612]/70' : 'text-white/70'}`}>
+                      <p className={`text-[15px] leading-relaxed lowercase ${isLightBg ? "text-ink-mid" : "text-bone/70"}`}>
                         {consultation.desc}
                       </p>
                     </div>
                     <div className="mt-8">
                       <Link href={`/dig-in-consultations/${consultation.slug}`}>
-                        <Button variant="ghost" className={`p-0 hover:bg-transparent ${isLightBg ? 'text-[#6B1421] hover:text-[#181612]' : 'text-white hover:text-white/70'}`}>
-                          Learn more <ArrowRight className="ml-2 w-4 h-4" />
+                        <Button
+                          variant="ghost"
+                          className={`p-0 hover:bg-transparent lowercase font-medium ${isLightBg ? "text-oxblood hover:text-ink" : "text-bone hover:text-bone/70"}`}
+                        >
+                          learn more <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                       </Link>
                     </div>
@@ -405,144 +425,133 @@ const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationT
   );
 };
 
-interface FreeValueContent {
-  badge: string;
-  title: string;
-  highlightWord: string;
-  subtitle: string;
-  resources: {
-    title: string;
-    desc: string;
-    iconName: string;
-    cta: string;
-    tag: string;
-  }[];
-}
+// ──────────────────────────────────────────────────────────────────────────────
+// SECTION 3 — WHAT YOU WALK AWAY WITH
+// ──────────────────────────────────────────────────────────────────────────────
+const WHAT_YOU_GET = [
+  {
+    num: "01",
+    title: "the call",
+    body: "a focused session where we dig into your business, audience, and current online presence. no fluff. no pitch. just diagnosis.",
+  },
+  {
+    num: "02",
+    title: "the action plan",
+    body: "a written document delivered within 48 hours. clear priorities, specific recommendations, and next steps you can act on immediately. whether you work with us or not.",
+  },
+];
 
-const defaultFreeValueContent: FreeValueContent = {
-  badge: "Consulting Samples",
-  title: "Steal My",
-  highlightWord: "Brain.",
-  subtitle: "Get a feel for my approach and the value I deliver before committing.",
-  resources: [
-    {
-      title: "Strategy Briefing",
-      desc: "A quick overview of how I approach strategic planning and analysis.",
-      iconName: "Mail",
-      cta: "Read Briefing",
-      tag: "Overview"
-    },
-    {
-      title: "Consulting Process Guide",
-      desc: "Understand the steps we take to diagnose and solve your business challenges.",
-      iconName: "FileText",
-      cta: "Download Guide",
-      tag: "Process"
-    },
-    {
-      title: "Sample Audit Report",
-      desc: "See a sanitized example of the depth and actionable insights provided in an audit.",
-      iconName: "Sparkles",
-      cta: "View Sample",
-      tag: "Example"
-    },
-    {
-      title: "Strategic Frameworks",
-      desc: "Key mental models and frameworks I use to make decisions.",
-      iconName: "MessageSquare",
-      cta: "Explore Frameworks",
-      tag: "Tools"
-    }
-  ]
-};
-
-const FreeValue = ({ content }: { content: FreeValueContent }) => {
+const WhatYouGet = () => {
   return (
-    <section className="py-24 bg-[#0A0A0A]">
-      <div className="container mx-auto px-6">
-        <div className="mb-12 text-center">
-          <span className="inline-block bg-[#6B1421] text-white font-bold uppercase tracking-widest text-xs px-4 py-2 rounded-full mb-6">
-            {content.badge}
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white">
-            {content.title} <span className="text-[#6B1421]">{content.highlightWord}</span>
+    <section className="bg-stone py-16 md:py-20">
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+        <div className="mb-12 md:mb-14 max-w-3xl">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-px w-8 bg-oxblood/40" />
+            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
+              what you get
+            </span>
+          </div>
+          <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase">
+            two deliverables.<br />both <span className="text-oxblood">yours to keep</span>.
           </h2>
-          <p className="text-white/60 text-lg mt-4 max-w-2xl mx-auto">{content.subtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {content.resources.map((resource, i) => {
-            const IconComponent = getIconComponent(resource.iconName);
-            return (
-              <div key={i} className="group relative bg-[#1B1B1B] p-8 rounded-md border border-white/10 hover:border-[#6B1421]/50 transition-all hover:shadow-lg hover:shadow-[#6B1421]/10 flex flex-col">
-                <span className="absolute top-4 right-4 bg-white/10 text-white/70 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                  {resource.tag}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {WHAT_YOU_GET.map((item, i) => (
+            <motion.div
+              key={item.num}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
+              className="bg-bone border border-ink/10 rounded-md p-7 md:p-9"
+            >
+              <div className="flex items-baseline gap-3 mb-4">
+                <span className="font-display font-extrabold text-oxblood text-lg tabular-nums tracking-tight">
+                  {item.num}
                 </span>
-                <div className="w-12 h-12 rounded-md bg-white/10 flex items-center justify-center text-white mb-6">
-                  <IconComponent className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-white">{resource.title}</h3>
-                <p className="text-white/60 leading-relaxed mb-6 flex-1">{resource.desc}</p>
-                <Button
-                  variant="outline"
-                  className="w-full border-white/20 text-white hover:bg-white hover:text-[#181612] transition-all rounded-full mt-auto"
-                >
-                  {resource.cta}
-                </Button>
+                <span className="h-px flex-1 bg-ink/10" />
               </div>
-            );
-          })}
+              <h3 className="font-display font-medium text-2xl md:text-3xl tracking-tight lowercase mb-4">
+                {item.title}
+              </h3>
+              <p className="text-ink-mid text-base leading-relaxed lowercase">
+                {item.body}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
   );
 };
 
-const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+// ──────────────────────────────────────────────────────────────────────────────
+// SECTION 4 — HOW IT WORKS
+// ──────────────────────────────────────────────────────────────────────────────
+const HOW_IT_WORKS = [
+  {
+    num: "01",
+    title: "book",
+    body: "pick a time. you'll get a short intake form so we can make the most of the session.",
+  },
+  {
+    num: "02",
+    title: "dig",
+    body: "we go deep into your situation. your business, your site, your goals. the questions most consultants skip.",
+  },
+  {
+    num: "03",
+    title: "deliver",
+    body: "within 48 hours, a written action plan lands in your inbox. priorities, recommendations, next steps.",
+  },
+];
 
-  const faqs = [
-    { q: "How do your consultations differ from typical consulting?", a: "I focus on deep, actionable insights rather than surface-level advice. Every session is tailored to your specific challenges and designed to deliver immediate, implementable value." },
-    { q: "What is the typical duration of a consultation?", a: "Sessions range from 90-minute deep dives to multi-day strategic workshops, depending on your needs. We'll determine the best format during our initial discovery call." },
-    { q: "How do you structure ongoing advisory relationships?", a: "Ongoing relationships typically include monthly strategy sessions, async support via Slack/email, and quarterly deep-dive reviews. We tailor the cadence to your growth stage and needs." },
-    { q: "What industries do you specialize in?", a: "I work primarily with B2B SaaS, e-commerce, and tech-enabled service businesses. My frameworks are adaptable, but these sectors benefit most from my specific expertise." },
-  ];
-
+const HowItWorks = () => {
   return (
-    <section className="py-24 bg-[#E7E2D6]">
-      <div className="container mx-auto px-6">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold tracking-tighter mb-4">Common Questions</h2>
-            <p className="text-[#181612]/60 text-lg">Everything you need to know about working together.</p>
+    <section id="how-it-works" className="bg-bone py-16 md:py-20 scroll-mt-20">
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+        <div className="text-center mb-12 md:mb-14">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="h-px w-8 bg-oxblood/40" />
+            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
+              how it works
+            </span>
+            <span className="h-px w-8 bg-oxblood/40" />
           </div>
+          <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase">
+            three steps. <span className="text-oxblood">no friction.</span>
+          </h2>
+        </div>
 
-          <div className="space-y-4">
-            {faqs.map((faq, i) => (
-              <div 
-                key={i}
-                className="bg-white rounded-md overflow-hidden cursor-pointer"
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+        <div className="max-w-6xl mx-auto relative">
+          {/* Connecting hairline behind the numbered nodes (desktop only) */}
+          <div className="hidden lg:block absolute left-0 right-0 top-[18px] h-px bg-ink/10" aria-hidden="true" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-12 relative">
+            {HOW_IT_WORKS.map((step, i, arr) => (
+              <div
+                key={step.num}
+                className="space-y-4 relative group transition-transform duration-300 ease-out hover:-translate-y-1 cursor-default"
               >
-                <div className="p-6 flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-[#181612] pr-4">{faq.q}</h3>
-                  <div className={`w-8 h-8 rounded-full border border-[#181612]/10 flex items-center justify-center transition-transform ${openIndex === i ? 'rotate-45' : ''}`}>
-                    <span className="text-xl leading-none">+</span>
-                  </div>
-                </div>
-                <AnimatePresence>
-                  {openIndex === i && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-6 pb-6 text-[#181612]/70 leading-relaxed">{faq.a}</p>
-                    </motion.div>
+                <div className="relative h-9 flex items-center">
+                  <span className="relative z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-bone border border-ink/15 text-oxblood font-semibold text-xs tabular-nums transition-colors duration-300 group-hover:border-oxblood group-hover:bg-oxblood group-hover:text-white">
+                    {step.num}
+                  </span>
+                  {i < arr.length - 1 && (
+                    <ArrowRight
+                      className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 text-ink/30 bg-bone px-0.5"
+                      aria-hidden="true"
+                    />
                   )}
-                </AnimatePresence>
+                </div>
+                <h3 className="font-display font-medium text-xl md:text-2xl tracking-tight lowercase transition-colors duration-300 group-hover:text-oxblood">
+                  {step.title}
+                </h3>
+                <p className="text-ink-mid leading-relaxed text-[15px]">
+                  {step.body}
+                </p>
               </div>
             ))}
           </div>
@@ -552,42 +561,220 @@ const FAQ = () => {
   );
 };
 
-const CTA = () => {
+// ──────────────────────────────────────────────────────────────────────────────
+// SECTION 5 — STEAL MY BRAIN
+// ──────────────────────────────────────────────────────────────────────────────
+const StealMyBrain = ({ onOpenLeadMagnet }: { onOpenLeadMagnet: (kind: LeadMagnetKind) => void }) => {
   return (
-    <section className="py-10 bg-[#E7E2D6] text-center">
-      <div className="container mx-auto px-6">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 text-[#181612]">
-            Ready to unlock your <span className="text-[#6B1421]">next level?</span>
+    <section className="bg-bone py-16 md:py-20 border-t border-ink/10">
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+        <div className="text-center mb-12 md:mb-14 max-w-3xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="h-px w-8 bg-oxblood/40" />
+            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
+              free resources
+            </span>
+            <span className="h-px w-8 bg-oxblood/40" />
+          </div>
+          <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase mb-5">
+            steal my <span className="text-oxblood">brain</span>.
           </h2>
-          <p className="text-xl text-[#181612]/70 mb-10">
-            Book a discovery call to discuss your challenges and explore how we can work together.
+          <p className="text-ink-mid text-lg leading-relaxed lowercase">
+            get a feel for how i think before you commit.
           </p>
-          <Button
-            size="lg"
-            className="text-lg h-16 px-12 bg-[#6B1421] hover:bg-[#181612] text-white transition-all rounded-md shadow-xl shadow-[#6B1421]/20 mb-6 cursor-pointer"
-            onClick={() => openCalendly()}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          {/* Resource 1 — Article */}
+          <button
+            onClick={() => onOpenLeadMagnet("article")}
+            className="group text-left bg-bone border border-ink/15 rounded-md p-7 md:p-9 transition-all duration-300 hover:-translate-y-1 hover:border-oxblood hover:shadow-lg hover:shadow-ink/5"
           >
-            Schedule Discovery Call
-          </Button>
-          <p className="text-sm font-medium text-[#181612]/50 uppercase tracking-wide">
-            Join 50+ founders scaling with expert guidance
-          </p>
+            <div className="flex items-center gap-2 mb-4 text-[10px] font-mono uppercase tracking-[0.22em] text-oxblood">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
+              <span>article · 5 min read</span>
+            </div>
+            <h3 className="font-display font-medium text-2xl tracking-tight lowercase mb-4 group-hover:text-oxblood transition-colors">
+              how i think about websites
+            </h3>
+            <p className="text-ink-mid text-[15px] leading-relaxed lowercase mb-6">
+              a short read on how sarahdigs approaches website strategy, design, and growth.
+            </p>
+            <span className="inline-flex items-center gap-2 text-ink font-medium lowercase text-sm group-hover:text-oxblood transition-colors">
+              read it
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </span>
+          </button>
+
+          {/* Resource 2 — Sample Plan */}
+          <button
+            onClick={() => onOpenLeadMagnet("sample")}
+            className="group text-left bg-bone border border-ink/15 rounded-md p-7 md:p-9 transition-all duration-300 hover:-translate-y-1 hover:border-oxblood hover:shadow-lg hover:shadow-ink/5"
+          >
+            <div className="flex items-center gap-2 mb-4 text-[10px] font-mono uppercase tracking-[0.22em] text-oxblood">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
+              <span>sample · pdf</span>
+            </div>
+            <h3 className="font-display font-medium text-2xl tracking-tight lowercase mb-4 group-hover:text-oxblood transition-colors">
+              sample action plan
+            </h3>
+            <p className="text-ink-mid text-[15px] leading-relaxed lowercase mb-6">
+              a sanitized example of the kind of action plan you'll receive after a dig-in session.
+            </p>
+            <span className="inline-flex items-center gap-2 text-ink font-medium lowercase text-sm group-hover:text-oxblood transition-colors">
+              view sample
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </span>
+          </button>
         </div>
       </div>
     </section>
   );
 };
 
+// ──────────────────────────────────────────────────────────────────────────────
+// SECTION 6 — FAQ
+// ──────────────────────────────────────────────────────────────────────────────
+const FAQS = [
+  {
+    q: "what exactly happens on the call?",
+    a: "we spend the session focused on your business. i'll ask about your audience, your goals, your current site, and what's not working. by the end, i'll have a clear picture of where you stand and what to prioritize.",
+  },
+  {
+    q: "what do i get after the session?",
+    a: "a written action plan delivered within 48 hours. it covers what's working, what's not, and exactly what to do next. with specific recommendations, not vague advice.",
+  },
+  {
+    q: "how is this different from a free discovery call?",
+    a: "a discovery call is about deciding whether to work together. a dig-in is the work. you're paying for expertise, diagnosis, and a deliverable you can use immediately.",
+  },
+  {
+    q: "what if i want to move forward with a full project after?",
+    a: "many clients do. the dig-in often becomes the starting point for the full dig. but there's no pressure and no obligation. the action plan stands on its own.",
+  },
+  {
+    q: "how much does it cost?",
+    a: "pricing is confirmed when you book. it's a fixed fee. no hourly billing, no surprises.",
+  },
+];
+
+const FAQ = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  return (
+    <section className="bg-bone py-16 md:py-20">
+      <div className="container mx-auto px-6 lg:px-12 max-w-4xl">
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="h-px w-8 bg-oxblood/40" />
+            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
+              common questions
+            </span>
+            <span className="h-px w-8 bg-oxblood/40" />
+          </div>
+          <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase">
+            things people ask.
+          </h2>
+        </div>
+
+        <div className="space-y-3">
+          {FAQS.map((faq, i) => (
+            <div
+              key={i}
+              className="bg-transparent border border-ink/15 rounded-md overflow-hidden cursor-pointer transition-colors hover:border-ink/30"
+              onClick={() => setOpenIndex(openIndex === i ? null : i)}
+            >
+              <div className="p-6 flex justify-between items-center gap-4">
+                <h3 className="font-display font-medium text-base md:text-lg text-ink lowercase">
+                  {faq.q}
+                </h3>
+                <div
+                  className={`w-8 h-8 rounded-full border border-ink/20 flex items-center justify-center shrink-0 transition-transform ${
+                    openIndex === i ? "rotate-45" : ""
+                  }`}
+                >
+                  <span className="text-xl leading-none">+</span>
+                </div>
+              </div>
+              <AnimatePresence>
+                {openIndex === i && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <p className="px-6 pb-6 text-ink-mid leading-relaxed lowercase">
+                      {faq.a}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ──────────────────────────────────────────────────────────────────────────────
+// SECTION 7 — FINAL CTA
+// ──────────────────────────────────────────────────────────────────────────────
+const FinalCTA = () => {
+  return (
+    <section className="bg-bone py-16 md:py-20">
+      <div className="container mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="bg-ink text-bone rounded-md p-10 md:p-16 lg:p-20 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+        >
+          {/* Left: eyebrow + headline */}
+          <div className="lg:col-span-8">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="h-px w-8 bg-oxblood-tint/50" />
+              <span className="text-oxblood-tint font-semibold uppercase tracking-[0.22em] text-xs">
+                one call away
+              </span>
+            </div>
+            <h2 className="font-display font-bold tracking-tighter text-3xl md:text-4xl lg:text-5xl leading-[1.05] lowercase mb-5">
+              clarity is <span className="text-oxblood-tint italic">one call</span> away.
+            </h2>
+            <p className="text-bone/70 text-base md:text-lg leading-relaxed lowercase max-w-xl">
+              book a dig-in and find out exactly where to start.
+            </p>
+          </div>
+
+          {/* Right: CTA */}
+          <div className="lg:col-span-4 flex lg:justify-end">
+            <Button
+              size="lg"
+              onClick={() => openCalendly({ tier: "dig-in consultation" })}
+              className="group w-full lg:w-auto text-base h-14 px-8 bg-oxblood-tint hover:bg-oxblood text-ink hover:text-bone rounded-md cursor-pointer lowercase font-semibold gap-2 transition-colors"
+            >
+              book your dig-in
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+// ──────────────────────────────────────────────────────────────────────────────
+// PAGE
+// ──────────────────────────────────────────────────────────────────────────────
 interface PageContentMap {
-  hero?: HeroContent;
-  painPoints?: PainPoint[];
   consultations?: ConsultationType[];
-  freeValue?: FreeValueContent;
 }
 
 export default function DigInConsultations() {
-  const [showDeckPopup, setShowDeckPopup] = useState(false);
+  const [leadMagnet, setLeadMagnet] = useState<LeadMagnetKind | null>(null);
 
   const { data: pageContent = {} } = useQuery<PageContentMap>({
     queryKey: ["/api/page-content", "consultations"],
@@ -598,26 +785,30 @@ export default function DigInConsultations() {
     },
   });
 
-  const heroContent = (pageContent.hero as HeroContent) || defaultHeroContent;
-  const painPoints = (pageContent.painPoints as PainPoint[]) || defaultPainPoints;
   const consultations = (pageContent.consultations as ConsultationType[]) || defaultConsultations;
-  const freeValueContent = (pageContent.freeValue as FreeValueContent) || defaultFreeValueContent;
 
   return (
-    <div className="min-h-screen bg-white text-[#181612]">
+    <div className="min-h-screen bg-bone text-ink">
       <SEO
-        title="Dig-In Consultations — 1:1 Strategy Sessions"
-        description="One-on-one consultations for founders and marketers. Deep-dive sessions on SEO, content, and growth strategy tailored to your business."
+        title="dig-in consultations | sarahdigs"
+        description="a focused call with a custom action plan delivered after. you leave with a clear sense of direction for your business."
         canonical="/dig-in-consultations"
       />
       <Navbar theme="light" />
-      <Hero content={heroContent} painPoints={painPoints} onOpenDeck={() => setShowDeckPopup(true)} />
+      <Hero />
+      <SoundsFamiliar />
       <ConsultationsCarousel consultations={consultations} />
-      <FreeValue content={freeValueContent} />
+      <WhatYouGet />
+      <HowItWorks />
+      <StealMyBrain onOpenLeadMagnet={(kind) => setLeadMagnet(kind)} />
       <FAQ />
-      <CTA />
+      <FinalCTA />
       <Footer />
-      <ConsultingDeckPopup isOpen={showDeckPopup} onClose={() => setShowDeckPopup(false)} />
+      <LeadMagnetPopup
+        isOpen={leadMagnet !== null}
+        kind={leadMagnet}
+        onClose={() => setLeadMagnet(null)}
+      />
     </div>
   );
 }
