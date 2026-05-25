@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { openCalendly } from "@/lib/calendly";
 import { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { renderMetricValue } from "@/lib/metric-value";
 import { PlacesCaseStudy } from "@/components/places-case-study";
 import { The20sEditCaseStudy } from "@/components/the-20s-edit-case-study";
 import type { Project } from "@shared/schema";
@@ -520,8 +521,8 @@ export default function ProjectDetail() {
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
                 >
-                  <span className="block font-display font-semibold text-oxblood text-[clamp(2.75rem,13vw,3.75rem)] md:text-8xl tabular-nums tracking-tight leading-none mb-4 wrap-break-word">
-                    {m.value}
+                  <span className="block font-display font-semibold text-oxblood text-[clamp(2.75rem,13vw,3.75rem)] md:text-8xl tabular-nums tracking-tight leading-none mb-4 whitespace-nowrap">
+                    {renderMetricValue(m.value)}
                   </span>
                   <span className="block text-sm md:text-base text-ink-mid lowercase">{m.label}</span>
                 </motion.div>

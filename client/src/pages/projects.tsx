@@ -2,6 +2,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
 import { collectionPageSchema } from "@/lib/schema";
+import { renderMetricValue } from "@/lib/metric-value";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -125,8 +126,8 @@ export default function Projects() {
 
                   {!comingSoon && p.metricValue && (
                     <div className="flex items-baseline gap-3 mb-6">
-                      <span className="font-mono font-bold text-oxblood text-3xl md:text-4xl tabular-nums leading-none">
-                        {p.metricValue}
+                      <span className="font-mono font-bold text-oxblood text-3xl md:text-4xl tabular-nums leading-none whitespace-nowrap">
+                        {renderMetricValue(p.metricValue)}
                       </span>
                       <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-mid">
                         {p.metricLabel}

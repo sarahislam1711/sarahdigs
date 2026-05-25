@@ -32,6 +32,7 @@ import SEO from "@/components/SEO";
 import { Footer as FooterComponent } from "@/components/layout/footer";
 import { cn } from "@/lib/utils";
 import { openCalendly } from "@/lib/calendly";
+import { renderMetricValue } from "@/lib/metric-value";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg-opt.jpg";
@@ -978,8 +979,8 @@ const SelectedWork = () => {
 
                         {/* Metric — visually distinct stat block */}
                         <div className="inline-flex items-baseline gap-3 mb-4 pb-3 border-b border-[#181612]/[0.12] w-fit">
-                          <span className="font-display font-bold text-3xl md:text-4xl text-[#6B1421] leading-none tabular-nums">
-                            {project.metricValue}
+                          <span className="font-display font-bold text-3xl md:text-4xl text-[#6B1421] leading-none tabular-nums whitespace-nowrap">
+                            {renderMetricValue(project.metricValue)}
                           </span>
                           <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-mid lowercase">
                             {project.metricLabel}
