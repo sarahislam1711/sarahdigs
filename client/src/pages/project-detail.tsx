@@ -5,13 +5,14 @@ import { projectSchema, breadcrumbSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useRoute, Link } from "wouter";
-import { ArrowUpRight, ArrowRight, ArrowLeft, Loader2, Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ArrowLeft, Loader2, Check, X, ChevronLeft, ChevronRight } from "lucide-react";
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import { openCalendly } from "@/lib/calendly";
 import { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { PlacesCaseStudy } from "@/components/places-case-study";
+import { The20sEditCaseStudy } from "@/components/the-20s-edit-case-study";
 import type { Project } from "@shared/schema";
 
 type Step = { title: string; description: string };
@@ -21,10 +22,14 @@ type Slide = { imageUrl: string; caption: string };
 // Emphasise pivotal phrases in a problem story (oxblood). Phrases not present are
 // simply ignored, so this is safe for any project's copy.
 const STORY_HIGHLIGHTS = [
+  // places
   "no digital presence",
   "depth of the developer relationships and market knowledge",
   "the brief:",
   "the expert in the room",
+  // the 20s edit
+  "build the entire machine from scratch",
+  "looks like a magazine, reads like a friend, and earns on every click",
 ];
 function highlightStory(text: string) {
   // build a single regex of the phrases, escaped, longest first so nested matches win
@@ -52,9 +57,11 @@ function ProcessJourney({ steps }: { steps: Step[] }) {
   const colSpan = cols > 1 ? (right - left) / (cols - 1) : 0; // distance between adjacent columns
   const colGap = colSpan || (right - left);
   const xAt = (c: number) => (cols === 1 ? (left + right) / 2 : left + c * colSpan); // column x-center
-  const rowH = 175;                                   // vertical distance between rows
+  // row gap must clear a node's full label (number + up-to-2-line title + 3-line desc).
+  // long titles wrap to 2 lines, so reserve enough room or rows collide.
+  const rowH = 230;                                   // vertical distance between rows
   const yAt = (rw: number) => 28 + rw * rowH;         // node y-center for row rw
-  const labelGap = 100;                               // space reserved under a node for its label
+  const labelGap = 130;                               // space reserved under the last row for its label
   const H = yAt(rows - 1) + labelGap;
 
   // node positions, snaking (even rows L→R, odd rows R→L)
@@ -132,7 +139,7 @@ function ProcessJourney({ steps }: { steps: Step[] }) {
                   <span className="block font-mono text-[10px] tracking-[0.22em] text-oxblood mb-1.5">
                     {String(n.i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="font-display font-medium text-base lg:text-lg tracking-tight lowercase mb-1.5 transition-all duration-300 group-hover:text-oxblood group-hover:font-semibold">{n.step.title}</h3>
+                  <h3 className="font-display font-medium text-base lg:text-lg tracking-tight lowercase mb-1.5 min-h-[2.6em] flex items-start justify-center transition-all duration-300 group-hover:text-oxblood group-hover:font-semibold">{n.step.title}</h3>
                   <p className="text-ink-mid text-[13px] leading-snug lowercase line-clamp-3 min-h-[4.1em] transition-colors duration-300 group-hover:text-ink">{n.step.description}</p>
                 </motion.div>
               </div>
@@ -361,6 +368,17 @@ export default function ProjectDetail() {
             {/* meta sidebar */}
             <div className="lg:col-span-5 lg:pt-2">
               <dl className="space-y-4 text-sm">
+                {project.metaStatus && (
+                  <div className="flex justify-between items-center border-b border-ink/10 pb-3">
+                    <dt className="font-mono uppercase tracking-[0.18em] text-[11px] text-ink-mid">status</dt>
+                    <dd>
+                      <span className="inline-flex items-center gap-1.5 lowercase text-[12px] font-medium text-oxblood border border-oxblood/30 bg-oxblood/6 rounded-full px-2.5 py-1">
+                        <span className="h-1.5 w-1.5 rounded-full bg-oxblood" />
+                        {project.metaStatus}
+                      </span>
+                    </dd>
+                  </div>
+                )}
                 {project.year && (
                   <div className="flex justify-between border-b border-ink/10 pb-3">
                     <dt className="font-mono uppercase tracking-[0.18em] text-[11px] text-ink-mid">year</dt>
@@ -427,6 +445,8 @@ export default function ProjectDetail() {
       {/* ── LEAD VISUAL: places gets its bespoke case-study carousel; others use gallery or static image ── */}
       {project.slug === "places" ? (
         <PlacesCaseStudy />
+      ) : project.slug === "the-20s-edit" ? (
+        <The20sEditCaseStudy />
       ) : gallery.length > 0 ? (
         <ProjectGallery slides={gallery} />
       ) : (
@@ -457,8 +477,11 @@ export default function ProjectDetail() {
                 <span className="block text-[11px] font-mono uppercase tracking-[0.28em] text-ink-mid mb-6">before</span>
                 <ul className="space-y-4">
                   {before.map((b, i) => (
-                    <li key={i} className="font-display font-medium text-xl md:text-2xl tracking-tight lowercase text-ink-mid leading-snug">
-                      {b}
+                    <li key={i} className="flex items-start gap-3 font-display font-medium text-xl md:text-2xl tracking-tight lowercase text-ink-mid leading-snug">
+                      <span className="mt-1 shrink-0 flex items-center justify-center w-5 h-5 rounded-full border border-ink-mid/30 text-ink-mid/60">
+                        <X className="w-3 h-3" strokeWidth={2.5} />
+                      </span>
+                      <span>{b}</span>
                     </li>
                   ))}
                 </ul>
@@ -497,7 +520,7 @@ export default function ProjectDetail() {
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
                 >
-                  <span className="block font-display font-semibold text-oxblood text-6xl md:text-8xl tabular-nums tracking-tight leading-none mb-4">
+                  <span className="block font-display font-semibold text-oxblood text-[clamp(2.75rem,13vw,3.75rem)] md:text-8xl tabular-nums tracking-tight leading-none mb-4 wrap-break-word">
                     {m.value}
                   </span>
                   <span className="block text-sm md:text-base text-ink-mid lowercase">{m.label}</span>
