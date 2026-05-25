@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-import sarahPhoto from "@/assets/Sarah - about.png";
+import sarahPhoto from "@/assets/sarah-about-opt.jpg";
 
 const beliefs = [
   {

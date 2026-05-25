@@ -34,8 +34,8 @@ import { cn } from "@/lib/utils";
 import { openCalendly } from "@/lib/calendly";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import heroBg from "@/assets/hero-bg.jpg";
-import sarahPhoto from "@/assets/Untitled design (1).png";
+import heroBg from "@/assets/hero-bg-opt.jpg";
+import sarahPhoto from "@/assets/sarah-home-opt.jpg";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Search,
