@@ -4,6 +4,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./auth";
 import multer from "multer";
+import sharp from "sharp";
 import path from "path";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
@@ -439,21 +440,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
           fileSize: req.file.size
         });
       } else {
-        // Fallback to local storage (for development)
+        // Local storage. Auto-optimize images: resize (max 1600px), convert to WebP,
+        // strip metadata — keeps uploaded journal images small + fast.
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        const ext = path.extname(req.file.originalname);
-        const filename = `${uniqueSuffix}${ext}`;
+        const isImage = (req.file.mimetype || "").startsWith("image/") && req.file.mimetype !== "image/svg+xml";
+
+        let outBuffer = req.file.buffer;
+        let filename: string;
+        let fileType = req.file.mimetype;
+
+        if (isImage) {
+          outBuffer = await sharp(req.file.buffer)
+            .rotate() // respect EXIF orientation
+            .resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true })
+            .webp({ quality: 80 })
+            .toBuffer();
+          filename = `${uniqueSuffix}.webp`;
+          fileType = "image/webp";
+        } else {
+          // non-image (e.g. PDF) — keep as-is
+          filename = `${uniqueSuffix}${path.extname(req.file.originalname)}`;
+        }
+
         const filePath = path.join(uploadsDir, filename);
-        
-        fs.writeFileSync(filePath, req.file.buffer);
-        
+        fs.writeFileSync(filePath, outBuffer);
+
         const fileUrl = `/uploads/${filename}`;
-        res.json({ 
-          url: fileUrl, 
-          filename: filename,
+        res.json({
+          url: fileUrl,
+          filename,
           originalFilename: req.file.originalname,
-          fileType: req.file.mimetype,
-          fileSize: req.file.size
+          fileType,
+          fileSize: outBuffer.length,
         });
       }
     } catch (error) {
@@ -569,7 +587,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const inquiry = await storage.createContactInquiry(validatedData);
 
       // Send email notification in background (don't block response)
-      sendContactEmail(validatedData).catch((emailError) => {
+      sendContactEmail({ ...validatedData, companyWebsite: validatedData.companyWebsite ?? undefined }).catch((emailError) => {
         console.error("Failed to send contact email:", emailError);
       });
 
