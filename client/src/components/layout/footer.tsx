@@ -10,8 +10,8 @@ export const Footer = () => {
           <Link href="/" className="font-display font-bold text-2xl lowercase">
             sarah<span className="text-[#6B1421]">digs</span>.
           </Link>
-          <p className="text-sm text-[#F4F1EA]/55 leading-snug lowercase whitespace-nowrap">
-            building beautiful, search-ready sites that win business.
+          <p className="text-sm text-[#F4F1EA]/55 leading-snug lowercase">
+            beautiful websites, built to convert.
           </p>
           <a
             href="mailto:sarah@sarahdigs.com"
