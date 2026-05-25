@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
+import { serviceSchema, faqSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, ArrowDown, Sparkles, Brain, LineChart, BookOpen, Mail, Zap, FileText, MessageSquare, X, Check, Loader2 } from "lucide-react";
@@ -93,7 +94,7 @@ const LeadMagnetPopup = ({
           companyWebsite: "",
           jobRole: "Not specified",
           companySize: "Not specified",
-          projectType: kind === "article" ? "Lead Magnet — Article" : "Lead Magnet — Sample Plan",
+          projectType: kind === "article" ? "Lead Magnet: Article" : "Lead Magnet: Sample Plan",
           budget: "Not specified",
           message: `User requested the "${kind}" lead magnet from the dig-in consultations page. Email: ${userEmail}`,
         }),
@@ -249,14 +250,13 @@ const Hero = () => {
             </span>
           </div>
 
-          <h1 className="font-display font-semibold tracking-tighter text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] lowercase mb-8">
-            you know <span className="text-oxblood italic font-bold">something's off.</span>
-            <br />
-            you just don't know what to fix first.
+          <h1 className="font-display font-semibold tracking-tighter text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.08] lowercase mb-7 md:mb-9">
+            <span className="block sm:whitespace-nowrap">your next customer is searching.</span>
+            <span className="text-oxblood italic font-bold">can they find you?</span>
           </h1>
 
-          <p className="font-display text-xl md:text-2xl text-ink font-medium italic lowercase leading-snug max-w-2xl mx-auto mb-12">
-            a focused call. a custom <span className="text-oxblood">action plan</span> delivered after. clear direction for your business.
+          <p className="font-display text-xl md:text-2xl lg:text-[26px] text-ink font-medium italic lowercase leading-snug max-w-2xl mx-auto mb-12">
+            a focused call. a custom <span className="text-oxblood">action plan</span> after. clear direction for your business.
           </p>
 
           {/* CTA + secondary scroll link */}
@@ -319,17 +319,11 @@ const SOUNDS_FAMILIAR = [
 
 const SoundsFamiliar = () => {
   return (
-    <section className="bg-bone py-16 md:py-20">
+    <section className="bg-bone py-12 md:py-14">
       <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
-        <div className="mb-12 md:mb-14">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="h-px w-8 bg-oxblood/40" />
-            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
-              sounds familiar?
-            </span>
-          </div>
+        <div className="mb-8 md:mb-10">
           <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase max-w-3xl">
-            3 reasons people book a <span className="text-oxblood">dig-in</span>
+            3 reasons you should book a <span className="text-oxblood">dig-in call</span>
           </h2>
         </div>
 
@@ -342,18 +336,18 @@ const SoundsFamiliar = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
-            className="group grid grid-cols-12 gap-4 md:gap-8 py-7 md:py-9 border-b border-ink/10 transition-colors duration-300 hover:border-oxblood/40"
+            className="group grid grid-cols-12 gap-3 md:gap-8 py-5 md:py-6 border-b border-ink/10 origin-left transition-all duration-300 ease-out hover:border-oxblood/40 hover:scale-[1.015]"
           >
             <div className="col-span-12 md:col-span-2">
-              <span className="font-display font-extrabold text-oxblood text-3xl md:text-4xl tabular-nums tracking-tighter leading-none block transition-colors duration-300 group-hover:text-ink">
+              <span className="font-display font-extrabold text-oxblood text-2xl md:text-3xl tabular-nums tracking-tighter leading-none block transition-colors duration-300 group-hover:text-ink">
                 {item.num}
               </span>
             </div>
-            <div className="col-span-12 md:col-span-10 space-y-2 md:space-y-3">
+            <div className="col-span-12 md:col-span-10 space-y-1.5">
               <h3 className="font-display font-medium text-xl md:text-2xl tracking-tight lowercase leading-tight">
                 {item.headline}
               </h3>
-              <p className="text-ink-mid text-[15px] md:text-base leading-relaxed lowercase max-w-2xl">
+              <p className="text-ink-mid text-[15px] md:text-base leading-snug lowercase max-w-2xl">
                 {item.body}
               </p>
             </div>
@@ -385,7 +379,8 @@ const ConsultationsCarousel = ({ consultations }: { consultations: ConsultationT
           </h2>
         </div>
 
-        <div className="overflow-hidden" ref={emblaRef}>
+        {/* pt/-mt pair gives the hover lift room without the overflow-hidden clipping it */}
+        <div className="overflow-hidden pt-3 -mt-3" ref={emblaRef}>
           <div className="flex -ml-6">
             {consultations.map((consultation, i) => {
               const IconComponent = getIconComponent(consultation.iconName);
@@ -443,21 +438,21 @@ const WHAT_YOU_GET = [
 
 const WhatYouGet = () => {
   return (
-    <section className="bg-stone py-16 md:py-20">
+    <section className="bg-ink text-bone py-14 md:py-16">
       <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
-        <div className="mb-12 md:mb-14 max-w-3xl">
+        <div className="mb-9 md:mb-11 max-w-3xl">
           <div className="flex items-center gap-3 mb-4">
-            <span className="h-px w-8 bg-oxblood/40" />
-            <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
+            <span className="h-px w-8 bg-oxblood-tint/50" />
+            <span className="text-oxblood-tint font-semibold uppercase tracking-[0.22em] text-xs">
               what you get
             </span>
           </div>
           <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase">
-            two deliverables.<br />both <span className="text-oxblood">yours to keep</span>.
+            what you<br /><span className="text-oxblood-tint">walk away with</span>.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {WHAT_YOU_GET.map((item, i) => (
             <motion.div
               key={item.num}
@@ -465,18 +460,18 @@ const WhatYouGet = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
-              className="bg-bone border border-ink/10 rounded-md p-7 md:p-9"
+              className="bg-bone text-ink rounded-md p-7 md:p-9 transition-transform duration-300 hover:-translate-y-1"
             >
               <div className="flex items-baseline gap-3 mb-4">
-                <span className="font-display font-extrabold text-oxblood text-lg tabular-nums tracking-tight">
+                <span className="font-display font-extrabold text-oxblood text-3xl md:text-4xl tabular-nums tracking-tighter leading-none">
                   {item.num}
                 </span>
                 <span className="h-px flex-1 bg-ink/10" />
               </div>
-              <h3 className="font-display font-medium text-2xl md:text-3xl tracking-tight lowercase mb-4">
+              <h3 className="font-display font-medium text-2xl md:text-3xl tracking-tight lowercase mb-3">
                 {item.title}
               </h3>
-              <p className="text-ink-mid text-base leading-relaxed lowercase">
+              <p className="text-ink-mid text-base leading-snug lowercase">
                 {item.body}
               </p>
             </motion.div>
@@ -556,6 +551,17 @@ const HowItWorks = () => {
             ))}
           </div>
         </div>
+
+        <div className="mt-12 md:mt-14 text-center">
+          <Button
+            size="lg"
+            onClick={() => openCalendly({ tier: "dig-in consultation" })}
+            className="group h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2 text-base"
+          >
+            book a dig-in call to get yours
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Button>
+        </div>
       </div>
     </section>
   );
@@ -566,17 +572,16 @@ const HowItWorks = () => {
 // ──────────────────────────────────────────────────────────────────────────────
 const StealMyBrain = ({ onOpenLeadMagnet }: { onOpenLeadMagnet: (kind: LeadMagnetKind) => void }) => {
   return (
-    <section className="bg-bone py-16 md:py-20 border-t border-ink/10">
+    <section className="bg-bone py-12 md:py-14">
       <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
-        <div className="text-center mb-12 md:mb-14 max-w-3xl mx-auto">
-          <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="mb-8 md:mb-10 max-w-3xl">
+          <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-oxblood/40" />
             <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
               free resources
             </span>
-            <span className="h-px w-8 bg-oxblood/40" />
           </div>
-          <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase mb-5">
+          <h2 className="font-display font-bold tracking-tighter text-4xl md:text-5xl leading-none lowercase mb-4">
             steal my <span className="text-oxblood">brain</span>.
           </h2>
           <p className="text-ink-mid text-lg leading-relaxed lowercase">
@@ -584,48 +589,45 @@ const StealMyBrain = ({ onOpenLeadMagnet }: { onOpenLeadMagnet: (kind: LeadMagne
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {/* Resource 1 — Article */}
-          <button
-            onClick={() => onOpenLeadMagnet("article")}
-            className="group text-left bg-bone border border-ink/15 rounded-md p-7 md:p-9 transition-all duration-300 hover:-translate-y-1 hover:border-oxblood hover:shadow-lg hover:shadow-ink/5"
-          >
-            <div className="flex items-center gap-2 mb-4 text-[10px] font-mono uppercase tracking-[0.22em] text-oxblood">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
-              <span>article · 5 min read</span>
-            </div>
-            <h3 className="font-display font-medium text-2xl tracking-tight lowercase mb-4 group-hover:text-oxblood transition-colors">
-              how i think about websites
-            </h3>
-            <p className="text-ink-mid text-[15px] leading-relaxed lowercase mb-6">
-              a short read on how sarahdigs approaches website strategy, design, and growth.
-            </p>
-            <span className="inline-flex items-center gap-2 text-ink font-medium lowercase text-sm group-hover:text-oxblood transition-colors">
-              read it
-              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </span>
-          </button>
-
-          {/* Resource 2 — Sample Plan */}
-          <button
-            onClick={() => onOpenLeadMagnet("sample")}
-            className="group text-left bg-bone border border-ink/15 rounded-md p-7 md:p-9 transition-all duration-300 hover:-translate-y-1 hover:border-oxblood hover:shadow-lg hover:shadow-ink/5"
-          >
-            <div className="flex items-center gap-2 mb-4 text-[10px] font-mono uppercase tracking-[0.22em] text-oxblood">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
-              <span>sample · pdf</span>
-            </div>
-            <h3 className="font-display font-medium text-2xl tracking-tight lowercase mb-4 group-hover:text-oxblood transition-colors">
-              sample action plan
-            </h3>
-            <p className="text-ink-mid text-[15px] leading-relaxed lowercase mb-6">
-              a sanitized example of the kind of action plan you'll receive after a dig-in session.
-            </p>
-            <span className="inline-flex items-center gap-2 text-ink font-medium lowercase text-sm group-hover:text-oxblood transition-colors">
-              view sample
-              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </span>
-          </button>
+        {/* index-style resource rows */}
+        <div className="border-t border-ink/15">
+          {[
+            { kind: "article" as LeadMagnetKind, num: "01", tag: "article · 5 min read", title: "how i think about websites", body: "a short read on how sarahdigs approaches website strategy, design, and growth.", cta: "read it" },
+            { kind: "sample" as LeadMagnetKind, num: "02", tag: "sample · pdf", title: "sample action plan", body: "a sanitized example of the kind of action plan you'll receive after a dig-in session.", cta: "view sample" },
+          ].map((r) => (
+            <button
+              key={r.num}
+              onClick={() => onOpenLeadMagnet(r.kind)}
+              className="group w-full text-left grid grid-cols-12 gap-4 md:gap-8 items-center py-7 md:py-8 px-4 md:px-6 -mx-4 md:-mx-6 border-b border-ink/15 rounded-md transition-all duration-300 hover:border-transparent hover:bg-oxblood/5 hover:shadow-sm hover:shadow-ink/5"
+            >
+              {/* index number */}
+              <div className="col-span-2 md:col-span-1">
+                <span className="font-display font-extrabold text-oxblood text-2xl md:text-3xl tabular-nums tracking-tighter leading-none transition-colors duration-300 group-hover:text-ink">
+                  {r.num}
+                </span>
+              </div>
+              {/* title + body */}
+              <div className="col-span-10 md:col-span-8">
+                <div className="flex items-center gap-2 mb-1.5 text-[10px] font-mono uppercase tracking-[0.22em] text-ink-mid">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood" />
+                  <span>{r.tag}</span>
+                </div>
+                <h3 className="font-display font-medium text-2xl md:text-3xl tracking-tight lowercase leading-tight group-hover:text-oxblood transition-colors">
+                  {r.title}
+                </h3>
+                <p className="text-ink-mid text-[15px] leading-snug lowercase mt-1.5 max-w-xl">
+                  {r.body}
+                </p>
+              </div>
+              {/* cta */}
+              <div className="hidden md:flex md:col-span-3 justify-end">
+                <span className="inline-flex items-center gap-2 text-ink font-medium lowercase text-sm group-hover:text-oxblood transition-colors">
+                  {r.cta}
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </section>
@@ -662,9 +664,9 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="bg-bone py-16 md:py-20">
+    <section className="bg-bone py-12 md:py-14">
       <div className="container mx-auto px-6 lg:px-12 max-w-4xl">
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <div className="flex items-center justify-center gap-3 mb-4">
             <span className="h-px w-8 bg-oxblood/40" />
             <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
@@ -677,14 +679,14 @@ const FAQ = () => {
           </h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {FAQS.map((faq, i) => (
             <div
               key={i}
               className="bg-transparent border border-ink/15 rounded-md overflow-hidden cursor-pointer transition-colors hover:border-ink/30"
               onClick={() => setOpenIndex(openIndex === i ? null : i)}
             >
-              <div className="p-6 flex justify-between items-center gap-4">
+              <div className="px-6 py-4 flex justify-between items-center gap-4">
                 <h3 className="font-display font-medium text-base md:text-lg text-ink lowercase">
                   {faq.q}
                 </h3>
@@ -724,37 +726,37 @@ const FAQ = () => {
 // ──────────────────────────────────────────────────────────────────────────────
 const FinalCTA = () => {
   return (
-    <section className="bg-bone py-16 md:py-20">
-      <div className="container mx-auto px-6">
+    <section className="bg-bone pt-4 pb-20 md:pb-28">
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="bg-ink text-bone rounded-md p-10 md:p-16 lg:p-20 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+          className="border-t border-ink/10 pt-10 md:pt-14 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
         >
           {/* Left: eyebrow + headline */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-9">
             <div className="flex items-center gap-3 mb-5">
-              <span className="h-px w-8 bg-oxblood-tint/50" />
-              <span className="text-oxblood-tint font-semibold uppercase tracking-[0.22em] text-xs">
+              <span className="h-px w-8 bg-oxblood/40" />
+              <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">
                 one call away
               </span>
             </div>
-            <h2 className="font-display font-bold tracking-tighter text-3xl md:text-4xl lg:text-5xl leading-[1.05] lowercase mb-5">
-              clarity is <span className="text-oxblood-tint italic">one call</span> away.
+            <h2 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl lg:text-6xl leading-[1.02] lowercase">
+              clarity is <span className="text-oxblood italic">one call</span> away.
             </h2>
-            <p className="text-bone/70 text-base md:text-lg leading-relaxed lowercase max-w-xl">
+            <p className="text-ink-mid text-base md:text-lg leading-relaxed lowercase max-w-xl mt-5">
               book a dig-in and find out exactly where to start.
             </p>
           </div>
 
           {/* Right: CTA */}
-          <div className="lg:col-span-4 flex lg:justify-end">
+          <div className="lg:col-span-3 flex lg:justify-end">
             <Button
               size="lg"
               onClick={() => openCalendly({ tier: "dig-in consultation" })}
-              className="group w-full lg:w-auto text-base h-14 px-8 bg-oxblood-tint hover:bg-oxblood text-ink hover:text-bone rounded-md cursor-pointer lowercase font-semibold gap-2 transition-colors"
+              className="group w-full lg:w-auto text-base h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2 transition-colors"
             >
               book your dig-in
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -793,6 +795,15 @@ export default function DigInConsultations() {
         title="dig-in consultations | sarahdigs"
         description="a focused call with a custom action plan delivered after. you leave with a clear sense of direction for your business."
         canonical="/dig-in-consultations"
+        jsonLd={[
+          serviceSchema({
+            name: "dig-in consultation",
+            description: "a focused diagnostic call and a written action plan delivered within 48 hours. clear direction for your website and business.",
+            url: "/dig-in-consultations",
+            serviceType: "Website strategy consultation",
+          }),
+          faqSchema(FAQS),
+        ]}
       />
       <Navbar theme="light" />
       <Hero />

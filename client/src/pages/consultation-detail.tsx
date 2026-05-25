@@ -3,107 +3,95 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, Calendar, ArrowLeft, User, Code, Megaphone, Briefcase, Clock, Star, Phone } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, ArrowLeft, Check, Briefcase, Code, Megaphone, User } from "lucide-react";
 import { openCalendly } from "@/lib/calendly";
 
-// Mock data for the consultations (mirroring what's in dig-in-consultations.tsx but with more detail)
+// Consultation content. Slugs preserved so existing links keep working.
 const consultationData = {
   "strategic-deep-dive": {
-    title: "Strategic Deep Dive",
-    subtitle: "Comprehensive analysis of your business model, market position, and growth levers.",
-    description: "We go beyond surface-level metrics to understand the fundamental drivers of your business. This isn't just an audit; it's a complete strategic overhaul designed to identify where you're leaving money on the table.",
+    title: "strategic deep dive",
+    subtitle: "a full read on your business model, market position, and growth levers.",
+    description:
+      "we go past surface metrics to the real drivers of your business. not just an audit, a strategic overhaul that finds where you're leaving money on the table.",
     outcomes: [
-      "Full technical and content audit report",
-      "Competitor gap analysis",
-      "Prioritized growth roadmap (3, 6, 12 months)",
-      "Revenue projection modeling"
+      "full technical and content audit",
+      "competitor gap analysis",
+      "prioritised growth roadmap (3, 6, 12 months)",
+      "revenue projection modelling",
     ],
-    benefit: "You'll walk away with absolute clarity on your biggest bottlenecks and a step-by-step roadmap to fix them. This session eliminates the 'what should we do next?' paralysis.",
-    valueProp: "Stop guessing what works. Get a data-backed blueprint for your next phase of growth.",
+    benefit:
+      "you leave with absolute clarity on your biggest bottlenecks and a step-by-step plan to fix them. no more 'what do we do next?' paralysis.",
     pricingOptions: [
-      { duration: "30 Min", price: "$150", desc: "Quick Audit & Fixes" },
-      { duration: "60 Min", price: "$300", desc: "Deep Dive & Roadmap" }
-    ]
+      { duration: "30 min", price: "$150", desc: "quick audit & fixes" },
+      { duration: "60 min", price: "$300", desc: "deep dive & roadmap" },
+    ],
   },
   "ai-workflow-optimization": {
-    title: "AI Workflow Optimization",
-    subtitle: "Tailoring AI integration to your specific team structure and operational needs.",
-    description: "AI isn't just about generating text; it's about operational efficiency. I help you build custom AI workflows that augment your team's capabilities, reduce manual grunt work, and increase output quality.",
+    title: "ai workflow optimization",
+    subtitle: "ai integration tailored to your team structure and how you actually work.",
+    description:
+      "ai isn't just about generating text, it's operational efficiency. we build custom workflows that augment your team, cut manual work, and raise output quality.",
     outcomes: [
-      "Custom AI prompt library for your specific use cases",
-      "Integration plan for existing tool stack",
-      "Team training session on AI best practices",
-      "Efficiency impact report"
+      "custom ai prompt library for your use cases",
+      "integration plan for your existing tools",
+      "team training on ai best practices",
+      "efficiency impact report",
     ],
-    benefit: "You'll get a customized AI implementation plan that actually fits your workflow, not generic advice. Walk away with ready-to-use prompts and tools.",
-    valueProp: "Scale your output without scaling your headcount.",
+    benefit:
+      "you get an implementation plan that fits your workflow, not generic advice. walk away with ready-to-use prompts and tools.",
     pricingOptions: [
-      { duration: "30 Min", price: "$150", desc: "Tool Stack Review" },
-      { duration: "60 Min", price: "$300", desc: "Full Implementation Plan" }
-    ]
+      { duration: "30 min", price: "$150", desc: "tool stack review" },
+      { duration: "60 min", price: "$300", desc: "full implementation plan" },
+    ],
   },
   "leadership-advisory": {
-    title: "Leadership Advisory",
-    subtitle: "One-on-one guidance for executives on navigating market shifts and technology trends.",
-    description: "A confidential sounding board for marketing leaders and founders. We tackle high-level strategy, team structure, hiring decisions, and navigating complex market shifts.",
+    title: "leadership advisory",
+    subtitle: "one-on-one guidance for founders and leaders navigating shifts.",
+    description:
+      "a confidential sounding board for marketing leaders and founders. we tackle high-level strategy, team structure, hiring calls, and navigating complex market shifts.",
     outcomes: [
-      "Bi-weekly strategy calls",
-      "Direct access for urgent questions",
-      "Second opinion on major decisions",
-      "Executive briefing on market trends"
+      "bi-weekly strategy calls",
+      "direct access for urgent questions",
+      "a second opinion on major decisions",
+      "executive briefing on market trends",
     ],
-    benefit: "Gain an experienced partner to stress-test your decisions before you make them. Walk away with confidence in your strategic direction.",
-    valueProp: "Navigate uncertainty with confidence and expert backing.",
+    benefit:
+      "an experienced partner to stress-test your decisions before you make them. walk away confident in your direction.",
     pricingOptions: [
-      { duration: "30 Min", price: "$200", desc: "Decision Support" },
-      { duration: "60 Min", price: "$400", desc: "Executive Deep Dive" }
-    ]
+      { duration: "30 min", price: "$200", desc: "decision support" },
+      { duration: "60 min", price: "$400", desc: "executive deep dive" },
+    ],
   },
   "custom-growth-roadmap": {
-    title: "Custom Growth Roadmap",
-    subtitle: "Developing a bespoke step-by-step plan to achieve your specific business objectives.",
-    description: "You have a goal? I build the bridge to get you there. This is a highly specific, tactical plan focused on achieving a singular major business objective, whether it's a product launch, market expansion, or turnaround.",
+    title: "custom growth roadmap",
+    subtitle: "a bespoke, step-by-step plan to hit a specific business objective.",
+    description:
+      "you have a goal, we build the bridge to it. a tactical plan focused on one major objective, whether it's a product launch, market expansion, or turnaround.",
     outcomes: [
-      "Detailed execution plan with timelines",
-      "Resource and budget requirements",
-      "Risk assessment and mitigation strategies",
-      "Success metrics and milestones"
+      "detailed execution plan with timelines",
+      "resource and budget requirements",
+      "risk assessment and mitigation",
+      "success metrics and milestones",
     ],
-    benefit: "Turn a vague goal into a concrete action plan. Walk away with a document that tells you exactly what to do, when to do it, and what to expect.",
-    valueProp: "Turn your ambitious goals into a clear, step-by-step execution plan.",
+    benefit:
+      "turn a vague goal into a concrete plan. walk away with a document that says exactly what to do, when, and what to expect.",
     pricingOptions: [
-      { duration: "30 Min", price: "$150", desc: "Goal Assessment" },
-      { duration: "60 Min", price: "$300", desc: "Full Roadmap Design" }
-    ]
-  }
+      { duration: "30 min", price: "$150", desc: "goal assessment" },
+      { duration: "60 min", price: "$300", desc: "full roadmap design" },
+    ],
+  },
 };
 
 const personas = [
-  {
-    icon: <Briefcase className="w-6 h-6" />,
-    title: "Founders",
-    desc: "Looking for high-level direction without the cost of a full-time CMO."
-  },
-  {
-    icon: <Code className="w-6 h-6" />,
-    title: "Technical Leads",
-    desc: "Needing to bridge the gap between product capabilities and market needs."
-  },
-  {
-    icon: <Megaphone className="w-6 h-6" />,
-    title: "Marketers",
-    desc: "Wanting to upgrade their skills or get a second opinion on their strategy."
-  },
-  {
-    icon: <User className="w-6 h-6" />,
-    title: "CEOs",
-    desc: "Seeking clarity on ROI and validation of their company's growth trajectory."
-  }
+  { icon: Briefcase, title: "founders", desc: "high-level direction without the cost of a full-time cmo." },
+  { icon: Code, title: "technical leads", desc: "bridging the gap between product capabilities and market needs." },
+  { icon: Megaphone, title: "marketers", desc: "upgrading their skills or getting a second opinion on strategy." },
+  { icon: User, title: "ceos", desc: "clarity on roi and validation of the growth trajectory." },
 ];
 
 export default function ConsultationDetail() {
   const [match, params] = useRoute("/dig-in-consultations/:slug");
-  
   if (!match) return null;
 
   const slug = params.slug;
@@ -111,11 +99,15 @@ export default function ConsultationDetail() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#F4F1EA] flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Consultation Not Found</h1>
+      <div className="min-h-screen bg-bone text-ink flex items-center justify-center font-sans">
+        <div className="text-center px-6">
+          <h1 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl lowercase mb-6">
+            consultation <span className="text-oxblood">not found.</span>
+          </h1>
           <Link href="/dig-in-consultations">
-            <Button>Return to Consultations</Button>
+            <Button className="h-12 px-7 bg-oxblood hover:bg-oxblood-soft text-white rounded-md lowercase font-medium gap-2">
+              back to consultations <ArrowRight className="w-4 h-4" />
+            </Button>
           </Link>
         </div>
       </div>
@@ -133,162 +125,146 @@ export default function ConsultationDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+    <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title={data.title}
+        title={`${data.title} | sarahdigs`}
         description={data.subtitle}
         canonical={`/dig-in-consultations/${slug}`}
         jsonLd={breadcrumbJsonLd}
       />
-      <Navbar />
+      <Navbar theme="light" />
 
-      <main className="pt-32 pb-20">
-        <div className="container mx-auto px-6">
-          <Link href="/dig-in-consultations" className="inline-flex items-center text-[#181612]/60 hover:text-[#6B1421] mb-8 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Consultations
+      {/* ── HERO ── */}
+      <section className="bg-bone pt-24 pb-12 md:pt-28 md:pb-16">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <Link
+            href="/dig-in-consultations"
+            className="inline-flex items-center gap-2 text-sm font-medium text-ink-mid hover:text-oxblood transition-colors lowercase mb-10"
+          >
+            <ArrowLeft className="w-4 h-4" /> back to consultations
           </Link>
 
-          <div className="max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="mb-16">
-              <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 text-[#181612]">
-                {data.title}
-              </h1>
-              <div className="inline-block bg-[#E7E2D6] text-[#6B1421] px-5 py-2.5 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm border border-[#6B1421]/20">
-                {data.subtitle}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="max-w-4xl"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <span className="h-px w-8 bg-oxblood/40" />
+              <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">the dig-in consultation</span>
+            </div>
+            <h1 className="font-display font-semibold tracking-tighter text-5xl md:text-7xl leading-[0.95] lowercase mb-5">
+              {data.title}
+            </h1>
+            <p className="font-display text-xl md:text-2xl text-ink font-medium italic lowercase leading-snug max-w-2xl">
+              {data.subtitle}
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── WHO IT'S FOR (moved up, right under the hero) ── */}
+      <section className="bg-bone pb-12 md:pb-16">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="border-t border-ink/10 pt-10 md:pt-12">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="h-px w-8 bg-oxblood/40" />
+              <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">who it's for</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1">
+              {personas.map((p) => {
+                const Icon = p.icon;
+                return (
+                  <div key={p.title} className="flex items-start gap-4 py-5 border-b border-ink/10">
+                    <span className="flex items-center justify-center w-10 h-10 rounded-md bg-oxblood/8 text-oxblood shrink-0">
+                      <Icon className="w-5 h-5" />
+                    </span>
+                    <div>
+                      <h3 className="font-display font-medium text-lg tracking-tight lowercase mb-1">{p.title}</h3>
+                      <p className="text-ink-mid text-sm leading-snug lowercase">{p.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-bone pb-20 md:pb-28">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+            {/* ── MAIN ── */}
+            <div className="lg:col-span-8 space-y-14 md:space-y-16">
+              {/* what you get */}
+              <div>
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="h-px w-8 bg-oxblood/40" />
+                  <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">what you get</span>
+                </div>
+                <p className="font-display text-2xl md:text-3xl text-ink leading-snug lowercase max-w-2xl mb-8">
+                  {data.description}
+                </p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
+                  {data.outcomes.map((outcome) => (
+                    <li key={outcome} className="flex items-center gap-3 py-3 border-b border-ink/10">
+                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-oxblood/10 shrink-0">
+                        <Check className="w-3.5 h-3.5 text-oxblood" strokeWidth={3} />
+                      </span>
+                      <span className="text-base lowercase">{outcome}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* the benefit — ink slab */}
+              <div className="bg-ink text-bone rounded-md p-8 md:p-10">
+                <span className="text-oxblood-tint font-semibold uppercase tracking-[0.22em] text-xs">the benefit</span>
+                <p className="font-display font-medium text-2xl md:text-3xl tracking-tight leading-snug lowercase mt-4">
+                  {data.benefit}
+                </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Main Content */}
-              <div className="lg:col-span-2 space-y-16">
-                
-                {/* Who is this for */}
-                <div>
-                  <h3 className="text-2xl font-bold mb-6 text-[#181612]">Who is this for?</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {personas.map((persona, i) => (
-                      <div key={i} className="bg-transparent p-6 rounded-md border border-[#181612]/15 flex flex-col gap-3 hover:border-[#6B1421]/30 transition-colors">
-                        <div className="w-10 h-10 rounded-md bg-[#E7E2D6] flex items-center justify-center text-[#6B1421]">
-                          {persona.icon}
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-lg mb-1">{persona.title}</h4>
-                          <p className="text-[#181612]/70 text-sm leading-relaxed">{persona.desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+            {/* ── SIDEBAR — book your session ── */}
+            <div className="lg:col-span-4">
+              <div className="lg:sticky lg:top-28 border border-ink/12 rounded-md p-7 md:p-8 bg-stone/40">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="h-px w-8 bg-oxblood/40" />
+                  <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">book your session</span>
                 </div>
+                <p className="font-display text-2xl tracking-tight lowercase text-ink mb-6">
+                  pick the depth that <span className="text-oxblood italic">fits.</span>
+                </p>
 
-                <div className="prose prose-lg max-w-none">
-                  <h3 className="text-2xl font-bold mb-4 text-[#181612]">What you get</h3>
-                  <p className="text-[#181612]/80 leading-relaxed text-lg mb-6">
-                    {data.description}
-                  </p>
-                  <div className="bg-transparent rounded-md p-8 border border-[#181612]/15 mb-8">
-                    <h4 className="font-bold text-lg mb-4 uppercase tracking-wider text-[#6B1421]">Outcomes</h4>
-                    <ul className="space-y-4">
-                      {data.outcomes.map((outcome, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-6 h-6 text-[#6B1421] shrink-0 mt-0.5" />
-                          <span className="text-lg text-[#181612]/80">{outcome}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                   <div className="bg-[#E7E2D6] rounded-md p-8 border border-[#6B1421]/10">
-                     <h4 className="font-bold text-lg mb-2 uppercase tracking-wider text-[#6B1421]">The Benefit</h4>
-                    <p className="text-xl font-medium text-[#181612]">
-                      {data.benefit}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Expertise */}
-                <div>
-                  <h3 className="text-2xl font-bold mb-6 text-[#181612]">Why work with me?</h3>
-                  <div className="bg-[#1B1B1B] text-white rounded-md p-8 relative overflow-hidden">
-                     {/* Abstract bg shape */}
-                    <div className="absolute top-0 right-0 w-full h-full opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#6B1421] via-transparent to-transparent" />
-                    
-                    <div className="relative z-10 space-y-6">
-                      <p className="text-lg leading-relaxed text-white/90">
-                        I've spent over a decade not just advising, but <strong>doing</strong>. I've led growth for startups, optimized enterprise-level SEO strategies, and built products from scratch. I don't give you theory; I give you what works in the trenches.
-                      </p>
-                      <div className="flex flex-wrap gap-4">
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">27x Avg Organic Traffic Growth</div>
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">3x Inbound Leads After Launch</div>
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">6 Weeks Strategy to Live</div>
-                         <div className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium">8+ Years Experience</div>
-                      </div>
-                      <div className="pt-6 border-t border-white/10">
-                        <div className="flex items-center gap-4">
-                          <div className="flex text-[#6B1421]">
-                            {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-current" />)}
-                          </div>
-                          <p className="text-sm text-white/60 italic">"The most actionable hour I've spent on my business this year." — Sarah J., Founder</p>
-                        </div>
-                      </div>
+                <div className="space-y-3 mb-7">
+                  {data.pricingOptions.map((option) => (
+                    <div
+                      key={option.duration}
+                      className="group flex items-start gap-4 border border-ink/10 rounded-md p-4 hover:border-oxblood/40 transition-colors cursor-pointer"
+                    >
+                      <span className="font-display font-semibold text-lg text-oxblood tabular-nums shrink-0 leading-snug">{option.duration}</span>
+                      <p className="text-sm text-ink-mid lowercase leading-snug group-hover:text-ink transition-colors">{option.desc}</p>
                     </div>
-                  </div>
+                  ))}
                 </div>
 
-              </div>
+                <Button
+                  className="w-full h-14 text-base bg-oxblood hover:bg-oxblood-soft text-white rounded-md font-medium lowercase gap-2 cursor-pointer"
+                  onClick={() => openCalendly({ tier: "dig-in consultation" })}
+                >
+                  book a session <ArrowRight className="w-4 h-4" />
+                </Button>
 
-              {/* Sidebar / CTA */}
-              <div className="lg:col-span-1">
-                <div className="sticky top-28 z-10 bg-stone border border-[#181612]/15 rounded-md p-8">
-                  <div className="mb-6 text-center">
-                    <h3 className="text-2xl font-bold mb-2">Pricing Options</h3>
-                    <p className="text-[#181612]/60 text-sm">Choose the duration that fits your needs</p>
-                  </div>
-
-                  <div className="space-y-4 mb-8">
-                    {data.pricingOptions.map((option, i) => (
-                      <div key={i} className="border border-[#181612]/10 rounded-md p-4 hover:border-[#6B1421] hover:bg-[#E7E2D6] transition-all cursor-pointer group">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="font-bold text-lg group-hover:text-[#6B1421]">{option.duration}</span>
-                          <span className="font-bold text-xl">{option.price}</span>
-                        </div>
-                        <p className="text-sm text-[#181612]/60">{option.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <Button className="w-full h-14 text-lg bg-[#1B1B1B] text-white hover:bg-[#6B1421] hover:text-white transition-colors rounded-md font-bold shadow-lg cursor-pointer" onClick={() => openCalendly()}>
-                      Book a Session
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </Button>
-                    
-                     <div className="relative py-4">
-                        <div className="absolute inset-0 flex items-center">
-                          <span className="w-full border-t border-[#181612]/10" />
-                        </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-                          <span className="bg-white px-2 text-[#181612]/40 font-bold tracking-widest">Or</span>
-                        </div>
-                      </div>
-
-                    <Button variant="outline" className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover-elevate active-elevate-2 border [border-color:var(--button-outline)] shadow-xs active:shadow-none min-h-9 px-4 py-2 w-full h-14 border-[#181612]/20 text-[#181612] hover:bg-[#181612]/5 hover:text-[#6B1421] rounded-md text-[16px]">
-                      <Phone className="mr-2 w-5 h-5" />
-                      Free Discovery Call
-                    </Button>
-                  </div>
-
-                  <div className="mt-6 text-center">
-                    <p className="text-[#181612]/40 text-xs leading-relaxed">
-                      Not ready to commit? The discovery call is 15 minutes to see if we're a good fit. No sales pressure.
-                    </p>
-                  </div>
-                </div>
+                <p className="text-ink-mid text-xs leading-relaxed lowercase mt-5 text-center">
+                  a focused call, a written plan, and clear direction. we'll confirm scope and details before anything's booked.
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </main>
+      </section>
 
       <Footer />
     </div>

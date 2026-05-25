@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
+import { serviceSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowDown, Check, Users, X } from "lucide-react";
 import { motion, useInView } from "framer-motion";
@@ -165,8 +166,8 @@ const tiers = [
 ];
 
 const caseStudies = [
-  { client: "client one", metric: "+312%", resultRest: "organic traffic", note: "in 90 days post-launch" },
-  { client: "client two", metric: "3.1x", resultRest: "inbound leads", note: "first quarter after relaunch" },
+  { client: "places", metric: "+312%", resultRest: "organic traffic", note: "in 90 days post-launch" },
+  { client: "the 20s edit", metric: "3.1x", resultRest: "inbound leads", note: "first quarter after relaunch" },
 ];
 
 export default function TheFullDig() {
@@ -177,8 +178,14 @@ export default function TheFullDig() {
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
         title="the full dig | sarahdigs"
-        description="Research, design, build, and optimization — done together, in the right order. The flagship sarahdigs service for founders who want a website that works."
+        description="Research, design, build, and optimization, done together in the right order. The flagship sarahdigs service for founders who want a website that works."
         canonical="/the-full-dig"
+        jsonLd={serviceSchema({
+          name: "the full dig",
+          description: "the flagship sarahdigs engagement: research, design, build, and optimization done together in the right order. a website that works.",
+          url: "/the-full-dig",
+          serviceType: "Website design and development",
+        })}
       />
       <Navbar theme="light" />
 
@@ -550,7 +557,7 @@ export default function TheFullDig() {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-y-0">
             {/* LEFT — primary path: dig-in consultation (heavier, larger, recommended) */}
-            <div className="lg:col-span-6 lg:pr-10 lg:border-r lg:border-ink/15">
+            <div className="lg:col-span-6 lg:pr-10 lg:border-r lg:border-ink/15 flex flex-col">
               <div className="flex items-baseline gap-4 mb-6">
                 <span className="font-display font-extrabold text-oxblood text-4xl md:text-5xl tabular-nums tracking-tighter leading-none">
                   01
@@ -565,20 +572,22 @@ export default function TheFullDig() {
               <p className="text-ink-mid text-base md:text-lg leading-relaxed mb-8 max-w-md lowercase">
                 if you're still figuring out what you need, the dig-in consultation is the right first step. a focused call, a written action plan, and a clear view of what to do next.
               </p>
-              <Button
-                size="lg"
-                onClick={() => openCalendly()}
-                className="text-base h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2"
-              >
-                book a dig-in call <ArrowRight className="w-4 h-4" />
-              </Button>
+              <div className="mt-auto">
+                <Button
+                  size="lg"
+                  onClick={() => openCalendly()}
+                  className="text-base h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2"
+                >
+                  book a dig-in call <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
 
             {/* RIGHT — secondary path: custom dig (card, oxblood-tinted, interactive) */}
             <div className="lg:col-span-6 lg:pl-10 pt-10 lg:pt-0 flex">
               <a
                 href="/dig-on-demand"
-                className="group relative w-full bg-oxblood/6 border border-oxblood/20 rounded-md p-8 md:p-10 transition-all duration-300 hover:bg-oxblood/10 hover:border-oxblood/40 hover:-translate-y-1 overflow-hidden"
+                className="group relative w-full flex flex-col bg-oxblood/6 border border-oxblood/20 rounded-md p-8 md:p-10 transition-all duration-300 hover:bg-oxblood/10 hover:border-oxblood/40 hover:-translate-y-1 overflow-hidden"
               >
                 {/* corner accent */}
                 <span
@@ -600,7 +609,7 @@ export default function TheFullDig() {
                   if you already know what you need but it doesn't fit a package, the custom dig lets us scope a build around your exact situation.
                 </p>
 
-                <span className="inline-flex items-center gap-3 text-sm text-oxblood font-medium lowercase">
+                <span className="mt-auto inline-flex items-center gap-3 text-sm text-oxblood font-medium lowercase">
                   explore custom dig
                   <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-oxblood/30 group-hover:border-oxblood group-hover:bg-oxblood group-hover:text-white transition-all">
                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
