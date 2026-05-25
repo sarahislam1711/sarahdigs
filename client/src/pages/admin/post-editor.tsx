@@ -16,6 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { BlogPost, Category, Tag } from "@shared/schema";
 import { ImageUploader } from "@/components/ImageUploader";
 import { RichTextEditor } from "@/components/RichTextEditor";
+import { setBlockNavigation } from "@/lib/nav-guard";
 
 interface PostWithRelations extends BlogPost {
   categories?: Category[];
@@ -55,6 +56,16 @@ export default function PostEditor() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newTagName, setNewTagName] = useState("");
 
+  // ── unsaved-changes guard ──
+  // baseline = the form state we'd consider "clean" (empty for new, loaded post for edit)
+  const baselineRef = useRef<string>(JSON.stringify({
+    title: "", slug: "", content: "", excerpt: "", featuredImageUrl: "",
+    isFeatured: false, status: "draft", metaTitle: "", metaDescription: "",
+    metaKeywords: "", categoryIds: [], tagIds: [],
+  }));
+  const justSavedRef = useRef(false);
+  const isDirty = JSON.stringify(formData) !== baselineRef.current;
+
   const { data: post, isLoading: postLoading } = useQuery<PostWithRelations>({
     queryKey: ["/api/admin/posts", postId],
     enabled: !!postId,
@@ -70,7 +81,7 @@ export default function PostEditor() {
 
   useEffect(() => {
     if (post) {
-      setFormData({
+      const loaded = {
         title: post.title || "",
         slug: post.slug || "",
         content: post.content || "",
@@ -83,23 +94,61 @@ export default function PostEditor() {
         metaKeywords: post.metaKeywords || "",
         categoryIds: post.categories?.map((c: any) => c.id) || [],
         tagIds: post.tags?.map((t: any) => t.id) || [],
-      });
+      };
+      setFormData(loaded);
+      baselineRef.current = JSON.stringify(loaded); // loaded post starts clean
     }
   }, [post]);
+
+  // Warn before closing/refreshing the tab with unsaved changes
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (isDirty && !justSavedRef.current) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [isDirty]);
+
+  // Sync dirty state to the global nav guard so sidebar links also prompt
+  useEffect(() => {
+    setBlockNavigation(isDirty && !justSavedRef.current);
+  }, [isDirty]);
+
+  // Always clear the guard when leaving the editor
+  useEffect(() => () => setBlockNavigation(false), []);
+
+  // Guarded in-app navigation (back button etc.)
+  const guardedNavigate = (to: string) => {
+    if (isDirty && !justSavedRef.current) {
+      const ok = window.confirm("you have unsaved changes. are you sure you want to leave? your progress will be lost.");
+      if (!ok) return;
+    }
+    navigate(to);
+  };
 
   const saveMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
       const publishedAt = data.status === "published" ? new Date().toISOString() : null;
-      if (postId) {
-        return await apiRequest("PUT", `/api/admin/posts/${postId}`, { ...data, publishedAt });
-      } else {
-        return await apiRequest("POST", "/api/admin/posts", { ...data, publishedAt });
-      }
+      const res = postId
+        ? await apiRequest("PUT", `/api/admin/posts/${postId}`, { ...data, publishedAt })
+        : await apiRequest("POST", "/api/admin/posts", { ...data, publishedAt });
+      return { saved: await res.json(), data };
     },
-    onSuccess: () => {
+    onSuccess: ({ saved, data }) => {
+      // mark the just-saved form state as the new clean baseline (no dirty guard, no redirect)
+      justSavedRef.current = true;
+      baselineRef.current = JSON.stringify(data);
       queryClient.invalidateQueries({ queryKey: ["/api/admin/posts"] });
       toast({ title: postId ? "Post updated" : "Post created" });
-      navigate("/admin/posts");
+      // for a brand-new post, switch the URL to its editor so further saves update it
+      if (!postId && saved?.id) {
+        navigate(`/admin/posts/${saved.id}`, { replace: true });
+      }
+      // allow the guard to re-arm for subsequent edits
+      setTimeout(() => { justSavedRef.current = false; }, 0);
     },
     onError: (error: any) => {
       toast({ title: "Failed to save post", description: error.message, variant: "destructive" });
@@ -227,7 +276,7 @@ export default function PostEditor() {
       <div className="flex items-center justify-between mb-6">
         <Button
           variant="ghost"
-          onClick={() => navigate("/admin/posts")}
+          onClick={() => guardedNavigate("/admin/posts")}
           className="text-[#6F6A5F] hover:text-[#181612]"
           data-testid="button-back"
         >

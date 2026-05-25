@@ -8,9 +8,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { Save, ArrowLeft, Loader2 } from "lucide-react";
+import { Save, ArrowLeft, Loader2, Plus, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 
 // Mirrors the `projects` table in shared/schema.ts (v1 minimal aligned model).
+interface GallerySlide {
+  imageUrl: string;
+  caption: string;
+}
+
 interface ProjectForm {
   id?: string;
   name: string;
@@ -19,7 +24,9 @@ interface ProjectForm {
   industry: string;
   year: number | null;
   imageUrl: string;
+  logoUrl: string;
   problem: string;
+  problemStory: string;
   approach: string;
   metricValue: string;
   metricLabel: string;
@@ -29,6 +36,7 @@ interface ProjectForm {
   timeline: string;
   displayOrder: number;
   isVisible: boolean;
+  gallery: GallerySlide[];
 }
 
 const defaultProject: ProjectForm = {
@@ -38,7 +46,9 @@ const defaultProject: ProjectForm = {
   industry: "",
   year: new Date().getFullYear(),
   imageUrl: "",
+  logoUrl: "",
   problem: "",
+  problemStory: "",
   approach: "",
   metricValue: "",
   metricLabel: "",
@@ -48,6 +58,7 @@ const defaultProject: ProjectForm = {
   timeline: "",
   displayOrder: 0,
   isVisible: true,
+  gallery: [],
 };
 
 export default function ProjectEditor() {
@@ -73,7 +84,13 @@ export default function ProjectEditor() {
 
   useEffect(() => {
     if (existingProject) {
-      setProject({ ...defaultProject, ...existingProject });
+      const ex = existingProject as Partial<ProjectForm>;
+      setProject({
+        ...defaultProject,
+        ...ex,
+        gallery: Array.isArray(ex.gallery) ? ex.gallery : [],
+        serviceTags: Array.isArray(ex.serviceTags) ? ex.serviceTags : [],
+      });
     }
   }, [existingProject]);
 
@@ -113,6 +130,25 @@ export default function ProjectEditor() {
 
   const update = (field: keyof ProjectForm, value: any) =>
     setProject((prev) => ({ ...prev, [field]: value }));
+
+  // ── gallery slide helpers ──
+  const addSlide = () =>
+    setProject((prev) => ({ ...prev, gallery: [...prev.gallery, { imageUrl: "", caption: "" }] }));
+  const updateSlide = (i: number, field: keyof GallerySlide, value: string) =>
+    setProject((prev) => ({
+      ...prev,
+      gallery: prev.gallery.map((s, idx) => (idx === i ? { ...s, [field]: value } : s)),
+    }));
+  const removeSlide = (i: number) =>
+    setProject((prev) => ({ ...prev, gallery: prev.gallery.filter((_, idx) => idx !== i) }));
+  const moveSlide = (i: number, dir: -1 | 1) =>
+    setProject((prev) => {
+      const next = [...prev.gallery];
+      const j = i + dir;
+      if (j < 0 || j >= next.length) return prev;
+      [next[i], next[j]] = [next[j], next[i]];
+      return { ...prev, gallery: next };
+    });
 
   if (isLoading) {
     return (
@@ -245,6 +281,77 @@ export default function ProjectEditor() {
                 <img src={project.imageUrl} alt="" className="mt-2 w-full max-w-sm rounded-md border border-[#181612]/10" />
               )}
             </div>
+
+            <div className="space-y-2">
+              <Label className="text-[#181612]">Logo URL (shown in work list & "more work")</Label>
+              <Input
+                value={project.logoUrl}
+                onChange={(e) => update("logoUrl", e.target.value)}
+                placeholder="/projects/places-logo.png"
+                className={inputCls}
+              />
+              {project.logoUrl && (
+                <div className="mt-2 w-full max-w-sm aspect-video rounded-md border border-[#181612]/10 bg-[#F4F1EA] flex items-center justify-center p-8">
+                  <img src={project.logoUrl} alt="" className="max-w-full max-h-full object-contain" />
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* ── Gallery carousel ── */}
+          <section className="space-y-5 border-t border-[#181612]/10 pt-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-widest text-[#C58A92]">Gallery Carousel</h2>
+                <p className="text-[#6F6A5F] text-xs mt-1">screenshots shown in the "a closer look" carousel on the project page. each slide: image + short caption.</p>
+              </div>
+              <Button
+                type="button"
+                onClick={addSlide}
+                className="bg-[#181612] text-[#F4F1EA] hover:bg-[#6B1421] gap-2"
+              >
+                <Plus className="w-4 h-4" /> add slide
+              </Button>
+            </div>
+
+            {project.gallery.length === 0 ? (
+              <p className="text-[#6F6A5F] text-sm italic">no slides yet. the carousel is hidden until you add one.</p>
+            ) : (
+              <div className="space-y-4">
+                {project.gallery.map((slide, i) => (
+                  <div key={i} className="rounded-md border border-[#181612]/15 bg-[#FBF9F3] p-4 flex gap-4">
+                    <div className="flex flex-col items-center gap-1 pt-1">
+                      <span className="text-[#6B1421] font-bold text-sm tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                      <button type="button" onClick={() => moveSlide(i, -1)} disabled={i === 0} className="text-[#181612]/50 hover:text-[#181612] disabled:opacity-25"><ChevronUp className="w-4 h-4" /></button>
+                      <button type="button" onClick={() => moveSlide(i, 1)} disabled={i === project.gallery.length - 1} className="text-[#181612]/50 hover:text-[#181612] disabled:opacity-25"><ChevronDown className="w-4 h-4" /></button>
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <Input
+                        value={slide.imageUrl}
+                        onChange={(e) => updateSlide(i, "imageUrl", e.target.value)}
+                        placeholder="/projects/places-2.jpg"
+                        className={inputCls}
+                      />
+                      <Textarea
+                        value={slide.caption}
+                        onChange={(e) => updateSlide(i, "caption", e.target.value)}
+                        placeholder="short caption describing this view..."
+                        rows={2}
+                        className={inputCls}
+                      />
+                      {slide.imageUrl && (
+                        <div className="w-40 aspect-video rounded border border-[#181612]/10 bg-[#E7E2D6] overflow-hidden">
+                          <img src={slide.imageUrl} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                    </div>
+                    <button type="button" onClick={() => removeSlide(i)} className="text-[#181612]/40 hover:text-[#6B1421] self-start pt-1">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* ── Case study ── */}
@@ -252,13 +359,24 @@ export default function ProjectEditor() {
             <h2 className="text-sm font-bold uppercase tracking-widest text-[#C58A92]">Case Study</h2>
 
             <div className="space-y-2">
-              <Label className="text-[#181612]">The Problem (before)</Label>
+              <Label className="text-[#181612]">The Problem (short, shown in hero)</Label>
               <Textarea
                 value={project.problem}
                 onChange={(e) => update("problem", e.target.value)}
-                placeholder="what the client came to us with."
+                placeholder="one-line summary of what the client came to us with."
                 className={inputCls}
-                rows={3}
+                rows={2}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-[#181612]">The Problem Story (long, "where it started" section)</Label>
+              <Textarea
+                value={project.problemStory}
+                onChange={(e) => update("problemStory", e.target.value)}
+                placeholder="the full narrative of the problem the client faced. shown as a story section above the carousel. leave blank to hide."
+                className={inputCls}
+                rows={5}
               />
             </div>
 
@@ -290,7 +408,7 @@ export default function ProjectEditor() {
                 className={inputCls}
               />
               <p className="text-[#6F6A5F] text-xs">
-                comma-separated. add as many as you want — shown as tags on the work page.
+                comma-separated. add as many as you want. shown as tags on the work page.
               </p>
             </div>
           </section>

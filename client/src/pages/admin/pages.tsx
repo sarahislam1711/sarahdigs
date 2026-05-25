@@ -592,7 +592,7 @@ function AboutPageEditor() {
   });
 
   const [storyContent, setStoryContent] = useState({
-    paragraph1: "I started SarahDigs because I believe every brand deserves strategy that's grounded in real data—not guesswork.",
+    paragraph1: "I started SarahDigs because I believe every brand deserves strategy that's grounded in real data, not guesswork.",
     paragraph2: "My approach is different. I dig into the numbers, understand your audience, and build strategies that actually convert.",
     paragraph3: "When I'm not deep in analytics dashboards, you'll find me exploring new coffee shops or testing the latest AI tools.",
   });
@@ -1205,7 +1205,7 @@ function ContactPageEditor() {
   const [heroContent, setHeroContent] = useState<ContactHeroContent>({
     title: "Let's Connect",
     subtitle: "Ready to dig deep?",
-    description: "Whether you have a question, want to discuss a project, or just want to say hello — I'd love to hear from you.",
+    description: "Whether you have a question, want to discuss a project, or just want to say hello, I'd love to hear from you.",
   });
 
   const [contactInfo, setContactInfo] = useState<ContactInfoContent>({
@@ -1497,7 +1497,7 @@ function DigOnDemandPageEditor() {
 
   const [formContent, setFormContent] = useState<DigOnDemandFormContent>({
     formTitle: "Let's Build Your Custom Marketing Plan",
-    formSubtitle: "Tell me your goals, challenges, and what you want to improve — I'll create a custom strategy just for you.",
+    formSubtitle: "Tell me your goals, challenges, and what you want to improve. I'll create a custom strategy just for you.",
     submitButtonText: "Let's Plan Your Next Move",
     budgetOptions: ["$2,000 - $5,000", "$5,000 - $10,000", "$10,000 - $15,000", "$20,000+"],
   });

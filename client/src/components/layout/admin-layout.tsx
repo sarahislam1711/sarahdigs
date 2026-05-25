@@ -2,9 +2,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { Link, useLocation } from "wouter";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { FileText, Inbox, LogOut, FolderOpen } from "lucide-react";
+import { FileText, Inbox, LogOut, FolderOpen, Folder, Tag } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
+import { confirmLeave } from "@/lib/nav-guard";
 import type { User, ContactInquiry, CustomPlanInquiry } from "@shared/schema";
 
 interface AdminLayoutProps {
@@ -20,6 +21,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: "/admin/posts", label: "journal", icon: FileText },
+  { href: "/admin/categories", label: "categories", icon: Folder },
+  { href: "/admin/tags", label: "tags", icon: Tag },
   { href: "/admin/projects", label: "projects", icon: FolderOpen },
   { href: "/admin/inquiries", label: "inquiries", icon: Inbox },
 ];
@@ -88,6 +91,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
         <div className="p-6 border-b border-[#181612]/10">
           <Link
             href="/"
+            onClick={(e) => { if (!confirmLeave()) e.preventDefault(); }}
             className="font-display font-bold text-xl lowercase block"
           >
             sarah<span className="text-[#6B1421]">digs</span>.
@@ -109,6 +113,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={(e) => { if (!confirmLeave()) e.preventDefault(); }}
                 className={cn(
                   "flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-colors lowercase",
                   active

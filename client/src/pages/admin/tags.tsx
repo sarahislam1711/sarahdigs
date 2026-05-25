@@ -2,13 +2,11 @@ import AdminLayout from "@/components/layout/admin-layout";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Plus, Trash2, X, Tags as TagsIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Badge } from "@/components/ui/badge";
 import type { Tag } from "@shared/schema";
 import {
   AlertDialog,
@@ -89,10 +87,10 @@ export default function AdminTags() {
   return (
     <AdminLayout title="Tags">
       <div className="flex justify-between items-center mb-6">
-        <p className="text-gray-400">Add tags to your blog posts for better organization</p>
+        <p className="text-[#6F6A5F] text-sm">{tags?.length ?? 0} tag{(tags?.length ?? 0) !== 1 ? "s" : ""} · add tags to label and organize your blog posts</p>
         <Button
           onClick={() => setShowForm(true)}
-          className="bg-[#6B1421] hover:bg-[#6B1421]/80"
+          className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
           data-testid="button-create-tag"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -101,34 +99,32 @@ export default function AdminTags() {
       </div>
 
       {showForm && (
-        <Card className="bg-[#0D0D0D] border-gray-800 mb-6">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center justify-between">
-              New Tag
-              <Button variant="ghost" size="icon" onClick={resetForm}>
-                <X className="w-4 h-4 text-gray-400" />
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="bg-white rounded-md border border-[#181612]/10 p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[#181612] font-semibold">New Tag</h2>
+            <Button variant="ghost" size="icon" onClick={resetForm}>
+              <X className="w-4 h-4 text-[#6F6A5F]" />
+            </Button>
+          </div>
+          <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-gray-400">Name</Label>
+              <div className="space-y-2">
+                <Label className="text-[#181612]">Name</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="Tag name"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  placeholder="tag name"
+                  className="bg-[#FBF9F3] border-[#181612]/15 text-[#181612]"
                   data-testid="input-tag-name"
                 />
               </div>
-              <div>
-                <Label className="text-gray-400">Slug</Label>
+              <div className="space-y-2">
+                <Label className="text-[#181612]">Slug</Label>
                 <Input
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   placeholder="tag-slug"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-[#FBF9F3] border-[#181612]/15 text-[#181612]"
                   data-testid="input-tag-slug"
                 />
               </div>
@@ -137,17 +133,17 @@ export default function AdminTags() {
               <Button
                 onClick={handleSubmit}
                 disabled={!formData.name || !formData.slug}
-                className="bg-[#6B1421] hover:bg-[#6B1421]/80"
+                className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
                 data-testid="button-save-tag"
               >
                 Create Tag
               </Button>
-              <Button variant="ghost" onClick={resetForm} className="text-gray-400">
+              <Button variant="ghost" onClick={resetForm} className="text-[#6F6A5F]">
                 Cancel
               </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {isLoading ? (
@@ -155,68 +151,64 @@ export default function AdminTags() {
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6B1421]"></div>
         </div>
       ) : tags && tags.length > 0 ? (
-        <Card className="bg-[#0D0D0D] border-gray-800">
-          <CardContent className="p-6">
-            <div className="flex flex-wrap gap-3">
-              {tags.map((tag: any) => (
-                <div
-                  key={tag.id}
-                  className="group flex items-center gap-2 bg-gray-800 rounded-full pl-4 pr-2 py-2"
-                  data-testid={`tag-${tag.id}`}
-                >
-                  <span className="text-white">{tag.name}</span>
-                  <span className="text-gray-500 text-sm">/{tag.slug}</span>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                        data-testid={`button-delete-tag-${tag.id}`}
+        <div className="bg-white rounded-md border border-[#181612]/10 p-6">
+          <div className="flex flex-wrap gap-3">
+            {tags.map((tag: any) => (
+              <div
+                key={tag.id}
+                className="group flex items-center gap-2 bg-[#F4F1EA] border border-[#181612]/10 rounded-full pl-4 pr-2 py-2"
+                data-testid={`tag-${tag.id}`}
+              >
+                <span className="text-[#181612] lowercase">{tag.name}</span>
+                <span className="text-[#6F6A5F] text-sm">/{tag.slug}</span>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 text-[#6F6A5F] hover:text-[#6B1421] opacity-0 group-hover:opacity-100 transition-opacity"
+                      data-testid={`button-delete-tag-${tag.id}`}
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="bg-white border-[#181612]/10">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-[#181612]">Delete Tag</AlertDialogTitle>
+                      <AlertDialogDescription className="text-[#6F6A5F]">
+                        Are you sure you want to delete "{tag.name}"? Posts will be unlinked from this tag.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-white text-[#181612] border-[#181612]/15 hover:bg-[#F4F1EA]">
+                        Cancel
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteMutation.mutate(tag.id)}
+                        className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
                       >
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent className="bg-[#0D0D0D] border-gray-800">
-                      <AlertDialogHeader>
-                        <AlertDialogTitle className="text-white">Delete Tag</AlertDialogTitle>
-                        <AlertDialogDescription className="text-gray-400">
-                          Are you sure you want to delete "{tag.name}"? Posts will be unlinked from this tag.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-gray-800 text-white border-gray-700 hover:bg-gray-700">
-                          Cancel
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => deleteMutation.mutate(tag.id)}
-                          className="bg-red-600 hover:bg-red-700"
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            ))}
+          </div>
+        </div>
       ) : (
-        <Card className="bg-[#0D0D0D] border-gray-800">
-          <CardContent className="py-12 text-center">
-            <TagsIcon className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">No tags yet</h3>
-            <p className="text-gray-400 mb-4">Create tags to label your blog posts</p>
-            <Button
-              onClick={() => setShowForm(true)}
-              className="bg-[#6B1421] hover:bg-[#6B1421]/80"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First Tag
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="bg-white rounded-md border border-[#181612]/10 py-12 text-center">
+          <TagsIcon className="w-12 h-12 text-[#181612]/20 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-[#181612] mb-2">No tags yet</h3>
+          <p className="text-[#6F6A5F] mb-4">Create tags to label your blog posts</p>
+          <Button
+            onClick={() => setShowForm(true)}
+            className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Your First Tag
+          </Button>
+        </div>
       )}
     </AdminLayout>
   );

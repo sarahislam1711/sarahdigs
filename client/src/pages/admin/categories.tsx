@@ -2,7 +2,6 @@ import AdminLayout from "@/components/layout/admin-layout";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
@@ -121,10 +120,10 @@ export default function AdminCategories() {
   return (
     <AdminLayout title="Categories">
       <div className="flex justify-between items-center mb-6">
-        <p className="text-gray-400">Organize your blog posts with categories</p>
+        <p className="text-[#6F6A5F] text-sm">{categories?.length ?? 0} categor{(categories?.length ?? 0) !== 1 ? "ies" : "y"} · organize your blog posts with categories</p>
         <Button
           onClick={() => setShowForm(true)}
-          className="bg-[#6B1421] hover:bg-[#6B1421]/80"
+          className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
           data-testid="button-create-category"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -133,45 +132,43 @@ export default function AdminCategories() {
       </div>
 
       {showForm && (
-        <Card className="bg-[#0D0D0D] border-gray-800 mb-6">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center justify-between">
-              {editingId ? "Edit Category" : "New Category"}
-              <Button variant="ghost" size="icon" onClick={resetForm}>
-                <X className="w-4 h-4 text-gray-400" />
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="bg-white rounded-md border border-[#181612]/10 p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[#181612] font-semibold">{editingId ? "Edit Category" : "New Category"}</h2>
+            <Button variant="ghost" size="icon" onClick={resetForm}>
+              <X className="w-4 h-4 text-[#6F6A5F]" />
+            </Button>
+          </div>
+          <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-gray-400">Name</Label>
+              <div className="space-y-2">
+                <Label className="text-[#181612]">Name</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="Category name"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  placeholder="category name"
+                  className="bg-[#FBF9F3] border-[#181612]/15 text-[#181612]"
                   data-testid="input-category-name"
                 />
               </div>
-              <div>
-                <Label className="text-gray-400">Slug</Label>
+              <div className="space-y-2">
+                <Label className="text-[#181612]">Slug</Label>
                 <Input
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   placeholder="category-slug"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-[#FBF9F3] border-[#181612]/15 text-[#181612]"
                   data-testid="input-category-slug"
                 />
               </div>
             </div>
-            <div>
-              <Label className="text-gray-400">Description</Label>
+            <div className="space-y-2">
+              <Label className="text-[#181612]">Description</Label>
               <Textarea
                 value={formData.description}
                 onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-                placeholder="Optional description"
-                className="bg-gray-800 border-gray-700 text-white"
+                placeholder="optional description"
+                className="bg-[#FBF9F3] border-[#181612]/15 text-[#181612]"
                 data-testid="input-category-description"
               />
             </div>
@@ -179,18 +176,18 @@ export default function AdminCategories() {
               <Button
                 onClick={handleSubmit}
                 disabled={!formData.name || !formData.slug}
-                className="bg-[#6B1421] hover:bg-[#6B1421]/80"
+                className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
                 data-testid="button-save-category"
               >
                 <Save className="w-4 h-4 mr-2" />
                 {editingId ? "Update" : "Create"}
               </Button>
-              <Button variant="ghost" onClick={resetForm} className="text-gray-400">
+              <Button variant="ghost" onClick={resetForm} className="text-[#6F6A5F]">
                 Cancel
               </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {isLoading ? (
@@ -200,83 +197,79 @@ export default function AdminCategories() {
       ) : categories && categories.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map((category: any) => (
-            <Card key={category.id} className="bg-[#0D0D0D] border-gray-800" data-testid={`card-category-${category.id}`}>
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-md bg-[#6B1421]/20">
-                      <Folder className="w-5 h-5 text-[#6B1421]" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium">{category.name}</h3>
-                      <p className="text-gray-500 text-sm">/{category.slug}</p>
-                    </div>
+            <div key={category.id} className="bg-white rounded-md border border-[#181612]/10 p-4" data-testid={`card-category-${category.id}`}>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-md bg-[#6B1421]/10">
+                    <Folder className="w-5 h-5 text-[#6B1421]" />
                   </div>
-                  <div className="flex gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleEdit(category)}
-                      className="text-gray-400 hover:text-white"
-                      data-testid={`button-edit-category-${category.id}`}
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-gray-400 hover:text-red-500"
-                          data-testid={`button-delete-category-${category.id}`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent className="bg-[#0D0D0D] border-gray-800">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle className="text-white">Delete Category</AlertDialogTitle>
-                          <AlertDialogDescription className="text-gray-400">
-                            Are you sure you want to delete "{category.name}"? Posts will be unlinked from this category.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="bg-gray-800 text-white border-gray-700 hover:bg-gray-700">
-                            Cancel
-                          </AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => deleteMutation.mutate(category.id)}
-                            className="bg-red-600 hover:bg-red-700"
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                  <div>
+                    <h3 className="text-[#181612] font-medium lowercase">{category.name}</h3>
+                    <p className="text-[#6F6A5F] text-sm">/{category.slug}</p>
                   </div>
                 </div>
-                {category.description && (
-                  <p className="text-gray-400 text-sm mt-2">{category.description}</p>
-                )}
-              </CardContent>
-            </Card>
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleEdit(category)}
+                    className="text-[#6F6A5F] hover:text-[#181612]"
+                    data-testid={`button-edit-category-${category.id}`}
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-[#6F6A5F] hover:text-[#6B1421]"
+                        data-testid={`button-delete-category-${category.id}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="bg-white border-[#181612]/10">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="text-[#181612]">Delete Category</AlertDialogTitle>
+                        <AlertDialogDescription className="text-[#6F6A5F]">
+                          Are you sure you want to delete "{category.name}"? Posts will be unlinked from this category.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="bg-white text-[#181612] border-[#181612]/15 hover:bg-[#F4F1EA]">
+                          Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => deleteMutation.mutate(category.id)}
+                          className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </div>
+              {category.description && (
+                <p className="text-[#6F6A5F] text-sm mt-3 lowercase">{category.description}</p>
+              )}
+            </div>
           ))}
         </div>
       ) : (
-        <Card className="bg-[#0D0D0D] border-gray-800">
-          <CardContent className="py-12 text-center">
-            <Folder className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">No categories yet</h3>
-            <p className="text-gray-400 mb-4">Create categories to organize your blog posts</p>
-            <Button
-              onClick={() => setShowForm(true)}
-              className="bg-[#6B1421] hover:bg-[#6B1421]/80"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First Category
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="bg-white rounded-md border border-[#181612]/10 py-12 text-center">
+          <Folder className="w-12 h-12 text-[#181612]/20 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-[#181612] mb-2">No categories yet</h3>
+          <p className="text-[#6F6A5F] mb-4">Create categories to organize your blog posts</p>
+          <Button
+            onClick={() => setShowForm(true)}
+            className="bg-[#6B1421] hover:bg-[#8C2331] text-white"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Your First Category
+          </Button>
+        </div>
       )}
     </AdminLayout>
   );
