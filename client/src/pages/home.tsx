@@ -763,65 +763,6 @@ const Process = () => {
   );
 };
 
-const Services = () => {
-  const { data: homeContent } = useQuery<Record<string, any>>({
-    queryKey: ["/api/page-content/home"],
-  });
-
-  const { data: servicesData = [] } = useQuery<Service[]>({
-    queryKey: ["/api/services"],
-  });
-
-  const servicesHeaderData = homeContent?.services || {
-    headline: "Where do you wanna dig?",
-  };
-
-  const defaultServices = [
-    { slug: "seo", title: "SEO & Organic", shortDescription: "Comprehensive audit of your technical foundation, content gaps, and opportunity landscape.", iconName: "Search" },
-    { slug: "product", title: "Product-Led Marketing", shortDescription: "Data-backed content planning that targets high-intent users, not just traffic.", iconName: "Layout" },
-    { slug: "brand", title: "Brand & Strategy", shortDescription: "Turning messy analytics into clear, actionable insights for conversion optimization.", iconName: "BarChart3" },
-    { slug: "founder", title: "Founder-led Growth", shortDescription: "Qualitative digging to understand the 'why' behind the 'what' of user behavior.", iconName: "Users" },
-  ];
-
-  const services = servicesData.length > 0 ? servicesData : defaultServices;
-
-  return (
-    <section id="services" className="py-6 bg-transparent text-[#181612] scroll-mt-20">
-      <div className="container mx-auto px-6">
-        <TextReveal text={servicesHeaderData.headline} tag="h2" className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter md:whitespace-nowrap mb-6" />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {services.map((service, i) => {
-            const IconComponent = iconMap[service.iconName || "Search"] || Search;
-            return (
-              <ScrollReveal key={service.slug || i} delay={i * 0.1}>
-                <Link href={`/services/${service.slug}`}>
-                <div
-                  className="group border border-[#181612]/20 p-8 hover:bg-[#E7E2D6] hover:text-[#181612] transition-colors duration-500 cursor-pointer relative overflow-hidden rounded-md"
-                >
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-12 h-12 rounded-md bg-[#6B1421] flex items-center justify-center text-white font-bold text-sm">
-                      {String(i + 1).padStart(2, "0")}
-                    </div>
-                    <IconComponent className="h-8 w-8 opacity-60 group-hover:text-[#8C2331] transition-colors" />
-                  </div>
-                  <h3 className="text-3xl font-bold mb-3 group-hover:translate-x-2 transition-transform duration-300">
-                    {service.title}
-                  </h3>
-                  <p className="text-lg font-light opacity-70 group-hover:opacity-100 transition-opacity">
-                    {service.shortDescription}
-                  </p>
-                  <ArrowUpRight className="absolute bottom-6 right-6 h-6 w-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 text-[#6B1421]" />
-                </div>
-                </Link>
-              </ScrollReveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};
 
 const WhyMe = () => {
   const { data: homeContent } = useQuery<Record<string, any>>({
