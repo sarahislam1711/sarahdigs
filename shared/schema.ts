@@ -142,6 +142,7 @@ export const projects = pgTable("projects", {
   results: text("results"),
   iconName: varchar("icon_name"),
   imageUrl: text("image_url"),
+  logoUrl: text("logo_url"),
   displayOrder: integer("display_order").default(0),
   isVisible: boolean("is_visible").default(true),
 
@@ -160,7 +161,9 @@ export const projects = pgTable("projects", {
   processSteps: jsonb("process_steps"),            // [{title, description}]
   beforeStates: text("before_states").array(),     // short "before" phrases
   afterStates: text("after_states").array(),       // short "after" phrases
-  metrics: jsonb("metrics"),                        // [{value, label}] — multiple results
+  metrics: jsonb("metrics"),                        // [{value, label}] multiple results
+  gallery: jsonb("gallery"),                        // [{imageUrl, caption}] carousel slides
+  problemStory: text("problem_story"),              // long-form "the problem" narrative on the case study
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

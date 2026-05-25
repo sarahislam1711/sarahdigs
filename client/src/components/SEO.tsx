@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet-async";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
 
 const SITE_URL = "https://www.sarahdigs.com";
-const SITE_NAME = "SarahDigs";
-const DEFAULT_TITLE = "SarahDigs | SEO, Content & Growth Strategy";
+const SITE_NAME = "sarahdigs";
+const DEFAULT_TITLE = "sarahdigs | creative website studio";
 const DEFAULT_DESCRIPTION =
-  "SarahDigs helps brands grow organically through SEO, content strategy, and data-driven marketing. Book a free consultation today.";
+  "sarahdigs is a creative website studio that designs and builds high-performing websites for businesses. book a dig-in to get started.";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/favicon.png`;
 
 interface SEOProps {
@@ -44,7 +45,9 @@ export default function SEO({
   const resolvedCanonical = absoluteUrl(canonical) || SITE_URL;
   const resolvedOgImage = absoluteUrl(ogImage) || DEFAULT_OG_IMAGE;
 
-  const jsonLdArray = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+  // Organization + WebSite are injected on every page; page-specific schema is appended.
+  const pageJsonLd = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+  const jsonLdArray = [organizationSchema, websiteSchema, ...pageJsonLd];
 
   return (
     <Helmet>

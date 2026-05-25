@@ -159,7 +159,14 @@ export class DatabaseStorage implements IStorage {
   async getBlogPosts(): Promise<BlogPost[]> {
     try {
       const result = await db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt));
-      return Array.isArray(result) ? result : [];
+      const posts = Array.isArray(result) ? result : [];
+      // attach each post's tags so cards/listings can show them
+      return await Promise.all(
+        posts.map(async (p) => ({
+          ...p,
+          tags: await this.getPostTags(p.id),
+        }))
+      ) as any;
     } catch (error) {
       console.error("Error fetching blog posts:", error);
       return [];
@@ -177,9 +184,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPublishedBlogPosts(): Promise<BlogPost[]> {
-    return await db.select().from(blogPosts)
+    const posts = await db.select().from(blogPosts)
       .where(eq(blogPosts.status, "published"))
       .orderBy(desc(blogPosts.publishedAt));
+    // attach each post's tags so journal cards can show them
+    return await Promise.all(
+      posts.map(async (p) => ({ ...p, tags: await this.getPostTags(p.id) }))
+    ) as any;
   }
 
   async createBlogPost(post: InsertBlogPost): Promise<BlogPost> {
@@ -390,8 +401,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateProject(id: string, project: Partial<InsertProject>): Promise<Project> {
+    // Strip server-managed fields — the client sends them back as strings,
+    // which breaks Drizzle's timestamp handling (value.toISOString is not a function).
+    const { id: _id, createdAt: _c, updatedAt: _u, ...data } = project as any;
     const [result] = await db.update(projects)
-      .set({ ...project, updatedAt: new Date() })
+      .set({ ...data, updatedAt: new Date() })
       .where(eq(projects.id, id))
       .returning();
     return result;

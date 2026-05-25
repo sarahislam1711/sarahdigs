@@ -61,6 +61,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
+  // Dynamic sitemap — always reflects current projects, posts, and categories
+  app.get("/sitemap.xml", async (_req, res) => {
+    const SITE = "https://www.sarahdigs.com";
+    const staticUrls: { loc: string; priority: string; changefreq: string }[] = [
+      { loc: "/", priority: "1.0", changefreq: "weekly" },
+      { loc: "/about", priority: "0.8", changefreq: "monthly" },
+      { loc: "/contact", priority: "0.7", changefreq: "monthly" },
+      { loc: "/projects", priority: "0.8", changefreq: "weekly" },
+      { loc: "/journal", priority: "0.8", changefreq: "weekly" },
+      { loc: "/the-full-dig", priority: "0.9", changefreq: "monthly" },
+      { loc: "/dig-on-demand", priority: "0.8", changefreq: "monthly" },
+      { loc: "/dig-in-consultations", priority: "0.9", changefreq: "monthly" },
+      { loc: "/privacy", priority: "0.3", changefreq: "yearly" },
+      { loc: "/terms", priority: "0.3", changefreq: "yearly" },
+    ];
+    try {
+      const [projects, posts, categories] = await Promise.all([
+        storage.getProjects().catch(() => []),
+        storage.getPublishedBlogPosts().catch(() => []),
+        storage.getCategories().catch(() => []),
+      ]);
+      const dynamic: { loc: string; priority: string; changefreq: string }[] = [];
+      for (const p of projects as any[]) {
+        if (p?.slug && p.isVisible !== false) dynamic.push({ loc: `/projects/${p.slug}`, priority: "0.7", changefreq: "monthly" });
+      }
+      for (const post of posts as any[]) {
+        if (post?.slug) dynamic.push({ loc: `/journal/post/${post.slug}`, priority: "0.7", changefreq: "monthly" });
+      }
+      for (const c of categories as any[]) {
+        if (c?.slug) dynamic.push({ loc: `/journal/${c.slug}`, priority: "0.5", changefreq: "monthly" });
+      }
+      const all = [...staticUrls, ...dynamic];
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${all
+        .map((u) => `  <url>\n    <loc>${SITE}${u.loc}</loc>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`)
+        .join("\n")}\n</urlset>\n`;
+      res.set("Content-Type", "application/xml").send(xml);
+    } catch (error) {
+      console.error("Error generating sitemap:", error);
+      res.status(500).send("sitemap error");
+    }
+  });
+
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
       // Return admin user info
@@ -103,7 +145,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/posts", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = 'admin'; // Simple auth uses admin user
+      // Ensure a valid author exists (blog_posts.author_id FK -> users.id).
+      // Use the hardcoded admin user, creating it if it's missing so this
+      // never fails on a fresh/reset database.
+      let userId = 'admin';
+      const existing = await storage.getUser(userId);
+      if (!existing) {
+        await storage.upsertUser({
+          id: userId,
+          email: 'admin@sarahdigs.com',
+          firstName: 'sarah',
+          role: 'admin',
+        } as any);
+      }
       const postData = { ...req.body };
       
       // Handle publishedAt - convert empty string to null
@@ -136,7 +190,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(post);
     } catch (error) {
       console.error("Error creating post:", error);
-      res.status(400).json({ error: "Invalid request data" });
+      res.status(400).json({ error: "Invalid request data", message: (error as Error)?.message });
     }
   });
 
@@ -180,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(post);
     } catch (error) {
       console.error("Error updating post:", error);
-      res.status(400).json({ error: "Failed to update post" });
+      res.status(400).json({ error: "Failed to update post", message: (error as Error)?.message });
     }
   });
 
@@ -467,6 +521,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching categories:", error);
       res.status(500).json({ error: "Failed to fetch categories" });
+    }
+  });
+
+  app.get("/api/tags", async (req, res) => {
+    try {
+      const tags = await storage.getTags();
+      res.json(tags);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+      res.status(500).json({ error: "Failed to fetch tags" });
     }
   });
 
