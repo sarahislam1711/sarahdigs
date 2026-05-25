@@ -939,7 +939,7 @@ const SelectedWork = () => {
                       {/* Thumbnail — project logo on a bone tile */}
                       <div
                         className={cn(
-                          "relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:h-[260px] overflow-hidden bg-[#E7E2D6]/50 flex items-center justify-center p-8 md:p-12",
+                          "relative w-full aspect-[16/9] md:aspect-auto overflow-hidden bg-[#E7E2D6]/50 flex items-center justify-center p-6 md:p-8",
                           reversed && "md:order-2"
                         )}
                       >
@@ -959,13 +959,13 @@ const SelectedWork = () => {
                           reversed && "md:order-1"
                         )}
                       >
-                        <span className="inline-flex items-center gap-2 mb-3">
+                        <span className="inline-flex items-center gap-2 mb-2.5">
                           <span className="h-px w-5 bg-[#6B1421]/50" />
                           <span className="text-[11px] font-mono font-semibold uppercase tracking-[0.2em] text-[#6B1421]">
                             {project.client}
                           </span>
                         </span>
-                        <h3 className="font-display font-bold text-2xl md:text-3xl leading-tight tracking-tight text-[#181612] mb-5 lowercase">
+                        <h3 className="font-display font-bold text-2xl md:text-3xl leading-tight tracking-tight text-[#181612] mb-3.5 lowercase">
                           {project.headline.split(project.emphasis).map((part, idx, arr) => (
                             <span key={idx}>
                               {part}
@@ -977,7 +977,7 @@ const SelectedWork = () => {
                         </h3>
 
                         {/* Metric — visually distinct stat block */}
-                        <div className="inline-flex items-baseline gap-3 mb-6 pb-4 border-b border-[#181612]/[0.12] w-fit">
+                        <div className="inline-flex items-baseline gap-3 mb-4 pb-3 border-b border-[#181612]/[0.12] w-fit">
                           <span className="font-display font-bold text-3xl md:text-4xl text-[#6B1421] leading-none tabular-nums">
                             {project.metricValue}
                           </span>
