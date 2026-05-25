@@ -8,6 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import type { BlogPost, Category } from "@shared/schema";
 import NotFound from "@/pages/not-found";
 
+const readTime = (content: string | null) => {
+  if (!content) return "3 min";
+  return `${Math.ceil(content.split(/\s+/).length / 200)} min`;
+};
+const fmtDate = (date: Date | string | null) => {
+  if (!date) return "";
+  return new Date(date)
+    .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    .toLowerCase();
+};
+
 export default function JournalCategory() {
   const [, params] = useRoute("/journal/:category");
   const categorySlug = params?.category;
@@ -15,46 +26,24 @@ export default function JournalCategory() {
   const { data: categories, isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
-
   const { data: posts, isLoading: postsLoading } = useQuery<BlogPost[]>({
     queryKey: ["/api/blog/posts"],
   });
 
-  const category = categories?.find(c => c.slug === categorySlug);
-  
-  const getReadTime = (content: string | null) => {
-    if (!content) return "3 min read";
-    const words = content.split(/\s+/).length;
-    const minutes = Math.ceil(words / 200);
-    return `${minutes} min read`;
-  };
-
-  const formatDate = (date: Date | string | null) => {
-    if (!date) return "";
-    return new Date(date).toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
-  };
+  const category = categories?.find((c) => c.slug === categorySlug);
 
   if (categoriesLoading) {
     return (
-      <div className="min-h-screen bg-[#F4F1EA] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
+      <div className="min-h-screen bg-bone flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-oxblood" />
       </div>
     );
   }
-
-  if (!categorySlug || !category) {
-    return <NotFound />;
-  }
+  if (!categorySlug || !category) return <NotFound />;
 
   const categoryPosts = posts || [];
-
   const description =
-    category.description ||
-    `Essays and field notes on ${category.name.toLowerCase()} from Sarah Islam.`;
+    category.description || `essays and field notes on ${category.name.toLowerCase()} from sarahdigs.`;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -67,85 +56,80 @@ export default function JournalCategory() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+    <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
         title={`${category.name} | journal | sarahdigs`}
         description={description}
         canonical={`/journal/${category.slug}`}
         jsonLd={breadcrumbJsonLd}
       />
-      <Navbar />
+      <Navbar theme="light" />
 
-      <section className="pt-40 pb-20 bg-[#F4F1EA]">
-        <div className="container mx-auto px-6">
-          <Link href="/journal" className="inline-flex items-center text-[#181612]/60 hover:text-[#6B1421] mb-8 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Journal
-          </Link>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl"
+      {/* MASTHEAD */}
+      <section className="bg-bone pt-24 pb-10 md:pt-28 md:pb-12">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <Link
+            href="/journal"
+            className="inline-flex items-center gap-2 text-sm font-medium text-ink-mid hover:text-oxblood transition-colors lowercase mb-10"
           >
-            <h1 
-              className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[0.95]"
-              style={{ color: category.textColor || '#6B1421' }}
-            >
-              {category.name}
+            <ArrowLeft className="w-4 h-4" /> back to the journal
+          </Link>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            <div className="flex items-center gap-3 mb-5">
+              <span className="h-px w-8 bg-oxblood/40" />
+              <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">category</span>
+            </div>
+            <h1 className="font-display font-semibold tracking-tighter text-6xl md:text-8xl leading-none lowercase mb-5">
+              {category.name.toLowerCase()}
             </h1>
-            <p className="text-xl md:text-2xl font-light text-[#181612]/80 leading-relaxed max-w-2xl">
-              {category.description}
+            <p className="text-ink-mid text-base md:text-lg leading-snug lowercase max-w-xl">
+              {description}
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-12 bg-white min-h-[60vh] border-t border-[#181612]/5">
-        <div className="container mx-auto px-6">
-          <div className="flex justify-between items-end mb-12">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-[#181612]">All Posts</h2>
+      {/* INDEX */}
+      <section className="bg-bone pb-20 md:pb-28 min-h-[40vh]">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="flex items-center gap-3 text-oxblood font-semibold uppercase tracking-[0.22em] text-xs mb-2 border-t border-ink/10 pt-10">
+            <span className="h-px w-8 bg-oxblood/40" /> the index
           </div>
 
           {postsLoading ? (
             <div className="flex justify-center items-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
+              <Loader2 className="w-7 h-7 animate-spin text-oxblood" />
             </div>
           ) : categoryPosts.length === 0 ? (
-            <div className="text-center py-20 text-[#181612]/70">
-              <p className="text-lg">No posts in this category yet. Check back soon!</p>
-            </div>
+            <p className="py-16 text-ink-mid lowercase">no posts in this category yet. check back soon.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div>
               {categoryPosts.map((post, i) => (
-                <Link key={post.id} href={`/journal/post/${post.slug}`}>
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
+                <Link key={post.id} href={`/journal/post/${post.slug}`} className="group block">
+                  <motion.article
+                    initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="group cursor-pointer flex flex-col h-full"
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.45, delay: Math.min(i, 6) * 0.05, ease: "easeOut" }}
+                    className="grid grid-cols-12 gap-4 md:gap-6 items-baseline py-6 border-b border-ink/10"
                   >
-                    <div className="bg-[#E7E2D6] rounded-[2rem] p-8 mb-6 group-hover:shadow-xl transition-all duration-300 border border-[#181612]/5 group-hover:border-[#6B1421]/20 relative overflow-hidden flex-1 flex flex-col">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#6B1421]/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all duration-500 group-hover:scale-150"></div>
-                      
-                      <div className="mb-auto">
-                        <h3 className="text-2xl font-bold leading-tight mb-4 group-hover:text-[#6B1421] transition-colors">
-                          {post.title}
-                        </h3>
-                        <p className="text-[#181612]/70 leading-relaxed text-sm">
-                          {post.excerpt || post.content?.substring(0, 150) + '...'}
-                        </p>
-                      </div>
-
-                      <div className="mt-8 pt-6 border-t border-[#181612]/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#181612]/70">
-                        <span>{formatDate(post.publishedAt)}</span>
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#6B1421] group-hover:text-white transition-all">
-                          <ArrowUpRight className="w-4 h-4" />
-                        </div>
-                      </div>
+                    <span className="col-span-2 md:col-span-1 font-display font-extrabold text-oxblood text-2xl md:text-3xl tabular-nums tracking-tighter">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h2 className="col-span-10 md:col-span-8 font-display font-medium text-2xl md:text-3xl tracking-tight leading-snug lowercase group-hover:text-oxblood transition-colors">
+                      {post.title}
+                    </h2>
+                    <span className="hidden md:block md:col-span-2 text-[11px] font-mono uppercase tracking-[0.18em] text-ink-mid">
+                      {fmtDate(post.publishedAt)} · {readTime(post.content)}
+                    </span>
+                    <div className="hidden md:flex md:col-span-1 justify-end">
+                      <ArrowUpRight className="w-5 h-5 text-ink/30 group-hover:text-oxblood group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                     </div>
-                  </motion.div>
+                  </motion.article>
                 </Link>
               ))}
             </div>

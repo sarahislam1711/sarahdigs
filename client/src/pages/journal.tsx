@@ -1,356 +1,209 @@
-import React from "react";
+import { useState } from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
+import { pageSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Wrench, Newspaper, FlaskConical, Lightbulb, FileText, ChevronRight, Loader2, Search, Layout, BarChart3, Users, Briefcase, Rocket, Target, Zap, Heart, Star, Globe, Code, Database, Settings, MessageSquare, BookOpen, PenTool, Camera, Video, Mail, Calendar, Tag, Award, TrendingUp, Cpu, Cloud, Layers, Plane } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import type { BlogPost, Category } from "@shared/schema";
+import type { BlogPost, Category, Tag as TagType } from "@shared/schema";
 
-const JournalHero = () => {
-  return (
-    <section className="pt-32 pb-20 bg-[#F4F1EA]">
-      {/* Top meta rail */}
-      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
-        <div className="flex items-center justify-between border-b border-ink/10 pb-4 mb-12 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
-          <span>sarahdigs · creative website studio</span>
-          <span className="hidden md:inline">writing</span>
-          <span>2026</span>
-        </div>
-      </div>
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-4xl"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[0.95]">
-            A living archive of what I'm <span className="text-[#6B1421]">testing</span>, <span className="text-[#6B1421]">learning</span> & fixing
-          </h1>
-          <p className="text-xl md:text-2xl font-light text-[#181612]/80 leading-relaxed max-w-2xl">
-            Welcome to my Journal — the inside of my brain, organized... well, mostly
-          </p>
-        </motion.div>
-      </div>
-    </section>
-  );
+// ── helpers ──
+const readTime = (content: string | null) => {
+  if (!content) return "3 min";
+  return `${Math.ceil(content.split(/\s+/).length / 200)} min`;
 };
-
-const FeaturedPieces = () => {
-  const { data: posts, isLoading } = useQuery<BlogPost[]>({
-    queryKey: ["/api/blog/posts"],
-  });
-
-  // Get posts marked as featured, or fall back to first 3 posts
-  const featuredPosts = posts?.filter((p: any) => p.isFeatured) || [];
-  const featured = featuredPosts.length > 0 ? featuredPosts.slice(0, 3) : posts?.slice(0, 3) || [];
-
-  const getReadTime = (content: string | null) => {
-    if (!content) return "3 min read";
-    const words = content.split(/\s+/).length;
-    const minutes = Math.ceil(words / 200);
-    return `${minutes} min read`;
-  };
-
-  const formatDate = (date: Date | string | null) => {
-    if (!date) return "";
-    return new Date(date).toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
-  };
-
-  const colors = ["bg-[#E7E2D6]", "bg-[#1B1B1B]", "bg-[#6B1421]"];
-
-  if (isLoading) {
-    return (
-      <section className="py-12 bg-bone">
-        <div className="container mx-auto px-6">
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (!featured.length) {
-    return (
-      <section className="py-12 bg-bone">
-        <div className="container mx-auto px-6">
-          <div className="flex justify-between items-end mb-12">
-            <h2 className="font-bold uppercase tracking-widest text-[#181612] text-[19px]">Featured Pieces</h2>
-          </div>
-          <div className="text-center py-12 text-[#181612]/70">
-            <p className="text-lg">No posts yet. Check back soon!</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section className="py-12 bg-bone">
-      <div className="container mx-auto px-6">
-        <div className="flex justify-between items-end mb-12">
-          <h2 className="font-bold uppercase tracking-widest text-[#181612] text-[19px]">Featured Pieces</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featured.map((post, i) => (
-            <Link key={post.id} href={`/journal/post/${post.slug}`}>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group cursor-pointer"
-              >
-                <div className={`aspect-[4/3] ${post.featuredImageUrl ? '' : colors[i % 3]} rounded-md mb-6 relative overflow-hidden group-hover:shadow-xl transition-all duration-500`}>
-                  {post.featuredImageUrl && (
-                    <img 
-                      src={post.featuredImageUrl} 
-                      alt={post.title} 
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                  <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-[#181612]">
-                    Blog
-                  </div>
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
-                  <ArrowUpRight className="absolute top-6 right-6 w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0" />
-                </div>
-                <div className="flex items-center gap-4 text-xs font-medium text-[#181612]/70 mb-3 uppercase tracking-wider">
-                  <span>{formatDate(post.publishedAt)}</span>
-                  <span className="w-1 h-1 bg-[#1B1B1B]/20 rounded-full"></span>
-                  <span>{getReadTime(post.content)}</span>
-                </div>
-                <h3 className="text-2xl font-bold leading-tight group-hover:text-[#6B1421] transition-colors">
-                  {post.title}
-                </h3>
-              </motion.div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+const fmtDate = (date: Date | string | null) => {
+  if (!date) return "";
+  return new Date(date)
+    .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    .toLowerCase();
 };
+const excerptOf = (p: BlogPost) => p.excerpt || p.content?.slice(0, 160) || "";
 
-const AllPosts = () => {
-  const { data: posts, isLoading } = useQuery<BlogPost[]>({
-    queryKey: ["/api/blog/posts"],
-  });
+type PostWithTags = BlogPost & { tags?: TagType[] };
+const usePosts = () => useQuery<PostWithTags[]>({ queryKey: ["/api/blog/posts"] });
+const useCats = () => useQuery<Category[]>({ queryKey: ["/api/categories"] });
+const useTags = () => useQuery<TagType[]>({ queryKey: ["/api/tags"] });
 
-  // Get posts that are not featured
-  const featuredPosts = posts?.filter((p: any) => p.isFeatured) || [];
-  // If there are featured posts, show non-featured in All Posts
-  // Otherwise, skip first 3 (which are shown in Featured) from All Posts
-  const allPosts = featuredPosts.length > 0 
-    ? posts?.filter((p: any) => !p.isFeatured) || []
-    : posts?.slice(3) || [];
+// ════════════════════════════════════════════════════════════════════
+// JOURNAL — index / table of contents layout
+// Quiet bone masthead, latest as a wide split, posts as a numbered index.
+// ════════════════════════════════════════════════════════════════════
+function JournalLayout() {
+  const { data: posts = [], isLoading } = usePosts();
+  const { data: cats = [] } = useCats();
 
-  const getReadTime = (content: string | null) => {
-    if (!content) return "3 min read";
-    const words = content.split(/\s+/).length;
-    const minutes = Math.ceil(words / 200);
-    return `${minutes} min read`;
-  };
-
-  const formatDate = (date: Date | string | null) => {
-    if (!date) return "";
-    return new Date(date).toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
-  };
-
-  if (isLoading || !allPosts.length) return null;
+  // featured-first ordering
+  const ordered = [...posts].sort((a: any, b: any) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
+  const featured = ordered[0];
+  const rest = ordered.slice(1);
 
   return (
-    <section className="py-12 bg-bone border-t border-[#181612]/10">
-      <div className="container mx-auto px-6">
-        <div className="flex justify-between items-end mb-12">
-          <h2 className="font-bold uppercase tracking-widest text-[#181612] text-[19px]">All Posts</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {allPosts.map((post, i) => (
-            <Link key={post.id} href={`/journal/post/${post.slug}`}>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group cursor-pointer flex flex-col h-full"
-              >
-                <div className="bg-[#E7E2D6] rounded-[2rem] p-8 mb-6 group-hover:shadow-xl transition-all duration-300 border border-[#181612]/5 group-hover:border-[#6B1421]/20 relative overflow-hidden flex-1 flex flex-col">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#6B1421]/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all duration-500 group-hover:scale-150"></div>
-                  
-                  <div className="mb-auto">
-                    <h3 className="text-2xl font-bold leading-tight mb-4 group-hover:text-[#6B1421] transition-colors">
-                      {post.title}
-                    </h3>
-                    <p className="text-[#181612]/70 leading-relaxed text-sm">
-                      {post.excerpt || post.content?.substring(0, 150) + '...'}
-                    </p>
-                  </div>
-
-                  <div className="mt-8 pt-6 border-t border-[#181612]/5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#181612]/70">
-                    <span>{formatDate(post.publishedAt)}</span>
-                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#6B1421] group-hover:text-white transition-all">
-                      <ArrowUpRight className="w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const SectionsGrid = () => {
-  const { data: categories, isLoading } = useQuery<Category[]>({
-    queryKey: ["/api/categories"],
-  });
-
-  // Icon mapping for category icons
-  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-    FlaskConical,
-    Newspaper,
-    Wrench,
-    Lightbulb,
-    FileText,
-    Search,
-    Layout,
-    BarChart3,
-    Users,
-    Briefcase,
-    Rocket,
-    Target,
-    Zap,
-    Heart,
-    Star,
-    Globe,
-    Code,
-    Database,
-    Settings,
-    MessageSquare,
-    BookOpen,
-    PenTool,
-    Camera,
-    Video,
-    Mail,
-    Calendar,
-    Tag,
-    Award,
-    TrendingUp,
-    Cpu,
-    Cloud,
-    Layers,
-    Plane,
-  };
-
-  if (isLoading) {
-    return (
-      <section className="py-24 bg-bone border-t border-[#181612]/10">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#6B1421]">Category</span></h2>
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-[#6B1421]" />
+    <>
+      {/* MASTHEAD */}
+      <section className="bg-bone pt-24 pb-4 md:pt-28 md:pb-6">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="flex items-center justify-between border-b border-ink/10 pb-4 mb-10 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
+            <span>sarahdigs · creative website studio</span>
+            <span>the journal · 2026</span>
           </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (!categories || categories.length === 0) {
-    return (
-      <section className="py-24 bg-bone border-t border-[#181612]/10">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#6B1421]">Category</span></h2>
-          <div className="text-center py-12 text-[#181612]/70">
-            <p className="text-lg">No categories yet. Check back soon!</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section className="py-24 bg-bone border-t border-[#181612]/10">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold tracking-tighter mb-16">Browse by <span className="text-[#6B1421]">Category</span></h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((category, i) => {
-            const IconComponent = iconMap[category.iconName || 'FileText'] || FileText;
-            const bgColor = category.bgColor || '#E7E2D6';
-            const textColor = category.textColor || '#6B1421';
-            
-            return (
-              <Link key={category.id} href={`/journal/${category.slug}`} className="block h-full">
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="group p-8 rounded-[2rem] border border-[#181612]/10 hover:border-[#6B1421] shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[300px] h-full relative overflow-hidden"
-                  style={{ backgroundColor: bgColor }}
+          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: "easeOut" }}>
+            <h1 className="font-display font-semibold tracking-tighter text-6xl md:text-8xl leading-none lowercase mb-5">
+              the <span className="text-oxblood italic">journal</span>
+            </h1>
+            <p className="text-ink-mid text-base md:text-lg leading-snug lowercase max-w-xl">
+              essays, frameworks, and notes on websites, design, and growth.
+            </p>
+          </motion.div>
+          {/* topics as numbered pills (option A style) */}
+          {cats.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2.5 mt-8">
+              {cats.map((c, i) => (
+                <Link
+                  key={c.id}
+                  href={`/journal/${c.slug}`}
+                  className="group inline-flex items-center gap-2 rounded-full border border-ink/15 pl-3 pr-4 py-2 transition-all duration-300 hover:bg-oxblood hover:border-oxblood hover:-translate-y-0.5"
                 >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#6B1421]/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all duration-500 group-hover:scale-150"></div>
-                  
-                  <div>
-                    <div className="w-12 h-12 rounded-md bg-white border border-[#181612]/5 flex items-center justify-center mb-6">
-                      <IconComponent className="w-6 h-6" style={{ color: textColor }} />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3" style={{ color: textColor }}>{category.name}</h3>
-                    <p className="text-lg leading-relaxed opacity-70" style={{ color: textColor }}>
-                      {category.description || ''}
-                    </p>
+                  <span className="font-mono text-[10px] tabular-nums text-oxblood group-hover:text-bone/70">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-medium text-sm lowercase text-ink group-hover:text-bone">{c.name.toLowerCase()}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {isLoading ? (
+        <section className="bg-bone py-24 text-center"><Loader2 className="w-7 h-7 animate-spin text-oxblood mx-auto" /></section>
+      ) : ordered.length === 0 ? (
+        <section className="bg-bone py-24 text-center text-ink-mid lowercase">writing coming soon.</section>
+      ) : (
+        <>
+          {/* FEATURED — on a slightly darker stone band to set it apart */}
+          <section className="bg-stone py-12 md:py-16 mt-6 md:mt-8">
+            <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+              <Link href={`/journal/post/${featured.slug}`} className="group block">
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center"
+                >
+                  <div className="rounded-md overflow-hidden border border-ink/10 bg-ink aspect-video flex items-center justify-center">
+                    {featured.featuredImageUrl ? (
+                      <img src={featured.featuredImageUrl} alt={featured.title} loading="lazy" decoding="async" className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.03]" />
+                    ) : (
+                      <div className="w-full h-full" style={{ background: "linear-gradient(135deg,#6B1421,#4A0E16)" }} />
+                    )}
                   </div>
-                  
-                  <div className="mt-8 flex items-center gap-2 text-sm font-bold uppercase tracking-widest group-hover:text-[#6B1421] transition-colors" style={{ color: textColor }}>
-                    Explore <ChevronRight className="w-4 h-4" />
+                  <div className="flex flex-col justify-center">
+                    <div className="flex items-center gap-3 text-oxblood font-semibold uppercase tracking-[0.22em] text-xs mb-5">
+                      <span className="h-px w-8 bg-oxblood/40" /> the latest
+                    </div>
+                    <div className="flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.18em] text-ink-mid mb-4">
+                      <span>{fmtDate(featured.publishedAt)}</span>
+                      <span className="w-1 h-1 rounded-full bg-ink/25" />
+                      <span>{readTime(featured.content)}</span>
+                    </div>
+                    <h2 className="font-display font-semibold tracking-tighter text-3xl md:text-5xl leading-[0.98] lowercase group-hover:text-oxblood transition-colors mb-5">
+                      {featured.title}
+                    </h2>
+                    {featured.tags && featured.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {featured.tags.slice(0, 4).map((t) => (
+                          <span key={t.id} className="inline-block bg-oxblood/8 text-oxblood text-xs font-medium lowercase px-3 py-1.5 rounded-full">{t.name}</span>
+                        ))}
+                      </div>
+                    )}
+                    <span className="inline-flex items-center gap-2 text-base font-medium lowercase text-oxblood w-fit">
+                      read the piece <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
                   </div>
                 </motion.div>
               </Link>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};
+            </div>
+          </section>
 
+          {/* REST — 2 per row, smaller titles */}
+          {rest.length > 0 && (
+            <section className="bg-bone py-14 md:py-20">
+              <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
+                  {rest.map((post, i) => (
+                    <Link key={post.id} href={`/journal/post/${post.slug}`} className="group">
+                      <motion.article
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.5, delay: Math.min(i, 5) * 0.06, ease: "easeOut" }}
+                      >
+                        <div className="rounded-md overflow-hidden border border-ink/10 bg-ink aspect-video mb-5 flex items-center justify-center group-hover:border-oxblood/40 transition-colors">
+                          {post.featuredImageUrl ? (
+                            <img src={post.featuredImageUrl} alt={post.title} loading="lazy" decoding="async" className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.03]" />
+                          ) : (
+                            <div className="w-full h-full" style={{ background: "linear-gradient(135deg,#E7E2D6,#C58A92)" }} />
+                          )}
+                        </div>
+                        <div className="flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.18em] text-ink-mid mb-2">
+                          <span>{fmtDate(post.publishedAt)}</span>
+                          <span className="w-1 h-1 rounded-full bg-ink/25" />
+                          <span>{readTime(post.content)}</span>
+                        </div>
+                        <h3 className="font-display font-medium text-2xl md:text-3xl tracking-tight leading-snug lowercase group-hover:text-oxblood transition-colors mb-3">{post.title}</h3>
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {post.tags.slice(0, 3).map((t) => (
+                              <span key={t.id} className="inline-block bg-oxblood/8 text-oxblood text-xs font-medium lowercase px-2.5 py-1 rounded-full">{t.name}</span>
+                            ))}
+                          </div>
+                        )}
+                      </motion.article>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+        </>
+      )}
+    </>
+  );
+}
+
+// ── NEWSLETTER (shared) ──
 const Newsletter = () => {
+  const [email, setEmail] = useState("");
   return (
-    <section className="py-24 bg-[#E7E2D6]">
-      <div className="container mx-auto px-6 text-center">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tighter mb-6">
-            Get the digest.
-          </h2>
-          <p className="text-xl text-[#181612]/70 mb-10">
-            I send one email a month with my best findings. No spam, just signal.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <input 
-              type="email" 
-              placeholder="Your email address" 
-              className="flex-1 px-6 py-4 rounded-md border border-[#181612]/15 bg-[#FBF9F3] focus:outline-none focus:border-oxblood transition-colors"
-            />
-            <Button size="lg" className="rounded-md px-8 h-auto py-4 bg-[#1B1B1B] hover:bg-[#6B1421] text-white text-lg">
-              Subscribe
-            </Button>
+    <section className="bg-bone pb-20 md:pb-28">
+      <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+        <div className="border-t border-ink/10 pt-12 md:pt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-6">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="h-px w-8 bg-oxblood/40" />
+              <span className="text-oxblood font-semibold uppercase tracking-[0.22em] text-xs">the digest</span>
+            </div>
+            <h2 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl lg:text-6xl leading-[1.02] lowercase">
+              get the good stuff,<br /><span className="text-oxblood italic">monthly.</span>
+            </h2>
+          </div>
+          <div className="lg:col-span-6 lg:pl-4">
+            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your email"
+                className="flex-1 h-14 px-5 rounded-md border border-ink/15 bg-transparent text-ink placeholder:text-ink-mid/60 lowercase focus:outline-none focus:border-oxblood transition-colors"
+              />
+              <Button size="lg" type="submit" className="h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2">
+                subscribe <ArrowRight className="w-4 h-4" />
+              </Button>
+            </form>
+            <p className="text-ink-mid text-sm lowercase mt-3">no spam. unsubscribe anytime.</p>
           </div>
         </div>
       </div>
@@ -360,18 +213,20 @@ const Newsletter = () => {
 
 export default function Journal() {
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-white">
+    <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
         title="journal | sarahdigs"
-        description="Essays, frameworks, and field notes on SEO, content strategy, and growth marketing from Sarah Islam."
+        description="essays, frameworks, and field notes on websites, design, and growth from sarahdigs."
         canonical="/journal"
         ogType="website"
+        jsonLd={pageSchema("Blog", {
+          name: "the journal",
+          description: "essays, frameworks, and field notes on websites, design, and growth from sarahdigs.",
+          url: "/journal",
+        })}
       />
       <Navbar theme="light" />
-      <JournalHero />
-      <FeaturedPieces />
-      <AllPosts />
-      <SectionsGrid />
+      <JournalLayout />
       <Newsletter />
       <Footer />
     </div>
