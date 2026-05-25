@@ -155,13 +155,14 @@ export default function Contact() {
       {/* Hero Section */}
       <section className="min-h-screen pt-24 pb-20 bg-bone relative overflow-hidden flex items-center">
         {/* Faded background image */}
-        <div className="absolute top-0 right-0 w-[62%] h-[126%] hidden lg:block pointer-events-none" style={{
+        <div className="absolute top-0 right-0 w-[62%] h-full hidden lg:block pointer-events-none" style={{
           backgroundImage: `url(${contactHero})`,
-          backgroundSize: '155%',
-          backgroundPosition: 'center 50%',
-          opacity: 0.35,
-          maskImage: 'radial-gradient(ellipse at 65% 50%, black 33%, transparent 77%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at 65% 50%, black 33%, transparent 77%)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.45,
+          maskImage: 'radial-gradient(ellipse at 65% 50%, black 45%, transparent 85%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 65% 50%, black 45%, transparent 85%)',
         }} />
 
         <div className="container mx-auto px-6 relative z-10">
