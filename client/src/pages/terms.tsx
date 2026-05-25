@@ -9,8 +9,8 @@ const sections = [
       <>
         <p>
           sarahdigs is a creative website studio that designs and builds high-performing
-          websites for businesses. by engaging with us — whether through a paid
-          project, consultation, or any other service — you agree to the terms
+          websites for businesses. by engaging with us, whether through a paid
+          project, consultation, or any other service, you agree to the terms
           outlined in this document.
         </p>
         <p>
@@ -33,25 +33,25 @@ const sections = [
         <p>sarahdigs offers the following core services:</p>
         <ul>
           <li>
-            <span className="text-[#181612] font-medium">the full dig</span> —
+            <span className="text-[#181612] font-medium">the full dig</span>:
             a comprehensive website build including strategy, design,
             development, and optimization. delivered in defined tiers (the dig,
             the deep dig, the full dig) scoped and agreed before work begins.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">dig-in consultation</span>{" "}
-            — a focused diagnostic call and written action plan. a one-time
+            <span className="text-[#181612] font-medium">dig-in consultation</span>:
+            a focused diagnostic call and written action plan. a one-time
             deliverable with no ongoing obligation on either side unless
             explicitly agreed.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">custom dig</span>{" "}
-            — a custom engagement built around a specific situation. scope and
+            <span className="text-[#181612] font-medium">custom dig</span>:
+            a custom engagement built around a specific situation. scope and
             deliverables are agreed in writing before any work starts.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">retainer arrangements</span>{" "}
-            — ongoing work agreed on a monthly basis. terms, scope, and output
+            <span className="text-[#181612] font-medium">retainer arrangements</span>:
+            ongoing work agreed on a monthly basis. terms, scope, and output
             are defined in a separate retainer agreement.
           </li>
         </ul>
@@ -138,7 +138,7 @@ const sections = [
         <p>
           invoices are due within 14 days of issue unless otherwise agreed.
           overdue invoices may result in a pause of work until the account is
-          settled. we don't charge late fees by default, but we do stop work —
+          settled. we don't charge late fees by default, but we do stop work,
           and that affects your timeline.
         </p>
         <p>
@@ -147,7 +147,7 @@ const sections = [
         <p>
           deposits are non-refundable once work has begun. if you cancel before
           work starts, we'll discuss a fair resolution. if we fail to deliver
-          what was agreed, we'll make it right — through revision, credit, or
+          what was agreed, we'll make it right, through revision, credit, or
           partial refund depending on the situation.
         </p>
       </>
@@ -170,7 +170,7 @@ const sections = [
         </p>
         <p>
           we retain the right to show the completed work in our portfolio, case
-          studies, and general marketing — unless you've asked for
+          studies, and general marketing, unless you've asked for
           confidentiality in writing and we've agreed to it.
         </p>
         <p>
@@ -182,8 +182,8 @@ const sections = [
           <span className="text-[#181612] font-medium">your assets</span>
         </p>
         <p>
-          any materials you provide — logos, images, copy, brand assets,
-          third-party content — remain yours. you are responsible for ensuring
+          any materials you provide, logos, images, copy, brand assets,
+          third-party content, remain yours. you are responsible for ensuring
           you have the right to use them.
         </p>
         <p>
@@ -207,7 +207,7 @@ const sections = [
           <li>provide accurate, complete information about your business when requested</li>
           <li>respond to feedback requests within the timeframes agreed (typically 5 business days unless otherwise specified)</li>
           <li>ensure that any content, assets, or materials you provide don't infringe on third-party rights</li>
-          <li>designate a clear decision-maker on your side — projects with unclear internal ownership create delays and confusion</li>
+          <li>designate a clear decision-maker on your side, projects with unclear internal ownership create delays and confusion</li>
           <li>make timely payments per the agreed schedule</li>
         </ul>
         <p>
@@ -223,8 +223,8 @@ const sections = [
     body: (
       <>
         <p>
-          we treat your business information — strategy, positioning, audience
-          insights, financials, internal documents — as confidential. we don't
+          we treat your business information, strategy, positioning, audience
+          insights, financials, internal documents, as confidential. we don't
           share it with other clients, discuss it publicly, or use it to inform
           work done for anyone else.
         </p>
@@ -249,7 +249,7 @@ const sections = [
         <p>we do quality work and stand behind it. but a few honest limits:</p>
         <ul>
           <li>
-            <span className="text-[#181612] font-medium">results</span> — we
+            <span className="text-[#181612] font-medium">results</span>: we
             can build a website that is strategically sound, well-designed, and
             optimized for search and conversion. we cannot guarantee specific
             revenue outcomes, traffic numbers, or ranking positions. those
@@ -257,20 +257,20 @@ const sections = [
             you follow up with leads, etc).
           </li>
           <li>
-            <span className="text-[#181612] font-medium">third-party platforms</span>{" "}
-            — if a platform we build on (Webflow, Google Search, etc.) changes
+            <span className="text-[#181612] font-medium">third-party platforms</span>:
+            if a platform we build on (Webflow, Google Search, etc.) changes
             its behavior, we are not liable for resulting impact. we'll advise
             on how to adapt.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">our liability cap</span>{" "}
-            — in any dispute, our maximum liability is limited to the total
+            <span className="text-[#181612] font-medium">our liability cap</span>:
+            in any dispute, our maximum liability is limited to the total
             fees paid by you for the specific engagement in question.
           </li>
         </ul>
         <p>
-          we are not liable for indirect, consequential, or incidental damages
-          — including lost revenue, lost data, or lost opportunities — arising
+          we are not liable for indirect, consequential, or incidental damages,
+          including lost revenue, lost data, or lost opportunities, arising
           from work we deliver or fail to deliver.
         </p>
       </>
@@ -341,7 +341,7 @@ const sections = [
       <>
         <p>
           questions, concerns, or anything that doesn't fit neatly into a
-          policy — we'd rather hear from you directly than have you wonder.
+          policy, we'd rather hear from you directly than have you wonder.
         </p>
         <p>
           <span className="text-[#181612] font-medium">sarahdigs</span>
@@ -381,9 +381,9 @@ export default function Terms() {
             <h1 className="font-display font-bold text-5xl md:text-7xl leading-[1] tracking-tight text-[#181612] mb-6 lowercase">
               terms of service.
             </h1>
-            <p className="text-lg md:text-xl text-[#6F6A5F] leading-relaxed lowercase">
+            <p className="text-lg md:text-xl text-ink-mid leading-relaxed lowercase">
               the terms under which sarahdigs delivers websites, consultations,
-              and ongoing work — in plain language.
+              and ongoing work, in plain language.
             </p>
           </div>
 
@@ -399,7 +399,7 @@ export default function Terms() {
                     {section.title}
                   </h2>
                 </div>
-                <div className="text-base md:text-lg text-[#6F6A5F] leading-relaxed lowercase space-y-5 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2 [&_ul]:marker:text-[#6B1421]/50">
+                <div className="text-base md:text-lg text-ink-mid leading-relaxed lowercase space-y-5 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2 [&_ul]:marker:text-[#6B1421]/50">
                   {section.body}
                 </div>
               </section>
@@ -408,12 +408,12 @@ export default function Terms() {
 
           {/* Meta footer */}
           <div className="max-w-3xl mt-20 md:mt-28 pt-10 border-t border-[#181612]/12">
-            <p className="text-sm text-[#6F6A5F] lowercase">
+            <p className="text-sm text-ink-mid lowercase">
               last updated: may 2025
               <br />
               version: 1.0
             </p>
-            <p className="text-sm text-[#6F6A5F] mt-4 lowercase">
+            <p className="text-sm text-ink-mid mt-4 lowercase">
               significant changes notified by email to active clients.
             </p>
           </div>

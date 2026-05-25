@@ -2,13 +2,14 @@ import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
+import { pageSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { Check, X, ArrowRight, Zap, Target, BarChart, Rocket, TrendingDown, Banknote, Puzzle, ChevronDown, ChevronRight } from "lucide-react";
 import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
-import contactHero from "@/assets/IMG_6270.jpg";
+import contactHero from "@/assets/IMG_6270-opt.jpg";
 import { openCalendly } from "@/lib/calendly";
 
 const CountUp = ({ value, label }: { value: string, label: string }) => {
@@ -120,17 +121,34 @@ export default function Contact() {
     },
   });
 
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const next: typeof errors = {};
+    if (!formData.name.trim()) next.name = "please add your name.";
+    if (!formData.email.trim()) next.email = "please add your email.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) next.email = "that email doesn't look right.";
+    if (!formData.message.trim()) next.message = "tell us a little about your project.";
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
     contactMutation.mutate(formData);
   };
+
+  const errInput = "border-oxblood focus:ring-oxblood/40";
+  const okInput = "border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent";
 
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
         title="contact | sarahdigs"
-        description="Book a free strategy call or share your project. SarahDigs offers SEO audits, content strategy, and growth consulting for founders and brands."
+        description="start a project or book a dig-in. sarahdigs is a creative website studio designing and building high-performing websites for founders and brands."
         canonical="/contact"
+        jsonLd={pageSchema("ContactPage", {
+          name: "contact sarahdigs",
+          description: "start a project or book a dig-in with sarahdigs, a creative website studio.",
+          url: "/contact",
+        })}
       />
       <Navbar theme="light" />
 
@@ -293,29 +311,29 @@ export default function Contact() {
              </div>
 
              <div className="bg-stone p-8 md:p-12 border border-ink/15 rounded-md shadow-xl shadow-ink/10">
-                <form className="space-y-8" onSubmit={handleSubmit}>
+                <form className="space-y-8" onSubmit={handleSubmit} noValidate>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
                       <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Name</label>
-                      <input 
-                        type="text" 
-                        required
+                      <input
+                        type="text"
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
-                        placeholder="jane doe" 
+                        onChange={(e) => { setFormData({ ...formData, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: undefined }); }}
+                        className={`w-full bg-[#FBF9F3] border outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink ${errors.name ? errInput : okInput}`}
+                        placeholder="jane doe"
                       />
+                      {errors.name && <p className="text-oxblood text-xs lowercase ml-1">{errors.name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Email</label>
-                      <input 
-                        type="email" 
-                        required
+                      <input
+                        type="email"
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink" 
-                        placeholder="jane@company.com" 
+                        onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: undefined }); }}
+                        className={`w-full bg-[#FBF9F3] border outline-none py-4 px-5 transition-all rounded-md placeholder:text-ink/30 text-ink ${errors.email ? errInput : okInput}`}
+                        placeholder="jane@company.com"
                       />
+                      {errors.email && <p className="text-oxblood text-xs lowercase ml-1">{errors.email}</p>}
                     </div>
                   </div>
 
@@ -405,13 +423,13 @@ export default function Contact() {
                   
                   <div className="space-y-2">
                     <label className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-mid ml-1">Message</label>
-                    <textarea 
-                      required
+                    <textarea
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full bg-[#FBF9F3] border border-ink/15 focus:ring-2 focus:ring-oxblood focus:border-transparent outline-none py-4 px-5 min-h-[150px] resize-none transition-all rounded-md placeholder:text-ink/30 text-ink" 
+                      onChange={(e) => { setFormData({ ...formData, message: e.target.value }); if (errors.message) setErrors({ ...errors, message: undefined }); }}
+                      className={`w-full bg-[#FBF9F3] border outline-none py-4 px-5 min-h-[150px] resize-none transition-all rounded-md placeholder:text-ink/30 text-ink ${errors.message ? errInput : okInput}`}
                       placeholder="tell me about your goals..."
                     ></textarea>
+                    {errors.message && <p className="text-oxblood text-xs lowercase ml-1">{errors.message}</p>}
                   </div>
                   
                   <Button 

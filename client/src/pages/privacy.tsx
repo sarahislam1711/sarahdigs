@@ -8,8 +8,8 @@ const sections = [
     body: (
       <>
         <p>
-          when you interact with sarahdigs — whether through our website, a
-          contact form, a consultation call, or any other point of contact — we
+          when you interact with sarahdigs, whether through our website, a
+          contact form, a consultation call, or any other point of contact, we
           may collect the following types of information.
         </p>
         <p>
@@ -50,7 +50,7 @@ const sections = [
           <li>to scope, plan, and deliver project work</li>
           <li>to send you relevant project updates, invoices, or deliverables</li>
           <li>to improve how the site works based on how people use it</li>
-          <li>to send occasional updates about sarahdigs (only if you've opted in — and always with an easy way out)</li>
+          <li>to send occasional updates about sarahdigs (only if you've opted in, and always with an easy way out)</li>
         </ul>
         <p>
           we don't use your data to build audience profiles, run targeted
@@ -69,7 +69,7 @@ const sections = [
           <li>we do not share your information with third parties for marketing purposes</li>
           <li>we do not run retargeting ads against you using your contact information</li>
           <li>we do not use your business information, strategy docs, or briefs to inform any other client's work</li>
-          <li>we do not store payment details — all card processing goes through our third-party payment provider</li>
+          <li>we do not store payment details, all card processing goes through our third-party payment provider</li>
         </ul>
       </>
     ),
@@ -85,30 +85,30 @@ const sections = [
         </p>
         <ul>
           <li>
-            <span className="text-[#181612] font-medium">analytics</span> — we
+            <span className="text-[#181612] font-medium">analytics</span>: we
             use a privacy-focused analytics tool to understand how the site is
             used. no cross-site tracking, no fingerprinting, no personal data
             stored.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">email</span> — client
+            <span className="text-[#181612] font-medium">email</span>: client
             communications happen over email. we use a standard email provider.
             messages are stored in that provider's infrastructure.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">project management</span>{" "}
-            — we may use a project management tool to track work. client files
+            <span className="text-[#181612] font-medium">project management</span>:
+            we may use a project management tool to track work. client files
             shared during a project are stored securely and only accessible to
             the team working on your project.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">payments</span> —
+            <span className="text-[#181612] font-medium">payments</span>:
             invoicing and payment processing is handled by a third-party
             provider. they are responsible for the security of your payment
             data under their own terms.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">video calls</span> —
+            <span className="text-[#181612] font-medium">video calls</span>:
             consultation and client calls may be conducted via standard video
             conferencing tools. recording only happens with your explicit
             consent.
@@ -128,13 +128,13 @@ const sections = [
         <p>our site uses a minimal set of cookies:</p>
         <ul>
           <li>
-            <span className="text-[#181612] font-medium">strictly necessary cookies</span>{" "}
-            — these keep the site functioning (form state, navigation). they
+            <span className="text-[#181612] font-medium">strictly necessary cookies</span>:
+            these keep the site functioning (form state, navigation). they
             don't track you.
           </li>
           <li>
-            <span className="text-[#181612] font-medium">analytics cookies</span>{" "}
-            — lightweight, privacy-respecting data about how people use the
+            <span className="text-[#181612] font-medium">analytics cookies</span>:
+            lightweight, privacy-respecting data about how people use the
             site. no cross-site tracking. no personal identification.
           </li>
         </ul>
@@ -156,22 +156,22 @@ const sections = [
         <p>we keep your information for as long as it's useful and no longer:</p>
         <ul>
           <li>
-            <span className="text-[#181612] font-medium">inquiries that don't lead to a project</span>{" "}
-            — retained for up to 12 months, then deleted
+            <span className="text-[#181612] font-medium">inquiries that don't lead to a project</span>:
+            retained for up to 12 months, then deleted
           </li>
           <li>
-            <span className="text-[#181612] font-medium">active client data</span>{" "}
-            — retained for the duration of the project plus 24 months after
+            <span className="text-[#181612] font-medium">active client data</span>:
+            retained for the duration of the project plus 24 months after
             completion, in case questions or follow-up work arise
           </li>
           <li>
-            <span className="text-[#181612] font-medium">invoices and financial records</span>{" "}
-            — retained for as long as legally required in our operating
+            <span className="text-[#181612] font-medium">invoices and financial records</span>:
+            retained for as long as legally required in our operating
             jurisdiction
           </li>
           <li>
-            <span className="text-[#181612] font-medium">analytics data</span>{" "}
-            — anonymized and aggregated, retained in aggregate form only
+            <span className="text-[#181612] font-medium">analytics data</span>:
+            anonymized and aggregated, retained in aggregate form only
           </li>
         </ul>
         <p>
@@ -190,25 +190,25 @@ const sections = [
         </p>
         <ul>
           <li>
-            <span className="text-[#181612] font-medium">access</span> — you can
+            <span className="text-[#181612] font-medium">access</span>: you can
             ask what data we hold on you
           </li>
           <li>
-            <span className="text-[#181612] font-medium">correction</span> — you
+            <span className="text-[#181612] font-medium">correction</span>: you
             can ask us to update or correct inaccurate data
           </li>
           <li>
-            <span className="text-[#181612] font-medium">deletion</span> — you
+            <span className="text-[#181612] font-medium">deletion</span>: you
             can ask us to delete your data, subject to any legal obligations to
             retain records
           </li>
           <li>
-            <span className="text-[#181612] font-medium">portability</span> —
+            <span className="text-[#181612] font-medium">portability</span>:
             you can ask for a copy of your data in a readable format
           </li>
           <li>
-            <span className="text-[#181612] font-medium">withdrawal of consent</span>{" "}
-            — if you've opted into any communications, you can unsubscribe at
+            <span className="text-[#181612] font-medium">withdrawal of consent</span>:
+            if you've opted into any communications, you can unsubscribe at
             any time
           </li>
         </ul>
@@ -251,7 +251,7 @@ const sections = [
       <>
         <p>
           questions about this policy, or anything related to how we handle
-          your data — reach out.
+          your data, reach out.
         </p>
         <p>
           <span className="text-[#181612] font-medium">sarahdigs</span>
@@ -291,8 +291,8 @@ export default function Privacy() {
             <h1 className="font-display font-bold text-5xl md:text-7xl leading-[1] tracking-tight text-[#181612] mb-6 lowercase">
               privacy.
             </h1>
-            <p className="text-lg md:text-xl text-[#6F6A5F] leading-relaxed lowercase">
-              how sarahdigs collects, uses, and protects your data — plainly,
+            <p className="text-lg md:text-xl text-ink-mid leading-relaxed lowercase">
+              how sarahdigs collects, uses, and protects your data, plainly,
               with no surprises.
             </p>
           </div>
@@ -309,7 +309,7 @@ export default function Privacy() {
                     {section.title}
                   </h2>
                 </div>
-                <div className="text-base md:text-lg text-[#6F6A5F] leading-relaxed lowercase space-y-5 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2 [&_ul]:marker:text-[#6B1421]/50">
+                <div className="text-base md:text-lg text-ink-mid leading-relaxed lowercase space-y-5 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2 [&_ul]:marker:text-[#6B1421]/50">
                   {section.body}
                 </div>
               </section>
@@ -318,12 +318,12 @@ export default function Privacy() {
 
           {/* Meta footer */}
           <div className="max-w-3xl mt-20 md:mt-28 pt-10 border-t border-[#181612]/12">
-            <p className="text-sm text-[#6F6A5F] lowercase">
+            <p className="text-sm text-ink-mid lowercase">
               last updated: may 2025
               <br />
               version: 1.0
             </p>
-            <p className="text-sm text-[#6F6A5F] mt-4 lowercase">
+            <p className="text-sm text-ink-mid mt-4 lowercase">
               changes are posted here. significant changes notified by email to
               active clients.
             </p>

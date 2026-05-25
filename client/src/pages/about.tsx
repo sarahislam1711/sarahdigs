@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import SEO from "@/components/SEO";
+import { pageSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -39,11 +40,16 @@ export default function About() {
         title="about | sarahdigs"
         description="sarahdigs is a creative website studio that designs websites people remember. small studio, fewer clients, deeper work."
         canonical="/about"
+        jsonLd={pageSchema("AboutPage", {
+          name: "about sarahdigs",
+          description: "sarahdigs is a creative website studio that designs websites people remember. small studio, fewer clients, deeper work.",
+          url: "/about",
+        })}
       />
       <Navbar theme="light" />
 
       {/* 01 — OPENING */}
-      <section className="bg-bone pt-32 pb-20 md:pt-40 md:pb-28 relative">
+      <section className="bg-bone pt-24 pb-20 md:pt-28 md:pb-28 relative">
         {/* Top meta rail */}
         <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
           <div className="flex items-center justify-between border-b border-ink/10 pb-4 mb-12 text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid">
@@ -59,23 +65,21 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            {/* Anchor pill */}
+            {/* Anchor pill — page identity */}
             <div className="inline-flex items-center gap-2.5 mb-10 bg-oxblood text-bone rounded-full pl-3 pr-4 py-2">
-              <span className="relative inline-flex w-2 h-2">
-                <span className="absolute inset-0 rounded-full bg-bone opacity-75 animate-ping" />
-                <span className="relative inline-block w-2 h-2 rounded-full bg-bone" />
-              </span>
+              <span className="inline-block w-2 h-2 rounded-full bg-bone" />
               <span className="text-[11px] md:text-xs font-semibold uppercase tracking-[0.22em]">
-                now booking q3 2026 projects
+                about · the studio
               </span>
             </div>
 
             <h1 className="font-display font-semibold tracking-tighter text-5xl md:text-7xl lg:text-[5.5rem] leading-none lowercase mb-8">
-              most websites are<br />
-              <span className="text-oxblood font-bold">decoration</span>
+              meet the<br />
+              <span className="text-oxblood font-bold">studio.</span>
             </h1>
-            <p className="font-display text-3xl md:text-4xl text-ink font-medium italic lowercase leading-snug max-w-3xl mb-12 md:mb-14">
-              we treat them like <span className="text-oxblood">sales tools</span> instead.
+            <p className="font-display text-2xl md:text-[1.75rem] lg:text-3xl text-ink font-medium italic lowercase leading-snug mb-12 md:mb-14">
+              <span className="md:whitespace-nowrap">websites designed to make your audience <span className="text-oxblood">feel</span> something.</span>{" "}
+              <span className="md:whitespace-nowrap">built to make them <span className="text-oxblood">do</span> something.</span>
             </p>
 
             {/* Stat row — proof beneath the claim */}
@@ -195,7 +199,7 @@ export default function About() {
           03 — NON-NEGOTIABLES (manifesto spread)
           Compact — fits in one viewport. Sidebar headline + dense list.
       ============================================================ */}
-      <section className="bg-bone py-12 md:py-16">
+      <section className="bg-bone pt-12 pb-8 md:pt-16 md:pb-10">
         <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
           <div className="grid grid-cols-12 gap-x-6 lg:gap-x-10 gap-y-8 lg:gap-y-0">
             {/* Sidebar headline — wider column, 2-line headline */}
@@ -254,43 +258,56 @@ export default function About() {
       </section>
 
       {/* ============================================================
-          04 — HOW WE WORK (column callout, magazine pull-quote style)
+          04 — HOW WE WORK (bone, light on text — big statement + labels)
       ============================================================ */}
-      <section className="bg-bone py-16 md:py-20">
+      <section className="bg-bone pt-8 pb-14 md:pt-10 md:pb-20">
         <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          <div className="grid grid-cols-12 gap-x-6 lg:gap-x-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              className="col-span-12"
-            >
-              <div className="flex items-baseline gap-4 mb-8">
-                <span className="font-display font-extrabold text-oxblood text-[2.5rem] md:text-5xl tabular-nums tracking-tighter leading-none">
-                  04
-                </span>
-                <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid pb-1">
-                  how we work
-                </span>
-              </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="border-t border-ink/10 pt-10 md:pt-14"
+          >
+            <div className="flex items-baseline gap-4 mb-8">
+              <span className="font-display font-extrabold text-oxblood text-[2.5rem] md:text-5xl tabular-nums tracking-tighter leading-none">
+                04
+              </span>
+              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid pb-1">
+                how we work
+              </span>
+            </div>
 
-              {/* Big pull-quote-style statement */}
-              <blockquote className="font-display font-semibold tracking-tighter text-4xl md:text-5xl leading-[1.05] lowercase max-w-5xl">
-                small studio.{" "}
-                <span className="text-oxblood italic">fewer clients.</span>{" "}
-                deeper work.
-              </blockquote>
-              <p className="mt-8 text-ink-mid text-base md:text-lg leading-relaxed max-w-2xl lowercase">
-                every client gets direct access to sarah. every project gets the kind of attention that makes the difference between a website that exists and one that people remember.
-              </p>
-            </motion.div>
-          </div>
+            {/* Big statement — carries the section */}
+            <blockquote className="font-display font-semibold tracking-tighter text-4xl md:text-6xl leading-none lowercase max-w-5xl">
+              most studios scale by adding people.{" "}
+              <span className="text-oxblood italic">we scale by going deeper.</span>
+            </blockquote>
+            <p className="mt-6 text-ink-mid text-base md:text-lg leading-relaxed max-w-2xl lowercase">
+              fewer clients, more attention, better output. every project gets the room it deserves.
+            </p>
+
+            {/* Three short labels — visual summary */}
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-y-6 sm:gap-x-10 max-w-4xl">
+              {[
+                "direct access to sarah, always.",
+                "one project at a time.",
+                "built to be remembered.",
+              ].map((line) => (
+                <div key={line} className="flex items-start gap-3">
+                  <span className="mt-2 h-px w-5 bg-oxblood shrink-0" />
+                  <span className="text-ink-mid text-sm md:text-base leading-snug lowercase">
+                    {line}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* 05 — PULL QUOTE (simple, pre-revamp style, on bone) */}
-      <section className="bg-bone py-20 md:py-28">
+      <section className="bg-bone py-12 md:py-16">
         <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
           <motion.figure
             initial={{ opacity: 0, y: 16 }}
@@ -310,34 +327,36 @@ export default function About() {
         </div>
       </section>
 
-      {/* 06 — CTA (ink card, distinct from other sections) */}
-      <section className="bg-bone py-16 md:py-20">
-        <div className="container mx-auto px-6">
+      {/* 06 — CTA (bone, tied into the page rhythm) */}
+      <section className="bg-bone pt-4 pb-20 md:pb-28">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, ease: "easeOut" }}
-            className="bg-ink text-bone rounded-md p-10 md:p-16 lg:p-20 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+            className="border-t border-ink/10 pt-10 md:pt-14 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
           >
             <div className="lg:col-span-8">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="h-px w-8 bg-oxblood-tint/50" />
-                <span className="text-oxblood-tint font-semibold uppercase tracking-[0.22em] text-xs">
+              <div className="flex items-baseline gap-4 mb-6">
+                <span className="font-display font-extrabold text-oxblood text-[2.5rem] md:text-5xl tabular-nums tracking-tighter leading-none">
+                  05
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-mid pb-1">
                   the invitation
                 </span>
               </div>
-              <h2 className="font-display font-semibold tracking-tighter text-3xl md:text-4xl lg:text-5xl leading-[1.05] lowercase">
+              <h2 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl lg:text-6xl leading-[1.02] lowercase">
                 if this sounds like the way you want to build,{" "}
-                <span className="text-oxblood-tint italic">let's talk</span>
+                <span className="text-oxblood italic">let's talk.</span>
               </h2>
             </div>
 
             <div className="lg:col-span-4 flex lg:justify-end">
-              <Link href="/contact" className="w-full lg:w-auto">
+              <Link href="/contact#contact-form" className="w-full lg:w-auto">
                 <Button
                   size="lg"
-                  className="group w-full lg:w-auto text-base h-14 px-8 bg-oxblood-tint hover:bg-oxblood text-ink hover:text-bone rounded-md cursor-pointer lowercase font-semibold gap-2 transition-colors"
+                  className="group w-full lg:w-auto text-base h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-semibold gap-2 transition-colors"
                 >
                   share your project
                   <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />

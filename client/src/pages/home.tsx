@@ -114,7 +114,7 @@ const ProofStat = ({ value, label }: { value: string; label: string }) => (
     <span className="font-display font-medium text-4xl md:text-5xl text-[#181612] group-hover:text-[#8C2331] tabular-nums leading-none transition-colors duration-300">
       {value}
     </span>
-    <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F] group-hover:text-[#181612] leading-tight transition-colors duration-300">
+    <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-mid group-hover:text-[#181612] leading-tight transition-colors duration-300">
       {label}
     </span>
   </div>
@@ -199,7 +199,7 @@ const HowWeWork = () => {
                     {d.title}
                   </h3>
                 </div>
-                <p className="text-sm md:text-base text-[#6F6A5F] leading-relaxed lowercase">
+                <p className="text-sm md:text-base text-ink-mid leading-relaxed lowercase">
                   {d.desc}
                 </p>
               </div>
@@ -345,7 +345,7 @@ const TheShift = () => {
           </ScrollReveal>
 
           <ScrollReveal delay={0.15} className="md:col-span-7 md:col-start-6 md:mt-8">
-            <p className="text-base md:text-lg leading-relaxed text-[#6F6A5F] max-w-2xl lowercase">
+            <p className="text-base md:text-lg leading-relaxed text-ink-mid max-w-2xl lowercase">
               that's not just google anymore.
             </p>
           </ScrollReveal>
@@ -366,7 +366,7 @@ const Manifesto = () => {
           </h2>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
-          <p className="mt-6 text-lg md:text-xl leading-relaxed text-[#6F6A5F] max-w-2xl mx-auto text-center lowercase">
+          <p className="mt-6 text-lg md:text-xl leading-relaxed text-ink-mid max-w-2xl mx-auto text-center lowercase">
             that's not just google anymore.
           </p>
         </ScrollReveal>
@@ -398,10 +398,10 @@ const MeetSarah = () => {
               <h2 className="font-display font-medium text-4xl md:text-5xl lg:text-6xl tracking-tight text-[#181612] mb-6 lowercase">
                 meet sarah.
               </h2>
-              <p className="text-base md:text-lg leading-relaxed text-[#6F6A5F] max-w-xl mb-8 lowercase">
+              <p className="text-base md:text-lg leading-relaxed text-ink-mid max-w-xl mb-8 lowercase">
                 i started sarahdigs because too many businesses were paying for
                 websites that didn't do anything for them. my team and i dig
-                into your positioning, audience, and goals — then we design an
+                into your positioning, audience, and goals, then we design an
                 immersive website that feels like entering your world, build it
                 clean, and optimize it to bring you customers. that's sarahdigs.{" "}
                 <span className="text-[#181612]">strategy first, always.</span>
@@ -431,7 +431,7 @@ const ProblemStatement = () => {
         <ScrollReveal>
           <p className="font-display text-2xl md:text-4xl font-normal leading-[1.25] tracking-tight text-[#181612] max-w-4xl lowercase">
             most sites either look good and don't bring business, or rank well and feel like everyone else's.{" "}
-            <span className="text-[#6F6A5F]">you've probably tried one. maybe both.</span>{" "}
+            <span className="text-ink-mid">you've probably tried one. maybe both.</span>{" "}
             <span className="text-[#6B1421]">neither worked.</span>
           </p>
         </ScrollReveal>
@@ -886,7 +886,7 @@ const Testimonials = () => {
   const testimonials = [
     { quote: "sarah completely transformed how we look at our data. within weeks, we had a clear roadmap that actually made sense.", clientName: "alex morgan", clientRole: "founder", clientCompany: "techflow" },
     { quote: "the deep dive uncovered opportunities we had been missing for years. our organic traffic doubled in under 6 months.", clientName: "jordan lee", clientRole: "e-commerce director", clientCompany: "urban collective" },
-    { quote: "finally, a strategist who connects creative with technical SEO. sarah doesn't just advise — she rolls up her sleeves and delivers.", clientName: "casey smith", clientRole: "vp of marketing", clientCompany: "bloom health" },
+    { quote: "finally, a strategist who connects creative with technical SEO. sarah doesn't just advise, she rolls up her sleeves and delivers.", clientName: "casey smith", clientRole: "vp of marketing", clientCompany: "bloom health" },
     { quote: "we went from zero organic presence to 150+ qualified leads per month. the ROI has been unreal.", clientName: "taylor reed", clientRole: "ceo", clientCompany: "finsmart" },
     { quote: "sarah's audit saved us from a migration disaster. she found issues three agencies missed and fixed them in weeks, not months.", clientName: "morgan chen", clientRole: "head of growth", clientCompany: "scaleup labs" },
   ];
@@ -924,14 +924,20 @@ const Testimonials = () => {
                 className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.33%] min-w-0 pl-4"
               >
                 <ScrollReveal delay={i * 0.08} className="h-full">
-                  <figure className="h-full bg-[#FBF9F3] border border-[#181612]/10 rounded-md p-8 md:p-10 flex flex-col justify-between shadow-[0_2px_12px_rgba(24,22,18,0.04)] transition-all duration-300 hover:bg-[#FBF9F3] hover:border-[#8C2331]/40 hover:shadow-[0_8px_24px_rgba(24,22,18,0.07)]">
-                    <blockquote className="font-display text-lg leading-snug mb-8 text-[#181612] lowercase">
-                      "{item.quote}"
-                    </blockquote>
-                    <figcaption>
-                      <div className="font-medium text-[#181612] lowercase">{item.clientName}</div>
-                      <div className="text-[11px] font-medium text-[#6F6A5F] uppercase tracking-[0.16em] mt-1">
-                        {[item.clientRole, item.clientCompany].filter(Boolean).join(" · ")}
+                  <figure className="group h-full flex flex-col justify-between border-t border-[#181612]/15 pt-6 pr-2 transition-colors duration-300 hover:border-[#6B1421]/50">
+                    <div>
+                      <span className="block font-display text-5xl leading-none text-[#6B1421] mb-3" aria-hidden>&ldquo;</span>
+                      <blockquote className="font-display text-xl md:text-2xl leading-snug text-[#181612] lowercase">
+                        {item.quote}
+                      </blockquote>
+                    </div>
+                    <figcaption className="mt-8 flex items-center gap-3">
+                      <span className="h-px w-6 bg-[#6B1421]" />
+                      <div>
+                        <span className="font-display font-medium text-[#181612] lowercase">{item.clientName}</span>
+                        <span className="text-[11px] font-mono uppercase tracking-[0.16em] text-ink-mid lowercase block mt-0.5">
+                          {[item.clientRole, item.clientCompany].filter(Boolean).join(" · ")}
+                        </span>
                       </div>
                     </figcaption>
                   </figure>
@@ -954,7 +960,7 @@ const SelectedWork = () => {
       emphasis: "brand",
       metricValue: "+312%",
       metricLabel: "organic traffic",
-      gradient: "linear-gradient(135deg, #6B1421 0%, #4A0E16 100%)",
+      logo: "/projects/places-logo.png",
     },
     {
       slug: "the-20s-edit",
@@ -963,16 +969,16 @@ const SelectedWork = () => {
       emphasis: "stay",
       metricValue: "3x",
       metricLabel: "avg session time",
-      gradient: "linear-gradient(135deg, #E7E2D6 0%, #C58A92 100%)",
+      logo: "/projects/the-20s-edit-logo.png",
     },
   ];
 
   return (
-    <section className="py-12 bg-[#F4F1EA] relative">
+    <section className="py-8 bg-[#F4F1EA] relative">
       <div className="container mx-auto px-6">
         <div>
           <ScrollReveal>
-            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6B1421] mb-8 block">
+            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6B1421] mb-5 block">
               selected work
             </span>
           </ScrollReveal>
@@ -989,33 +995,34 @@ const SelectedWork = () => {
                     className="group block transition-colors hover:bg-[#E7E2D6]/40"
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
-                      {/* Thumbnail */}
+                      {/* Thumbnail — project logo on a bone tile */}
                       <div
                         className={cn(
-                          "relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:min-h-[280px] overflow-hidden",
+                          "relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:h-[260px] overflow-hidden bg-[#E7E2D6]/50 flex items-center justify-center p-8 md:p-12",
                           reversed && "md:order-2"
                         )}
-                        style={{ background: project.gradient }}
                       >
-                        <div
-                          aria-hidden
-                          className="absolute inset-0 opacity-[0.04] mix-blend-multiply pointer-events-none"
-                          style={{
-                            backgroundImage:
-                              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-                          }}
+                        <img
+                          src={project.logo}
+                          alt={project.client}
+                          loading="lazy"
+                          decoding="async"
+                          className="max-w-[70%] max-h-[60%] object-contain transition-transform duration-500 group-hover:scale-[1.04]"
                         />
                       </div>
 
                       {/* Text */}
                       <div
                         className={cn(
-                          "flex flex-col justify-center p-6 md:p-8 min-w-0",
+                          "flex flex-col justify-center p-6 md:p-7 min-w-0",
                           reversed && "md:order-1"
                         )}
                       >
-                        <span className="text-xs text-[#6F6A5F] lowercase mb-2 block">
-                          {project.client}
+                        <span className="inline-flex items-center gap-2 mb-3">
+                          <span className="h-px w-5 bg-[#6B1421]/50" />
+                          <span className="text-[11px] font-mono font-semibold uppercase tracking-[0.2em] text-[#6B1421]">
+                            {project.client}
+                          </span>
                         </span>
                         <h3 className="font-display font-bold text-2xl md:text-3xl leading-tight tracking-tight text-[#181612] mb-5 lowercase">
                           {project.headline.split(project.emphasis).map((part, idx, arr) => (
@@ -1033,7 +1040,7 @@ const SelectedWork = () => {
                           <span className="font-display font-bold text-3xl md:text-4xl text-[#6B1421] leading-none tabular-nums">
                             {project.metricValue}
                           </span>
-                          <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#6F6A5F] lowercase">
+                          <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-mid lowercase">
                             {project.metricLabel}
                           </span>
                         </div>
@@ -1080,21 +1087,21 @@ const NotSureWhereToStart = () => {
         </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Dig-In Consultation */}
+          {/* Dig-In Consultation — OXBLOOD TINT WASH (primary) */}
           <ScrollReveal delay={0.08}>
-            <div className="group h-full flex flex-col border border-[#181612]/[0.12] rounded-md p-6 md:p-8 transition-all hover:border-[#181612]/[0.24] hover:-translate-y-0.5">
-              <div className="mb-5 inline-flex items-center justify-center w-11 h-11 rounded-md bg-[#6B1421]/8 border border-[#6B1421]/20 text-[#6B1421] transition-colors group-hover:bg-[#6B1421] group-hover:text-[#F4F1EA]">
+            <div className="group h-full flex flex-col bg-[#6B1421]/[0.06] border border-[#6B1421]/20 rounded-md p-6 md:p-8 transition-all hover:bg-[#6B1421]/[0.1] hover:border-[#6B1421]/40 hover:-translate-y-0.5">
+              <div className="mb-5 inline-flex items-center justify-center w-11 h-11 rounded-md bg-[#6B1421]/10 border border-[#6B1421]/25 text-[#6B1421] transition-colors group-hover:bg-[#6B1421] group-hover:text-[#F4F1EA]">
                 <MessageCircle className="w-5 h-5" strokeWidth={2} />
               </div>
               <h3 className="font-display font-bold text-2xl md:text-[28px] leading-tight tracking-tight text-[#181612] mb-3 lowercase">
                 dig-in consultation
               </h3>
-              <p className="text-sm text-[#6F6A5F] leading-relaxed mb-8 lowercase">
+              <p className="text-sm text-ink-mid leading-relaxed mb-8 lowercase">
                 a focused call + written action plan. for when you need clarity
                 before committing to anything.
               </p>
               <Link href="/dig-in-consultations" className="mt-auto w-fit">
-                <span className="inline-flex items-center gap-2 text-sm font-medium lowercase bg-[#181612] text-[#F4F1EA] rounded-md px-4 py-2.5 hover:bg-[#6B1421] transition-colors group/cta">
+                <span className="inline-flex items-center gap-2 text-sm font-medium lowercase bg-[#6B1421] text-[#F4F1EA] rounded-md px-4 py-2.5 hover:bg-[#8C2331] transition-colors group/cta">
                   book a consultation call
                   <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-1" />
                 </span>
@@ -1102,20 +1109,20 @@ const NotSureWhereToStart = () => {
             </div>
           </ScrollReveal>
 
-          {/* Custom Dig */}
+          {/* Custom Dig — LIGHT OUTLINE (alternative) */}
           <ScrollReveal delay={0.14}>
-            <div className="group h-full flex flex-col border border-[#181612]/[0.12] rounded-md p-6 md:p-8 transition-all hover:border-[#181612]/[0.24] hover:-translate-y-0.5">
+            <div className="group h-full flex flex-col bg-[#F4F1EA] border border-[#181612]/[0.14] rounded-md p-6 md:p-8 transition-all hover:border-[#6B1421]/40 hover:-translate-y-0.5">
               <div className="mb-5 inline-flex items-center justify-center w-11 h-11 rounded-md bg-[#6B1421]/8 border border-[#6B1421]/20 text-[#6B1421] transition-colors group-hover:bg-[#6B1421] group-hover:text-[#F4F1EA]">
                 <Wrench className="w-5 h-5" strokeWidth={2} />
               </div>
               <h3 className="font-display font-bold text-2xl md:text-[28px] leading-tight tracking-tight text-[#181612] mb-3 lowercase">
                 custom dig
               </h3>
-              <p className="text-sm text-[#6F6A5F] leading-relaxed mb-8 lowercase">
+              <p className="text-sm text-ink-mid leading-relaxed mb-8 lowercase">
                 a custom plan built around your business, goals, and gaps.
               </p>
               <Link href="/dig-on-demand" className="mt-auto w-fit">
-                <span className="inline-flex items-center gap-2 text-sm font-medium lowercase bg-[#181612] text-[#F4F1EA] rounded-md px-4 py-2.5 hover:bg-[#6B1421] transition-colors group/cta">
+                <span className="inline-flex items-center gap-2 text-sm font-medium lowercase border border-[#181612] text-[#181612] rounded-md px-4 py-2.5 hover:bg-[#181612] hover:text-[#F4F1EA] transition-colors group/cta">
                   explore custom plans
                   <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-1" />
                 </span>
@@ -1212,7 +1219,7 @@ const JournalTeaser = () => {
                 className="group flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-8 py-6 md:py-7 px-2 -mx-2 border-t border-[#181612]/[0.12] first:border-t-0 transition-all hover:bg-[#E7E2D6]/30 rounded-md"
               >
                 <div className="flex items-center gap-4 md:gap-6 min-w-0 flex-1">
-                  <span className="font-mono text-xs text-[#6F6A5F] tabular-nums shrink-0">
+                  <span className="font-mono text-xs text-ink-mid tabular-nums shrink-0">
                     0{i + 1}
                   </span>
                   <span className="text-base md:text-lg font-medium text-[#181612] group-hover:text-[#6B1421] transition-colors lowercase truncate">
@@ -1225,7 +1232,7 @@ const JournalTeaser = () => {
                       {row.category}
                     </span>
                   )}
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6F6A5F]">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-mid">
                     {row.date} · {row.read}
                   </span>
                   <ArrowUpRight
@@ -1307,7 +1314,7 @@ const Contact = () => {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-mid">
                     name
                   </label>
                   <input
@@ -1320,7 +1327,7 @@ const Contact = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-mid">
                     company
                   </label>
                   <input
@@ -1334,7 +1341,7 @@ const Contact = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-mid">
                     email
                   </label>
                   <input
@@ -1347,7 +1354,7 @@ const Contact = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-mid">
                     website url
                   </label>
                   <input
@@ -1360,7 +1367,7 @@ const Contact = () => {
                 </div>
               </div>
               <div className="space-y-3">
-                <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F] block">
+                <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-mid block">
                   interested in
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -1385,7 +1392,7 @@ const Contact = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#6F6A5F]">
+                <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-mid">
                   message
                 </label>
                 <textarea
@@ -1417,23 +1424,23 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-[#F4F1EA]">
       <SEO
-        title="sarahdigs | cool websites built to convert"
+        title="sarahdigs | beautiful websites, built to convert"
         exactTitle
-        description="SarahDigs helps founders and brands grow organically through deep SEO, content strategy, and data-driven marketing. Book a free strategy call."
+        description="sarahdigs is a creative website studio that designs and builds high-performing websites for founders and brands. beautiful websites, built to convert."
         canonical="/"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Sarah Islam",
-          jobTitle: "Marketing Consultant",
-          url: "https://www.sarahdigs.com",
-          worksFor: { "@type": "Organization", name: "SarahDigs" },
+          jobTitle: "Founder & Web Designer",
+          url: "https://www.sarahdigs.com/about",
+          worksFor: { "@id": "https://www.sarahdigs.com/#organization" },
           knowsAbout: [
-            "SEO",
-            "Content Strategy",
-            "Growth Marketing",
-            "Product-Led Marketing",
+            "Website Design",
+            "Web Development",
+            "UX Design",
             "Brand Strategy",
+            "SEO",
           ],
         }}
       />
