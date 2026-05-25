@@ -34,6 +34,7 @@ interface ProjectForm {
   serviceTags: string[];
   role: string;
   timeline: string;
+  metaStatus: string;
   displayOrder: number;
   isVisible: boolean;
   gallery: GallerySlide[];
@@ -56,6 +57,7 @@ const defaultProject: ProjectForm = {
   serviceTags: [],
   role: "",
   timeline: "",
+  metaStatus: "",
   displayOrder: 0,
   isVisible: true,
   gallery: [],
@@ -264,6 +266,15 @@ export default function ProjectEditor() {
                   value={project.timeline}
                   onChange={(e) => update("timeline", e.target.value)}
                   placeholder="6 weeks"
+                  className={inputCls}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[#181612]">Status (meta pill)</Label>
+                <Input
+                  value={project.metaStatus}
+                  onChange={(e) => update("metaStatus", e.target.value)}
+                  placeholder="live, in progress, concept…"
                   className={inputCls}
                 />
               </div>

@@ -158,6 +158,7 @@ export const projects = pgTable("projects", {
   // Standalone case-study (rich, visual)
   role: varchar("role"),                           // meta: e.g. "design & build"
   timeline: varchar("timeline"),                   // meta: e.g. "6 weeks"
+  metaStatus: varchar("meta_status"),              // meta pill: free text, e.g. "live", "in progress", "concept"
   processSteps: jsonb("process_steps"),            // [{title, description}]
   beforeStates: text("before_states").array(),     // short "before" phrases
   afterStates: text("after_states").array(),       // short "after" phrases
