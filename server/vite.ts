@@ -5,6 +5,7 @@ import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
 import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
+import { resolveMeta, injectMeta } from "./seo";
 
 const viteLogger = createLogger();
 
@@ -59,7 +60,9 @@ export async function setupVite(app: Express, server: Server) {
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
       const page = await vite.transformIndexHtml(url, template);
-      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+      const meta = await resolveMeta(url);
+      const pageWithMeta = injectMeta(page, meta);
+      res.status(200).set({ "Content-Type": "text/html" }).end(pageWithMeta);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);
       next(e);
@@ -92,9 +95,20 @@ export function serveStatic(app: Express) {
     })
   );
 
-  // SPA fallback — always serve a fresh index.html (no caching)
-  app.use("*", (_req, res) => {
+  // SPA fallback — always serve a fresh index.html (no caching) with per-route
+  // meta tags injected so Googlebot, link previews, etc. see the right title /
+  // description / canonical / OG image for the URL it actually requested.
+  const indexPath = path.resolve(distPath, "index.html");
+  app.use("*", async (req, res) => {
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.sendFile(path.resolve(distPath, "index.html"));
+    res.setHeader("Content-Type", "text/html; charset=UTF-8");
+    try {
+      const html = await fs.promises.readFile(indexPath, "utf-8");
+      const meta = await resolveMeta(req.originalUrl);
+      res.status(200).end(injectMeta(html, meta));
+    } catch (err) {
+      console.error("[spa-fallback] failed to render index.html", err);
+      res.sendFile(indexPath);
+    }
   });
 }

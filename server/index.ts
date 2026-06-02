@@ -1,11 +1,14 @@
 import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 import { redirectsMiddleware } from "./redirects";
 
 const app = express();
+app.disable("x-powered-by");
+app.use(compression());
 
 declare module 'http' {
   interface IncomingMessage {
