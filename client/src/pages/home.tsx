@@ -900,8 +900,8 @@ const SelectedWork = () => {
       client: "places",
       headline: "real estate, turned into a brand.",
       emphasis: "brand",
-      metricValue: "+312%",
-      metricLabel: "organic traffic",
+      metricValue: "3",
+      metricLabel: "platforms shipped",
       logo: "/projects/places-logo.png",
     },
     {
@@ -949,7 +949,7 @@ const SelectedWork = () => {
                           alt={project.client}
                           loading="lazy"
                           decoding="async"
-                          className="max-w-[70%] max-h-[60%] object-contain transition-transform duration-500 group-hover:scale-[1.04]"
+                          className="max-w-[55%] max-h-[110px] md:max-h-[120px] object-contain transition-transform duration-500 group-hover:scale-[1.04]"
                         />
                       </div>
 
