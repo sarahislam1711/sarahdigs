@@ -65,7 +65,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dynamic sitemap — always reflects current projects, posts, and categories
   app.get("/sitemap.xml", async (_req, res) => {
     const SITE = "https://www.sarahdigs.com";
-    const staticUrls: { loc: string; priority: string; changefreq: string }[] = [
+    type SitemapUrl = { loc: string; priority: string; changefreq: string; lastmod?: string };
+    const toLastmod = (d: unknown): string | undefined => {
+      if (!d) return undefined;
+      const date = new Date(d as any);
+      return isNaN(date.getTime()) ? undefined : date.toISOString().slice(0, 10);
+    };
+    const staticUrls: SitemapUrl[] = [
       { loc: "/", priority: "1.0", changefreq: "weekly" },
       { loc: "/about", priority: "0.8", changefreq: "monthly" },
       { loc: "/contact", priority: "0.7", changefreq: "monthly" },
@@ -83,19 +89,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         storage.getPublishedBlogPosts().catch(() => []),
         storage.getCategories().catch(() => []),
       ]);
-      const dynamic: { loc: string; priority: string; changefreq: string }[] = [];
+      const dynamic: SitemapUrl[] = [];
       for (const p of projects as any[]) {
-        if (p?.slug && p.isVisible !== false) dynamic.push({ loc: `/projects/${p.slug}`, priority: "0.7", changefreq: "monthly" });
+        if (p?.slug && p.isVisible !== false) dynamic.push({ loc: `/projects/${p.slug}`, priority: "0.7", changefreq: "monthly", lastmod: toLastmod(p.updatedAt) });
       }
       for (const post of posts as any[]) {
-        if (post?.slug) dynamic.push({ loc: `/journal/post/${post.slug}`, priority: "0.7", changefreq: "monthly" });
+        if (post?.slug) dynamic.push({ loc: `/journal/post/${post.slug}`, priority: "0.7", changefreq: "monthly", lastmod: toLastmod(post.updatedAt) });
       }
       for (const c of categories as any[]) {
         if (c?.slug) dynamic.push({ loc: `/journal/${c.slug}`, priority: "0.5", changefreq: "monthly" });
       }
       const all = [...staticUrls, ...dynamic];
       const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${all
-        .map((u) => `  <url>\n    <loc>${SITE}${u.loc}</loc>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`)
+        .map((u) => `  <url>\n    <loc>${SITE}${u.loc}</loc>${u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ""}\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`)
         .join("\n")}\n</urlset>\n`;
       res.set("Content-Type", "application/xml").send(xml);
     } catch (error) {

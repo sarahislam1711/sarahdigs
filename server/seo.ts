@@ -11,6 +11,10 @@ export type ResolvedMeta = {
   ogImage: string;
   ogType: "website" | "article";
   noindex: boolean;
+  /** JSON-LD objects to render server-side into <head> (for crawlers that don't run JS). */
+  jsonLd?: object[];
+  /** Pre-rendered article body HTML injected into the page shell so crawlers see real content. */
+  bodyHtml?: string;
 };
 
 const DEFAULTS: ResolvedMeta = {
@@ -97,7 +101,87 @@ function withDefaults(
     ogImage: partial.ogImage ?? DEFAULTS.ogImage,
     ogType: partial.ogType ?? "website",
     noindex: partial.noindex ?? false,
+    jsonLd: partial.jsonLd,
+    bodyHtml: partial.bodyHtml,
   };
+}
+
+const ORG_PUBLISHER = {
+  "@type": "Organization",
+  name: SITE_NAME,
+  logo: { "@type": "ImageObject", url: DEFAULT_OG_IMAGE },
+};
+
+function breadcrumbLd(trail: { name: string; url: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: t.name,
+      item: `${SITE_URL}${t.url}`,
+    })),
+  };
+}
+
+/**
+ * Minimal, crawler-facing article body. The React app hydrates over this with
+ * the full styled layout; until then (and for non-JS crawlers) this carries the
+ * real heading + prose so the page isn't an empty shell.
+ */
+function articleBodyHtml(opts: {
+  title: string;
+  contentHtml?: string | null;
+  publishedAt?: Date | string | null;
+}): string {
+  const heading = `<h1>${esc(opts.title)}</h1>`;
+  const date = opts.publishedAt
+    ? `<p><time datetime="${esc(String(opts.publishedAt))}">${esc(
+        String(opts.publishedAt),
+      )}</time></p>`
+    : "";
+  // content is stored as HTML; pass through (it's authored in the admin editor).
+  const body = opts.contentHtml ?? "";
+  return `<article>${heading}${date}${body}</article>`;
+}
+
+/**
+ * Crawler-facing project case-study body. The React app renders the full
+ * interactive layout (carousels, journey diagram) over this on mount; this is
+ * the plain-HTML version so the page isn't an empty shell for non-JS crawlers.
+ */
+function projectBodyHtml(project: any): string {
+  const parts: string[] = [`<h1>${esc(project.name)}</h1>`];
+  if (project.industry) parts.push(`<p>${esc(project.industry)}</p>`);
+  if (project.problem) parts.push(`<p>${esc(project.problem)}</p>`);
+  if (project.problemStory) parts.push(`<p>${esc(project.problemStory)}</p>`);
+
+  const metrics = Array.isArray(project.metrics) ? project.metrics : [];
+  if (metrics.length) {
+    const items = metrics
+      .map((m: any) => `<li>${esc(String(m?.value ?? ""))} — ${esc(String(m?.label ?? ""))}</li>`)
+      .join("");
+    parts.push(`<ul>${items}</ul>`);
+  }
+
+  const steps = Array.isArray(project.processSteps) ? project.processSteps : [];
+  if (steps.length) {
+    const items = steps
+      .map(
+        (s: any) =>
+          `<li><strong>${esc(String(s?.title ?? ""))}</strong>: ${esc(String(s?.description ?? ""))}</li>`,
+      )
+      .join("");
+    parts.push(`<h2>process</h2><ol>${items}</ol>`);
+  }
+
+  const before = Array.isArray(project.beforeStates) ? project.beforeStates : [];
+  const after = Array.isArray(project.afterStates) ? project.afterStates : [];
+  if (before.length) parts.push(`<h2>before</h2><ul>${before.map((s: any) => `<li>${esc(String(s))}</li>`).join("")}</ul>`);
+  if (after.length) parts.push(`<h2>after</h2><ul>${after.map((s: any) => `<li>${esc(String(s))}</li>`).join("")}</ul>`);
+
+  return `<article>${parts.join("")}</article>`;
 }
 
 export async function resolveMeta(rawUrl: string): Promise<ResolvedMeta> {
@@ -118,14 +202,34 @@ export async function resolveMeta(rawUrl: string): Promise<ResolvedMeta> {
     try {
       const project = await storage.getProjectBySlug(projectMatch[1]);
       if (project) {
+        const description =
+          project.problem ?? project.focus ?? project.results ?? DEFAULTS.description;
+        const creativeWorkLd = {
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: project.name,
+          description,
+          url: `${SITE_URL}${pathname}`,
+          image: absoluteUrl(project.imageUrl) ?? undefined,
+          dateModified: project.updatedAt,
+          creator: ORG_PUBLISHER,
+        };
         return withDefaults(
           {
             title: withTitleSuffix(project.name),
-            description:
-              project.problem ?? project.focus ?? project.results ?? DEFAULTS.description,
+            description,
             canonical: `${SITE_URL}${pathname}`,
             ogImage: absoluteUrl(project.imageUrl) ?? DEFAULTS.ogImage,
             ogType: "article",
+            jsonLd: [
+              creativeWorkLd,
+              breadcrumbLd([
+                { name: "Home", url: "/" },
+                { name: "Work", url: "/projects" },
+                { name: project.name, url: pathname },
+              ]),
+            ],
+            bodyHtml: projectBodyHtml(project),
           },
           pathname,
         );
@@ -141,14 +245,45 @@ export async function resolveMeta(rawUrl: string): Promise<ResolvedMeta> {
     try {
       const post = await storage.getBlogPostBySlug(postMatch[1]);
       if (post) {
+        const description =
+          post.metaDescription ?? post.excerpt ?? DEFAULTS.description;
+        const image = absoluteUrl(post.featuredImageUrl) ?? DEFAULTS.ogImage;
+        const blogPostingLd = {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description,
+          image: absoluteUrl(post.featuredImageUrl) ?? undefined,
+          datePublished: post.publishedAt ?? post.createdAt,
+          dateModified: post.updatedAt,
+          author: {
+            "@type": "Person",
+            name: "Sarah Islam",
+            url: `${SITE_URL}/about`,
+          },
+          publisher: ORG_PUBLISHER,
+          mainEntityOfPage: `${SITE_URL}${pathname}`,
+        };
         return withDefaults(
           {
             title: withTitleSuffix(post.metaTitle ?? post.title),
-            description:
-              post.metaDescription ?? post.excerpt ?? DEFAULTS.description,
+            description,
             canonical: `${SITE_URL}${pathname}`,
-            ogImage: absoluteUrl(post.featuredImageUrl) ?? DEFAULTS.ogImage,
+            ogImage: image,
             ogType: "article",
+            jsonLd: [
+              blogPostingLd,
+              breadcrumbLd([
+                { name: "Home", url: "/" },
+                { name: "Journal", url: "/journal" },
+                { name: post.title, url: pathname },
+              ]),
+            ],
+            bodyHtml: articleBodyHtml({
+              title: post.title,
+              contentHtml: post.content,
+              publishedAt: post.publishedAt ?? post.createdAt,
+            }),
           },
           pathname,
         );
@@ -158,9 +293,79 @@ export async function resolveMeta(rawUrl: string): Promise<ResolvedMeta> {
     }
   }
 
-  // static routes
+  // journal index: /journal — list recent posts as crawler-facing links + Blog schema
+  if (pathname === "/journal") {
+    const base = STATIC_ROUTES["/journal"] ?? {};
+    try {
+      const posts = (await storage.getPublishedBlogPosts()).slice(0, 20);
+      const links = posts
+        .map(
+          (p: any) =>
+            `<li><a href="/journal/post/${esc(p.slug)}">${esc(p.title)}</a></li>`,
+        )
+        .join("");
+      const blogLd = {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        name: "the journal | sarahdigs",
+        url: `${SITE_URL}/journal`,
+        blogPost: posts.map((p: any) => ({
+          "@type": "BlogPosting",
+          headline: p.title,
+          url: `${SITE_URL}/journal/post/${p.slug}`,
+          datePublished: p.publishedAt ?? p.createdAt,
+        })),
+      };
+      return withDefaults(
+        {
+          ...base,
+          canonical: `${SITE_URL}/journal`,
+          jsonLd: [blogLd],
+          bodyHtml: `<main><h1>the journal</h1><ul>${links}</ul></main>`,
+        },
+        pathname,
+      );
+    } catch (err) {
+      console.error("[seo] journal index lookup failed", err);
+      return withDefaults(base, pathname);
+    }
+  }
+
+  // static routes (checked before the catch-all /journal/:category so that
+  // /journal itself uses its own STATIC_ROUTES entry)
   const staticMeta = STATIC_ROUTES[pathname];
   if (staticMeta) return withDefaults(staticMeta, pathname);
+
+  // journal category: /journal/:category
+  const categoryMatch = pathname.match(/^\/journal\/([^/]+)$/);
+  if (categoryMatch) {
+    try {
+      const categories = await storage.getCategories();
+      const category = categories.find((c) => c.slug === categoryMatch[1]);
+      if (category) {
+        const description =
+          category.description ??
+          `essays and field notes on ${category.name.toLowerCase()} from ${SITE_NAME}.`;
+        return withDefaults(
+          {
+            title: withTitleSuffix(`${category.name} | journal`),
+            description,
+            canonical: `${SITE_URL}${pathname}`,
+            jsonLd: [
+              breadcrumbLd([
+                { name: "Home", url: "/" },
+                { name: "Journal", url: "/journal" },
+                { name: category.name, url: pathname },
+              ]),
+            ],
+          },
+          pathname,
+        );
+      }
+    } catch (err) {
+      console.error("[seo] category lookup failed", err);
+    }
+  }
 
   // fallback — keep canonical pointed at the URL itself, not the homepage
   return withDefaults({}, pathname);
@@ -264,5 +469,38 @@ export function injectMeta(html: string, meta: ResolvedMeta): string {
     );
   }
 
+  // Inject server-rendered JSON-LD into <head> so crawlers that don't execute
+  // JS still see structured data. (react-helmet adds the same client-side; this
+  // is the crawler-facing copy.) Marked data-ssr-jsonld for clarity.
+  if (meta.jsonLd?.length) {
+    const blocks = meta.jsonLd
+      .map(
+        (obj) =>
+          `    <script type="application/ld+json" data-ssr-jsonld>${jsonForScript(
+            obj,
+          )}</script>`,
+      )
+      .join("\n");
+    out = out.replace(/<\/head>/i, `${blocks}\n  </head>`);
+  }
+
+  // Inject crawler-facing body content inside the (otherwise empty) #root div.
+  // React's createRoot().render() replaces these children on mount, so users
+  // get the full app while crawlers/no-JS clients see real article HTML.
+  if (meta.bodyHtml) {
+    out = out.replace(
+      /(<div id="root">)(\s*)(<\/div>)/i,
+      `$1${meta.bodyHtml}$3`,
+    );
+  }
+
   return out;
+}
+
+/**
+ * Serialize an object for safe embedding inside a <script type="application/ld+json">.
+ * Escapes `<` so a "</script>" inside any string value can't close the tag early.
+ */
+function jsonForScript(obj: object): string {
+  return JSON.stringify(obj).replace(/</g, "\\u003c");
 }

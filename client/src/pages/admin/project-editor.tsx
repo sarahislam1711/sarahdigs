@@ -16,6 +16,16 @@ interface GallerySlide {
   caption: string;
 }
 
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface ProcessStep {
+  title: string;
+  description: string;
+}
+
 interface ProjectForm {
   id?: string;
   name: string;
@@ -38,6 +48,10 @@ interface ProjectForm {
   displayOrder: number;
   isVisible: boolean;
   gallery: GallerySlide[];
+  metrics: Metric[];
+  processSteps: ProcessStep[];
+  beforeStates: string[];
+  afterStates: string[];
 }
 
 const defaultProject: ProjectForm = {
@@ -61,6 +75,10 @@ const defaultProject: ProjectForm = {
   displayOrder: 0,
   isVisible: true,
   gallery: [],
+  metrics: [],
+  processSteps: [],
+  beforeStates: [],
+  afterStates: [],
 };
 
 export default function ProjectEditor() {
@@ -92,6 +110,10 @@ export default function ProjectEditor() {
         ...ex,
         gallery: Array.isArray(ex.gallery) ? ex.gallery : [],
         serviceTags: Array.isArray(ex.serviceTags) ? ex.serviceTags : [],
+        metrics: Array.isArray(ex.metrics) ? ex.metrics : [],
+        processSteps: Array.isArray(ex.processSteps) ? ex.processSteps : [],
+        beforeStates: Array.isArray(ex.beforeStates) ? ex.beforeStates : [],
+        afterStates: Array.isArray(ex.afterStates) ? ex.afterStates : [],
       });
     }
   }, [existingProject]);
@@ -151,6 +173,47 @@ export default function ProjectEditor() {
       [next[i], next[j]] = [next[j], next[i]];
       return { ...prev, gallery: next };
     });
+
+  // ── metrics helpers ──
+  const addMetric = () =>
+    setProject((prev) => ({ ...prev, metrics: [...prev.metrics, { value: "", label: "" }] }));
+  const updateMetric = (i: number, field: keyof Metric, value: string) =>
+    setProject((prev) => ({
+      ...prev,
+      metrics: prev.metrics.map((m, idx) => (idx === i ? { ...m, [field]: value } : m)),
+    }));
+  const removeMetric = (i: number) =>
+    setProject((prev) => ({ ...prev, metrics: prev.metrics.filter((_, idx) => idx !== i) }));
+
+  // ── process step helpers ──
+  const addStep = () =>
+    setProject((prev) => ({ ...prev, processSteps: [...prev.processSteps, { title: "", description: "" }] }));
+  const updateStep = (i: number, field: keyof ProcessStep, value: string) =>
+    setProject((prev) => ({
+      ...prev,
+      processSteps: prev.processSteps.map((s, idx) => (idx === i ? { ...s, [field]: value } : s)),
+    }));
+  const removeStep = (i: number) =>
+    setProject((prev) => ({ ...prev, processSteps: prev.processSteps.filter((_, idx) => idx !== i) }));
+  const moveStep = (i: number, dir: -1 | 1) =>
+    setProject((prev) => {
+      const next = [...prev.processSteps];
+      const j = i + dir;
+      if (j < 0 || j >= next.length) return prev;
+      [next[i], next[j]] = [next[j], next[i]];
+      return { ...prev, processSteps: next };
+    });
+
+  // ── before/after state helpers (plain string arrays) ──
+  const addState = (field: "beforeStates" | "afterStates") =>
+    setProject((prev) => ({ ...prev, [field]: [...prev[field], ""] }));
+  const updateState = (field: "beforeStates" | "afterStates", i: number, value: string) =>
+    setProject((prev) => ({
+      ...prev,
+      [field]: prev[field].map((s, idx) => (idx === i ? value : s)),
+    }));
+  const removeState = (field: "beforeStates" | "afterStates", i: number) =>
+    setProject((prev) => ({ ...prev, [field]: prev[field].filter((_, idx) => idx !== i) }));
 
   if (isLoading) {
     return (
@@ -424,9 +487,10 @@ export default function ProjectEditor() {
             </div>
           </section>
 
-          {/* ── Result metric ── */}
+          {/* ── Result metric (index card) ── */}
           <section className="space-y-5 border-t border-[#181612]/10 pt-8">
             <h2 className="text-sm font-bold uppercase tracking-widest text-[#C58A92]">Headline Result</h2>
+            <p className="text-[#6F6A5F] text-xs -mt-3">single metric shown on the work-list card. the stat cards on the project page itself come from "Result Metrics" below.</p>
             <div className="grid grid-cols-2 gap-5">
               <div className="space-y-2">
                 <Label className="text-[#181612]">Metric Value</Label>
@@ -446,6 +510,98 @@ export default function ProjectEditor() {
                   className={inputCls}
                 />
               </div>
+            </div>
+          </section>
+
+          {/* ── Result metrics (stat cards on the project page) ── */}
+          <section className="space-y-5 border-t border-[#181612]/10 pt-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-widest text-[#C58A92]">Result Metrics</h2>
+                <p className="text-[#6F6A5F] text-xs mt-1">the row of stat cards on the project page. each: a value (e.g. "3") and a label (e.g. "platforms shipped").</p>
+              </div>
+              <Button type="button" onClick={addMetric} className="bg-[#181612] text-[#F4F1EA] hover:bg-[#6B1421] gap-2">
+                <Plus className="w-4 h-4" /> add metric
+              </Button>
+            </div>
+            {project.metrics.length === 0 ? (
+              <p className="text-[#6F6A5F] text-sm italic">no metrics yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {project.metrics.map((m, i) => (
+                  <div key={i} className="rounded-md border border-[#181612]/15 bg-[#FBF9F3] p-4 flex gap-3 items-start">
+                    <span className="text-[#6B1421] font-bold text-sm tabular-nums pt-2">{String(i + 1).padStart(2, "0")}</span>
+                    <div className="flex-1 grid grid-cols-2 gap-3">
+                      <Input value={m.value} onChange={(e) => updateMetric(i, "value", e.target.value)} placeholder="+312%" className={inputCls} />
+                      <Input value={m.label} onChange={(e) => updateMetric(i, "label", e.target.value)} placeholder="organic traffic" className={inputCls} />
+                    </div>
+                    <button type="button" onClick={() => removeMetric(i)} className="text-[#181612]/40 hover:text-[#6B1421] self-center"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* ── Process steps ── */}
+          <section className="space-y-5 border-t border-[#181612]/10 pt-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-widest text-[#C58A92]">Process Steps</h2>
+                <p className="text-[#6F6A5F] text-xs mt-1">the snaking "process journey" on the project page. each step: a title + short description, shown in order.</p>
+              </div>
+              <Button type="button" onClick={addStep} className="bg-[#181612] text-[#F4F1EA] hover:bg-[#6B1421] gap-2">
+                <Plus className="w-4 h-4" /> add step
+              </Button>
+            </div>
+            {project.processSteps.length === 0 ? (
+              <p className="text-[#6F6A5F] text-sm italic">no steps yet. the journey is hidden until you add one.</p>
+            ) : (
+              <div className="space-y-4">
+                {project.processSteps.map((s, i) => (
+                  <div key={i} className="rounded-md border border-[#181612]/15 bg-[#FBF9F3] p-4 flex gap-4">
+                    <div className="flex flex-col items-center gap-1 pt-1">
+                      <span className="text-[#6B1421] font-bold text-sm tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                      <button type="button" onClick={() => moveStep(i, -1)} disabled={i === 0} className="text-[#181612]/50 hover:text-[#181612] disabled:opacity-25"><ChevronUp className="w-4 h-4" /></button>
+                      <button type="button" onClick={() => moveStep(i, 1)} disabled={i === project.processSteps.length - 1} className="text-[#181612]/50 hover:text-[#181612] disabled:opacity-25"><ChevronDown className="w-4 h-4" /></button>
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <Input value={s.title} onChange={(e) => updateStep(i, "title", e.target.value)} placeholder="strategy" className={inputCls} />
+                      <Textarea value={s.description} onChange={(e) => updateStep(i, "description", e.target.value)} placeholder="what happened in this step..." rows={2} className={inputCls} />
+                    </div>
+                    <button type="button" onClick={() => removeStep(i)} className="text-[#181612]/40 hover:text-[#6B1421] self-start pt-1"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* ── Before / After ── */}
+          <section className="space-y-5 border-t border-[#181612]/10 pt-8">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-[#C58A92]">Before / After</h2>
+            <p className="text-[#6F6A5F] text-xs -mt-3">the two-column "where it started vs. where it landed" lists. one short phrase per line.</p>
+            <div className="grid grid-cols-2 gap-5">
+              {(["beforeStates", "afterStates"] as const).map((field) => (
+                <div key={field} className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-[#181612]">{field === "beforeStates" ? "Before" : "After"}</Label>
+                    <Button type="button" onClick={() => addState(field)} variant="ghost" className="text-[#6B1421] hover:text-[#8C2331] h-7 px-2 gap-1 text-xs">
+                      <Plus className="w-3 h-3" /> add
+                    </Button>
+                  </div>
+                  {project[field].length === 0 ? (
+                    <p className="text-[#6F6A5F] text-xs italic">none yet.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {project[field].map((s, i) => (
+                        <div key={i} className="flex gap-2 items-start">
+                          <Textarea value={s} onChange={(e) => updateState(field, i, e.target.value)} placeholder="short phrase..." rows={2} className={inputCls} />
+                          <button type="button" onClick={() => removeState(field, i)} className="text-[#181612]/40 hover:text-[#6B1421] pt-2"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </section>
 
