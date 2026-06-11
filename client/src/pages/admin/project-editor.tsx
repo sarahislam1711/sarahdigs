@@ -90,6 +90,10 @@ export default function ProjectEditor() {
   const projectId = isNew ? null : params?.id;
 
   const [project, setProject] = useState<ProjectForm>(defaultProject);
+  // Raw text backing the comma-separated Service Tags input. Kept separate from
+  // the parsed array so typing a comma (which briefly leaves an empty segment)
+  // doesn't get stripped mid-edit — we only trim/filter on save.
+  const [serviceTagsText, setServiceTagsText] = useState("");
 
   const { data: existingProject, isLoading } = useQuery({
     queryKey: ["/api/admin/projects", projectId],
@@ -115,6 +119,7 @@ export default function ProjectEditor() {
         beforeStates: Array.isArray(ex.beforeStates) ? ex.beforeStates : [],
         afterStates: Array.isArray(ex.afterStates) ? ex.afterStates : [],
       });
+      setServiceTagsText((Array.isArray(ex.serviceTags) ? ex.serviceTags : []).join(", "));
     }
   }, [existingProject]);
 
@@ -146,7 +151,12 @@ export default function ProjectEditor() {
       toast({ title: "Project name is required", variant: "destructive" });
       return;
     }
-    saveMutation.mutate(project);
+    // Parse the raw Service Tags text into a clean array only at save time.
+    const serviceTags = serviceTagsText
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    saveMutation.mutate({ ...project, serviceTags });
   };
 
   const generateSlug = (name: string) =>
@@ -455,29 +465,10 @@ export default function ProjectEditor() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[#181612]">The Approach (what we built)</Label>
-              <Textarea
-                value={project.approach}
-                onChange={(e) => update("approach", e.target.value)}
-                placeholder="research, design, build narrative."
-                className={inputCls}
-                rows={5}
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label className="text-[#181612]">Service Tags</Label>
               <Input
-                value={(project.serviceTags ?? []).join(", ")}
-                onChange={(e) =>
-                  update(
-                    "serviceTags",
-                    e.target.value
-                      .split(",")
-                      .map((t) => t.trim())
-                      .filter(Boolean)
-                  )
-                }
+                value={serviceTagsText}
+                onChange={(e) => setServiceTagsText(e.target.value)}
                 placeholder="strategy, design & development, custom cms, seo architecture"
                 className={inputCls}
               />
