@@ -67,6 +67,55 @@ const STATIC_ROUTES: Record<string, Partial<ResolvedMeta>> = {
   },
 };
 
+// Content pages (home / about / contact). Hardcoded in the React components;
+// we mirror the key headings + copy here so crawlers and AI bots get a real
+// body instead of an empty shell. Keep roughly in sync with the components.
+const CONTENT_PAGES: Record<
+  string,
+  { h1: string; sections: { heading?: string; body: string }[] }
+> = {
+  "/": {
+    h1: "sarahdigs — a website studio for the AI search era",
+    sections: [
+      {
+        body: "sarahdigs is a creative website studio that designs and builds high-performing, brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. beautiful websites, built to convert.",
+      },
+      {
+        heading: "how we work",
+        body: "every website we build runs on four things: dig — we learn your business, audience and market before the project starts; design — immersive, interactive websites that make users feel like they're entering your world; build — fast, clean, and built to grow with you; optimize — every touchpoint tuned so your site consistently brings in business.",
+      },
+      {
+        heading: "get found where your customers are searching",
+        body: "your website should show up where your customers are looking — on Google and in AI search engines. we build for discovery (AEO/GEO) so you get found, and for experience so real users stay and convert.",
+      },
+      {
+        heading: "the full dig",
+        body: "our flagship end-to-end engagement: brand-led website design, build, and launch for businesses ready to be remembered.",
+      },
+    ],
+  },
+  "/about": {
+    h1: "meet the studio",
+    sections: [
+      {
+        body: "sarahdigs is a creative website studio that designs websites people remember. a small studio, fewer clients, deeper work. founded by Sarah Islam.",
+      },
+      {
+        heading: "the philosophy",
+        body: "a website should feel like walking into the business. we spend real time learning your brand, your audience, and your market before a single page is designed — then build sites that get found on Google and AI search and loved by the people who land on them.",
+      },
+    ],
+  },
+  "/contact": {
+    h1: "ready to start digging?",
+    sections: [
+      {
+        body: "start a project or book a dig-in. sarahdigs is a creative website studio designing and building high-performing websites for founders and brands. we reply within one business day and only take on work we're the right fit for.",
+      },
+    ],
+  },
+};
+
 // Service (offering) pages. Content is hardcoded in the React components, so we
 // mirror the essentials here to server-render a crawler-facing body + Service
 // (and optional FAQ) schema. Keep in sync with the page components.
@@ -492,6 +541,27 @@ export async function resolveMeta(rawUrl: string): Promise<ResolvedMeta> {
         canonical: `${SITE_URL}${pathname}`,
         jsonLd,
         bodyHtml: `<main><h1>${esc(service.h1)}</h1><p>${esc(service.intro)}</p>${faqHtml}</main>`,
+      },
+      pathname,
+    );
+  }
+
+  // content pages (home / about / contact) — attach a crawler-facing body to
+  // the page's existing meta so the body isn't an empty shell.
+  const content = CONTENT_PAGES[pathname];
+  if (content) {
+    const baseMeta = STATIC_ROUTES[pathname] ?? {};
+    const sectionsHtml = content.sections
+      .map(
+        (s) =>
+          `${s.heading ? `<h2>${esc(s.heading)}</h2>` : ""}<p>${esc(s.body)}</p>`,
+      )
+      .join("");
+    return withDefaults(
+      {
+        ...baseMeta,
+        canonical: `${SITE_URL}${pathname}`,
+        bodyHtml: `<main><h1>${esc(content.h1)}</h1>${sectionsHtml}</main>`,
       },
       pathname,
     );
