@@ -645,7 +645,7 @@ const Hero = () => {
             className="flex flex-col md:flex-row justify-between gap-8 md:items-end w-full"
           >
             <p className="font-display text-2xl md:text-3xl font-medium leading-snug tracking-tight text-[#181612] max-w-3xl lowercase">
-              building websites people remember. and keep coming back to.
+              beautiful websites, built to convert.
             </p>
           </motion.div>
         </div>
@@ -1366,9 +1366,9 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-[#F4F1EA]">
       <SEO
-        title="sarahdigs | beautiful websites, built to convert"
+        title="sarahdigs | a website studio for the AI search era"
         exactTitle
-        description="sarahdigs is a creative website studio that designs and builds high-performing websites for founders and brands. beautiful websites, built to convert."
+        description="sarahdigs is a creative website studio building brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. book a dig-in."
         canonical="/"
         jsonLd={{
           "@context": "https://schema.org",

@@ -18,9 +18,9 @@ export type ResolvedMeta = {
 };
 
 const DEFAULTS: ResolvedMeta = {
-  title: "sarahdigs | creative website studio",
+  title: "sarahdigs | a website studio for the AI search era",
   description:
-    "sarahdigs is a creative website studio that designs and builds high-performing websites for businesses. book a dig-in to get started.",
+    "sarahdigs is a creative website studio building brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. book a dig-in.",
   canonical: `${SITE_URL}/`,
   ogImage: DEFAULT_OG_IMAGE,
   ogType: "website",
@@ -29,7 +29,9 @@ const DEFAULTS: ResolvedMeta = {
 
 const STATIC_ROUTES: Record<string, Partial<ResolvedMeta>> = {
   "/": {
-    title: "sarahdigs | creative website studio",
+    title: "sarahdigs | a website studio for the AI search era",
+    description:
+      "sarahdigs is a creative website studio building brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. book a dig-in.",
   },
   "/about": {
     title: "about | sarahdigs",
