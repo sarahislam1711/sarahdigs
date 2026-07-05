@@ -53,21 +53,8 @@ const STATIC_ROUTES: Record<string, Partial<ResolvedMeta>> = {
     description:
       "essays and field notes from the sarahdigs studio on web design, ai search visibility, and building a brand that gets found.",
   },
-  "/the-full-dig": {
-    title: "the full dig | sarahdigs",
-    description:
-      "our end-to-end engagement: brand-led website design, build, and launch. for businesses ready to be remembered.",
-  },
-  "/dig-on-demand": {
-    title: "dig on demand | sarahdigs",
-    description:
-      "ongoing design and dev support for businesses with a live site that needs to keep moving.",
-  },
-  "/dig-in-consultations": {
-    title: "dig-in consultations | sarahdigs",
-    description:
-      "a focused call and written action plan. for when you need clarity before committing to a full engagement.",
-  },
+  // NOTE: /the-full-dig, /dig-on-demand, /dig-in-consultations are handled by
+  // SERVICE_PAGES below (body + Service/FAQ schema), not here.
   "/privacy": {
     title: "privacy | sarahdigs",
     description: "how sarahdigs handles your data.",
@@ -77,6 +64,86 @@ const STATIC_ROUTES: Record<string, Partial<ResolvedMeta>> = {
     title: "terms | sarahdigs",
     description: "terms of service for sarahdigs.",
     noindex: true,
+  },
+};
+
+// Service (offering) pages. Content is hardcoded in the React components, so we
+// mirror the essentials here to server-render a crawler-facing body + Service
+// (and optional FAQ) schema. Keep in sync with the page components.
+const SERVICE_PAGES: Record<
+  string,
+  {
+    metaTitle: string;
+    metaDescription: string;
+    h1: string;
+    intro: string;
+    service: { name: string; description: string; serviceType: string };
+    faqs?: { q: string; a: string }[];
+  }
+> = {
+  "/the-full-dig": {
+    metaTitle: "the full dig | sarahdigs",
+    metaDescription:
+      "research, design, build, and optimization, done together in the right order. the flagship sarahdigs service for founders who want a website that works.",
+    h1: "designed to impress, built to sell",
+    intro:
+      "the full dig is the flagship sarahdigs engagement: research, design, build, and optimization done together in the right order. exceptional design and real business results, in one service across three depths.",
+    service: {
+      name: "the full dig",
+      description:
+        "the flagship sarahdigs engagement: research, design, build, and optimization done together in the right order. a website that works.",
+      serviceType: "Website design and development",
+    },
+  },
+  "/dig-on-demand": {
+    metaTitle: "custom dig | sarahdigs",
+    metaDescription:
+      "a custom engagement scoped to your business, goals, and gaps. tell us what you need and we'll build the plan.",
+    h1: "tell us what you need. we'll build the plan.",
+    intro:
+      "dig on demand is a custom engagement scoped to your business, goals, and gaps. ongoing design and development support for a live site that needs to keep moving. tell us what you need and we'll build the plan.",
+    service: {
+      name: "custom dig",
+      description:
+        "a custom engagement scoped to your business, goals, and gaps. tell us what you need and we'll build the plan.",
+      serviceType: "Custom website engagement",
+    },
+  },
+  "/dig-in-consultations": {
+    metaTitle: "dig-in consultations | sarahdigs",
+    metaDescription:
+      "a focused call with a custom action plan delivered after. you leave with a clear sense of direction for your business.",
+    h1: "a focused call, a custom action plan",
+    intro:
+      "a dig-in consultation is a focused diagnostic call and a written action plan delivered within 48 hours. you leave with a clear sense of direction for your website and business.",
+    service: {
+      name: "dig-in consultation",
+      description:
+        "a focused diagnostic call and a written action plan delivered within 48 hours. clear direction for your website and business.",
+      serviceType: "Website strategy consultation",
+    },
+    faqs: [
+      {
+        q: "what exactly happens on the call?",
+        a: "we spend the session focused on your business. i'll ask about your audience, your goals, your current site, and what's not working. by the end, i'll have a clear picture of where you stand and what to prioritize.",
+      },
+      {
+        q: "what do i get after the session?",
+        a: "a written action plan delivered within 48 hours. it covers what's working, what's not, and exactly what to do next. with specific recommendations, not vague advice.",
+      },
+      {
+        q: "how is this different from a free discovery call?",
+        a: "a discovery call is about deciding whether to work together. a dig-in is the work. you're paying for expertise, diagnosis, and a deliverable you can use immediately.",
+      },
+      {
+        q: "what if i want to move forward with a full project after?",
+        a: "many clients do. the dig-in often becomes the starting point for the full dig. but there's no pressure and no obligation. the action plan stands on its own.",
+      },
+      {
+        q: "how much does it cost?",
+        a: "pricing is confirmed when you book. it's a fixed fee. no hourly billing, no surprises.",
+      },
+    ],
   },
 };
 
@@ -152,6 +219,36 @@ const WEBSITE_LD = {
 
 // Prepended to every page's server-rendered JSON-LD (unless the page is noindex).
 const SITEWIDE_LD: object[] = [ORGANIZATION_LD, WEBSITE_LD];
+
+function serviceLd(opts: {
+  name: string;
+  description: string;
+  url: string;
+  serviceType?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: opts.name,
+    description: opts.description,
+    url: `${SITE_URL}${opts.url}`,
+    ...(opts.serviceType ? { serviceType: opts.serviceType } : {}),
+    provider: { "@id": `${SITE_URL}/#organization` },
+    areaServed: "Worldwide",
+  };
+}
+
+function faqLd(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+}
 
 function breadcrumbLd(trail: { name: string; url: string }[]) {
   return {
@@ -370,6 +467,34 @@ export async function resolveMeta(rawUrl: string): Promise<ResolvedMeta> {
       console.error("[seo] journal index lookup failed", err);
       return withDefaults(base, pathname);
     }
+  }
+
+  // service (offering) pages — server-render body + Service/FAQ schema
+  const service = SERVICE_PAGES[pathname];
+  if (service) {
+    const jsonLd: object[] = [
+      serviceLd({ ...service.service, url: pathname }),
+      breadcrumbLd([
+        { name: "Home", url: "/" },
+        { name: service.service.name, url: pathname },
+      ]),
+    ];
+    if (service.faqs?.length) jsonLd.push(faqLd(service.faqs));
+    const faqHtml = service.faqs?.length
+      ? `<section><h2>faq</h2><dl>${service.faqs
+          .map((f) => `<dt>${esc(f.q)}</dt><dd>${esc(f.a)}</dd>`)
+          .join("")}</dl></section>`
+      : "";
+    return withDefaults(
+      {
+        title: service.metaTitle,
+        description: service.metaDescription,
+        canonical: `${SITE_URL}${pathname}`,
+        jsonLd,
+        bodyHtml: `<main><h1>${esc(service.h1)}</h1><p>${esc(service.intro)}</p>${faqHtml}</main>`,
+      },
+      pathname,
+    );
   }
 
   // static routes (checked before the catch-all /journal/:category so that
