@@ -241,9 +241,16 @@ const ORGANIZATION_LD = {
   alternateName: "SarahDigs",
   url: SITE_URL,
   logo: DEFAULT_OG_IMAGE,
+  email: "sarah@sarahdigs.com",
   description:
     "sarahdigs is a creative website studio that designs and builds high-performing, brand-led websites optimized for Google, AI search, and real user experience.",
   founder: { "@type": "Person", name: "Sarah Islam" },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "sarah@sarahdigs.com",
+    contactType: "customer support",
+  },
+  sameAs: ["https://www.linkedin.com/in/sarahislamm/"],
   knowsAbout: [
     "Website Design",
     "Web Development",

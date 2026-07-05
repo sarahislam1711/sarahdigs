@@ -3,10 +3,9 @@
 
 const SITE = "https://www.sarahdigs.com";
 
-// TODO: add real social profile URLs here to strengthen entity recognition.
+// Social / external profiles that represent the sarahdigs entity.
 const SAME_AS: string[] = [
-  // "https://www.instagram.com/...",
-  // "https://www.linkedin.com/...",
+  "https://www.linkedin.com/in/sarahislamm/",
 ];
 
 const abs = (path: string) => (path.startsWith("http") ? path : `${SITE}${path.startsWith("/") ? "" : "/"}${path}`);
@@ -20,9 +19,15 @@ export const organizationSchema = {
   alternateName: "SarahDigs",
   url: SITE,
   logo: `${SITE}/favicon.png`,
+  email: "sarah@sarahdigs.com",
   description:
     "sarahdigs is a creative website studio that designs and builds high-performing websites for businesses.",
   founder: { "@type": "Person", name: "Sarah Islam" },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "sarah@sarahdigs.com",
+    contactType: "customer support",
+  },
   knowsAbout: [
     "Website Design",
     "Web Development",

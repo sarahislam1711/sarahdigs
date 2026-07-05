@@ -1,5 +1,8 @@
 import { Link } from "wouter";
-import { Mail } from "lucide-react";
+import { Mail, Linkedin } from "lucide-react";
+
+const LINKEDIN_URL = "https://www.linkedin.com/in/sarahislamm/";
+const EMAIL = "sarah@sarahdigs.com";
 
 export const Footer = () => {
   return (
@@ -13,13 +16,27 @@ export const Footer = () => {
           <p className="text-sm text-[#F4F1EA]/55 leading-snug lowercase">
             beautiful websites, built to convert.
           </p>
-          <a
-            href="mailto:sarah@sarahdigs.com"
-            className="inline-flex items-center gap-2 mt-2 text-sm text-[#F4F1EA]/75 hover:text-[#F4F1EA] transition-colors lowercase w-fit"
-          >
-            <Mail className="h-4 w-4" strokeWidth={1.75} />
-            sarah@sarahdigs.com
-          </a>
+
+          {/* Social buttons */}
+          <div className="flex items-center gap-3 mt-3">
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="sarahdigs on LinkedIn"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-[#F4F1EA]/75 hover:text-[#F4F1EA] hover:border-[#6B1421] hover:bg-[#6B1421]/20 transition-colors"
+            >
+              <Linkedin className="h-4 w-4" strokeWidth={1.75} />
+            </a>
+            <a
+              href={`mailto:${EMAIL}`}
+              aria-label={`Email sarahdigs at ${EMAIL}`}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-white/15 text-sm text-[#F4F1EA]/75 hover:text-[#F4F1EA] hover:border-[#6B1421] hover:bg-[#6B1421]/20 transition-colors lowercase"
+            >
+              <Mail className="h-4 w-4" strokeWidth={1.75} />
+              {EMAIL}
+            </a>
+          </div>
         </div>
 
         {/* Links + copyright */}
