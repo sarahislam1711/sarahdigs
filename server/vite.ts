@@ -84,6 +84,10 @@ export function serveStatic(app: Express) {
   // a hard refresh. index.html must always revalidate so new builds show up.
   app.use(
     express.static(distPath, {
+      // Don't let express.static auto-serve index.html for "/" — that would
+      // bypass the SSR meta/JSON-LD injection in the app.use("*") handler
+      // below. The root path must fall through so it gets per-route meta too.
+      index: false,
       setHeaders: (res, filePath) => {
         if (filePath.endsWith("index.html")) {
           res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
