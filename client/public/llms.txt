@@ -1,0 +1,24 @@
+# sarahdigs
+
+> sarahdigs is a creative website studio that designs and builds high-performing, brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. Founded by Sarah Islam.
+
+sarahdigs helps businesses get found on Google and AI search engines while delivering websites real users love. The studio's work spans brand strategy, UX design, custom development, SEO, and answer-engine optimization (AEO/GEO).
+
+## Services
+
+- [The Full Dig](https://www.sarahdigs.com/the-full-dig): End-to-end engagement — brand-led website design, build, and launch for businesses ready to be remembered.
+- [Dig on Demand](https://www.sarahdigs.com/dig-on-demand): Ongoing design and development support for businesses with a live site that needs to keep moving.
+- [Dig-in Consultations](https://www.sarahdigs.com/dig-in-consultations): A focused call and written action plan for clarity before committing to a full engagement.
+
+## Work
+
+- [Selected Work](https://www.sarahdigs.com/projects): Case studies from the studio — brand-led websites built for businesses that want to be remembered.
+
+## Journal
+
+- [The Journal](https://www.sarahdigs.com/journal): Essays and field notes on web design, AI search visibility (AEO/GEO), and building a brand that gets found.
+
+## About
+
+- [About](https://www.sarahdigs.com/about): The founder and philosophy behind every build — a website should feel like walking into the business.
+- [Contact](https://www.sarahdigs.com/contact): Start a project. Replies within one business day.

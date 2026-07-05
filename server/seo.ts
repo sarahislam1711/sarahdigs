@@ -114,6 +114,45 @@ const ORG_PUBLISHER = {
   logo: { "@type": "ImageObject", url: DEFAULT_OG_IMAGE },
 };
 
+// ── Sitewide entity schema. Injected server-side into EVERY page so crawlers
+// (and AI bots) that don't run JS still see the brand entity. Mirrors the
+// client-side organizationSchema/websiteSchema in client/src/lib/schema.ts.
+const ORGANIZATION_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: SITE_NAME,
+  alternateName: "SarahDigs",
+  url: SITE_URL,
+  logo: DEFAULT_OG_IMAGE,
+  description:
+    "sarahdigs is a creative website studio that designs and builds high-performing, brand-led websites optimized for Google, AI search, and real user experience.",
+  founder: { "@type": "Person", name: "Sarah Islam" },
+  knowsAbout: [
+    "Website Design",
+    "Web Development",
+    "Brand Strategy",
+    "UX Design",
+    "SEO",
+    "Answer Engine Optimization",
+    "Generative Engine Optimization",
+    "AI Search Optimization",
+    "Conversion Optimization",
+  ],
+};
+
+const WEBSITE_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  publisher: { "@id": `${SITE_URL}/#organization` },
+};
+
+// Prepended to every page's server-rendered JSON-LD (unless the page is noindex).
+const SITEWIDE_LD: object[] = [ORGANIZATION_LD, WEBSITE_LD];
+
 function breadcrumbLd(trail: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",
@@ -474,8 +513,13 @@ export function injectMeta(html: string, meta: ResolvedMeta): string {
   // Inject server-rendered JSON-LD into <head> so crawlers that don't execute
   // JS still see structured data. (react-helmet adds the same client-side; this
   // is the crawler-facing copy.) Marked data-ssr-jsonld for clarity.
-  if (meta.jsonLd?.length) {
-    const blocks = meta.jsonLd
+  // Every indexable page gets the sitewide Organization + WebSite entity,
+  // then any page-specific schema (BlogPosting, CreativeWork, breadcrumbs…).
+  const allJsonLd = meta.noindex
+    ? meta.jsonLd ?? []
+    : [...SITEWIDE_LD, ...(meta.jsonLd ?? [])];
+  if (allJsonLd.length) {
+    const blocks = allJsonLd
       .map(
         (obj) =>
           `    <script type="application/ld+json" data-ssr-jsonld>${jsonForScript(
