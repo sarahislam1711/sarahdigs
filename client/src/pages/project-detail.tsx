@@ -282,7 +282,11 @@ export default function ProjectDetail() {
     queryKey: ["/api/projects"],
   });
 
-  if (isLoading) {
+  // Show the loader while the route param is still resolving OR the query is
+  // loading. Without the `!slug` guard, a disabled query (enabled: !!slug)
+  // reports isLoading:false with data:undefined for a tick, briefly flashing
+  // the 404 page before the real content mounts.
+  if (!slug || isLoading) {
     return (
       <div className="min-h-screen bg-bone flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-oxblood" />

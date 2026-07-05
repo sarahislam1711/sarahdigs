@@ -38,7 +38,10 @@ export default function BlogPostPage() {
     });
   };
 
-  if (isLoading) {
+  // Guard on `!slug` too: a disabled query (enabled: !!slug) reports
+  // isLoading:false with data:undefined for a tick while the route param
+  // resolves, which briefly flashes the 404 before the post mounts.
+  if (!slug || isLoading) {
     return (
       <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans">
         <Navbar theme="light" />
