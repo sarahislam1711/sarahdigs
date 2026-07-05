@@ -1366,7 +1366,7 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-[#F4F1EA]">
       <SEO
-        title="sarahdigs | a website studio for the AI search era"
+        title="sarahdigs | website studio for the AI search era"
         exactTitle
         description="sarahdigs is a creative website studio building brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. book a dig-in."
         canonical="/"
