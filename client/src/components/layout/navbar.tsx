@@ -235,7 +235,7 @@ export const Navbar = ({ theme = "light" }: NavbarProps) => {
           aria-label="sarahdigs home"
           className="flex items-center hover:opacity-80 transition-opacity duration-300"
         >
-          <img src="/favicon.png" alt="sarahdigs" className="h-[72px] w-auto" />
+          <img src="/logo.png" alt="sarahdigs" className="h-[72px] w-auto" />
         </Link>
 
         {/* Desktop nav */}

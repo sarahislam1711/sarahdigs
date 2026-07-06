@@ -56,7 +56,7 @@ export const Footer = () => {
             </Link>
           </div>
           <span className="text-[#F4F1EA]/40 lowercase">
-            &copy; {new Date().getFullYear()} sarahdigs. all rights excavated.
+            &copy; {new Date().getFullYear()} sarahdigs. all rights reserved.
           </span>
         </div>
       </div>
