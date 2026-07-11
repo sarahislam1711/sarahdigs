@@ -130,6 +130,19 @@ export const contactInquiries = pgTable("contact_inquiries", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Email subscribers / lead-magnet captures ("steal my brain" gated content,
+// newsletter). Email is unique so re-submitting updates rather than duplicates.
+export const subscribers = pgTable("subscribers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").notNull().unique(),
+  // where they signed up: "consultations", "home", "journal", etc.
+  source: varchar("source"),
+  // what they wanted to unlock: "article", "sample-plan", "newsletter", etc.
+  assetRequested: varchar("asset_requested"),
+  status: varchar("status").default("new"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Projects table for portfolio (auction-catalog style)
 export const projects = pgTable("projects", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -263,6 +276,14 @@ export const insertCustomPlanInquirySchema = createInsertSchema(customPlanInquir
   status: true,
 });
 
+export const insertSubscriberSchema = createInsertSchema(subscribers, {
+  email: (schema) => schema.email("please enter a valid email"),
+}).omit({
+  id: true,
+  createdAt: true,
+  status: true,
+});
+
 export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
   id: true,
   createdAt: true,
@@ -322,6 +343,9 @@ export type User = typeof users.$inferSelect;
 
 export type InsertContactInquiry = z.infer<typeof insertContactInquirySchema>;
 export type ContactInquiry = typeof contactInquiries.$inferSelect;
+
+export type InsertSubscriber = z.infer<typeof insertSubscriberSchema>;
+export type Subscriber = typeof subscribers.$inferSelect;
 
 export type InsertCustomPlanInquiry = z.infer<typeof insertCustomPlanInquirySchema>;
 export type CustomPlanInquiry = typeof customPlanInquiries.$inferSelect;

@@ -10,8 +10,9 @@ import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
 import { sendCustomPlanEmail, sendContactEmail } from "./email";
 import { 
-  insertContactInquirySchema, 
+  insertContactInquirySchema,
   insertCustomPlanInquirySchema,
+  insertSubscriberSchema,
   insertBlogPostSchema,
   insertCategorySchema,
   insertTagSchema,
@@ -618,6 +619,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating custom plan inquiry:", error);
       res.status(400).json({ error: "Invalid request data" });
+    }
+  });
+
+  // Email capture for lead magnets ("steal my brain" gated content) + newsletter.
+  // Stores the email now; sender integration (Resend/etc.) plugs in here later.
+  app.post("/api/subscribe", async (req, res) => {
+    try {
+      const validatedData = insertSubscriberSchema.parse(req.body);
+      const subscriber = await storage.createSubscriber(validatedData);
+      res.status(201).json({ ok: true, id: subscriber.id });
+    } catch (error) {
+      console.error("Error creating subscriber:", error);
+      res.status(400).json({ error: "Invalid email" });
+    }
+  });
+
+  // Admin: list subscribers (for exporting / connecting a sender later).
+  app.get("/api/admin/subscribers", isAuthenticated, async (_req, res) => {
+    try {
+      res.json(await storage.getSubscribers());
+    } catch (error) {
+      console.error("Error fetching subscribers:", error);
+      res.status(500).json({ error: "Failed to fetch subscribers" });
     }
   });
 

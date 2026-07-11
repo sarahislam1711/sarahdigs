@@ -9,8 +9,9 @@ import {
   postTags,
   media,
   siteSettings,
-  contactInquiries, 
+  contactInquiries,
   customPlanInquiries,
+  subscribers,
   projects,
   services,
   stats,
@@ -31,8 +32,10 @@ import {
   type SiteSetting,
   type InsertContactInquiry, 
   type ContactInquiry, 
-  type InsertCustomPlanInquiry, 
+  type InsertCustomPlanInquiry,
   type CustomPlanInquiry,
+  type InsertSubscriber,
+  type Subscriber,
   type InsertProject,
   type Project,
   type InsertService,
@@ -84,6 +87,8 @@ export interface IStorage {
 
   createContactInquiry(inquiry: InsertContactInquiry): Promise<ContactInquiry>;
   createCustomPlanInquiry(inquiry: InsertCustomPlanInquiry): Promise<CustomPlanInquiry>;
+  createSubscriber(sub: InsertSubscriber): Promise<Subscriber>;
+  getSubscribers(): Promise<Subscriber[]>;
   getContactInquiries(): Promise<ContactInquiry[]>;
   getCustomPlanInquiries(): Promise<CustomPlanInquiry[]>;
   updateContactInquiryStatus(id: string, status: string): Promise<ContactInquiry>;
@@ -349,6 +354,24 @@ export class DatabaseStorage implements IStorage {
   async createCustomPlanInquiry(inquiry: InsertCustomPlanInquiry): Promise<CustomPlanInquiry> {
     const [result] = await db.insert(customPlanInquiries).values(inquiry).returning();
     return result;
+  }
+
+  async createSubscriber(sub: InsertSubscriber): Promise<Subscriber> {
+    // Upsert on email so a repeat signup updates (source/asset) instead of
+    // failing the unique constraint.
+    const [result] = await db
+      .insert(subscribers)
+      .values(sub)
+      .onConflictDoUpdate({
+        target: subscribers.email,
+        set: { source: sub.source, assetRequested: sub.assetRequested },
+      })
+      .returning();
+    return result;
+  }
+
+  async getSubscribers(): Promise<Subscriber[]> {
+    return await db.select().from(subscribers).orderBy(desc(subscribers.createdAt));
   }
 
   async getContactInquiries(): Promise<ContactInquiry[]> {
