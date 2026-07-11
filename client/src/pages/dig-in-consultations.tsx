@@ -46,15 +46,13 @@ const defaultConsultations: ConsultationType[] = [
 ];
 
 // ──────────────────────────────────────────────────────────────────────────────
-// Lead magnet popup
-// TODO (lead-magnet email automation):
-//   When email tool is set up (Resend / Postmark / SendGrid):
-//   1. Replace this popup's POST to /api/contact with a dedicated /api/lead-magnet route
-//   2. Backend should send the appropriate resource based on `kind`:
-//      - kind="article" → email the "how I think about websites" article
-//      - kind="sample"  → email the sanitized sample action plan
-//   3. Upload the actual resources somewhere linkable (Drive / public URL)
-//   4. Remove this TODO once wired
+// Lead magnet popup — captures the email via /api/subscribe (stored in the
+// subscribers table). TODO when an email sender is connected (Resend/etc.):
+//   have the backend send the resource based on `assetRequested`:
+//     - "article"     → the "how I think about websites" article
+//     - "sample-plan" → the sanitized sample action plan
+//   For now the email is stored and the success message shown; deliver the
+//   resource in-popup or via the sender once wired.
 // ──────────────────────────────────────────────────────────────────────────────
 type LeadMagnetKind = "article" | "sample";
 
@@ -85,18 +83,13 @@ const LeadMagnetPopup = ({
 
   const mutation = useMutation({
     mutationFn: async (userEmail: string) => {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: kind === "article" ? "Lead Magnet: Article" : "Lead Magnet: Sample Plan",
           email: userEmail,
-          companyWebsite: "",
-          jobRole: "Not specified",
-          companySize: "Not specified",
-          projectType: kind === "article" ? "Lead Magnet: Article" : "Lead Magnet: Sample Plan",
-          budget: "Not specified",
-          message: `User requested the "${kind}" lead magnet from the dig-in consultations page. Email: ${userEmail}`,
+          source: "consultations",
+          assetRequested: kind === "article" ? "article" : "sample-plan",
         }),
       });
       if (!response.ok) throw new Error("Failed to submit");

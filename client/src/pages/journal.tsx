@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowUpRight, ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import type { BlogPost, Category, Tag as TagType } from "@shared/schema";
 
 // ── helpers ──
@@ -177,6 +177,19 @@ function JournalLayout() {
 // ── NEWSLETTER (shared) ──
 const Newsletter = () => {
   const [email, setEmail] = useState("");
+  const mutation = useMutation({
+    mutationFn: async (userEmail: string) => {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, source: "journal", assetRequested: "newsletter" }),
+      });
+      if (!res.ok) throw new Error("Failed to subscribe");
+      return res.json();
+    },
+    onSuccess: () => setEmail(""),
+  });
+  const subscribed = mutation.isSuccess;
   return (
     <section className="bg-bone pb-20 md:pb-28">
       <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
@@ -191,19 +204,34 @@ const Newsletter = () => {
             </h2>
           </div>
           <div className="lg:col-span-6 lg:pl-4">
-            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your email"
-                className="flex-1 h-14 px-5 rounded-md border border-ink/15 bg-transparent text-ink placeholder:text-ink-mid/60 lowercase focus:outline-none focus:border-oxblood transition-colors"
-              />
-              <Button size="lg" type="submit" className="h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2">
-                subscribe <ArrowRight className="w-4 h-4" />
-              </Button>
-            </form>
-            <p className="text-ink-mid text-sm lowercase mt-3">no spam. unsubscribe anytime.</p>
+            {subscribed ? (
+              <div className="h-14 flex items-center gap-2 text-oxblood font-medium lowercase">
+                <ArrowRight className="w-4 h-4" /> you're in. talk soon.
+              </div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (email.trim()) mutation.mutate(email.trim());
+                }}
+                className="flex flex-col sm:flex-row gap-3"
+              >
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your email"
+                  className="flex-1 h-14 px-5 rounded-md border border-ink/15 bg-transparent text-ink placeholder:text-ink-mid/60 lowercase focus:outline-none focus:border-oxblood transition-colors"
+                />
+                <Button size="lg" type="submit" disabled={mutation.isPending} className="h-14 px-8 bg-oxblood hover:bg-oxblood-soft text-white rounded-md cursor-pointer lowercase font-medium gap-2">
+                  {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <>subscribe <ArrowRight className="w-4 h-4" /></>}
+                </Button>
+              </form>
+            )}
+            <p className="text-ink-mid text-sm lowercase mt-3">
+              {mutation.isError ? "something went wrong — try again." : "no spam. unsubscribe anytime."}
+            </p>
           </div>
         </div>
       </div>
