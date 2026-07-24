@@ -14,6 +14,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { renderMetricValue } from "@/lib/metric-value";
 import { PlacesCaseStudy } from "@/components/places-case-study";
 import { The20sEditCaseStudy } from "@/components/the-20s-edit-case-study";
+import { ResVisaCaseStudy } from "@/components/resvisa-case-study";
 import type { Project } from "@shared/schema";
 
 type Step = { title: string; description: string };
@@ -452,6 +453,8 @@ export default function ProjectDetail() {
         <PlacesCaseStudy />
       ) : project.slug === "the-20s-edit" ? (
         <The20sEditCaseStudy />
+      ) : project.slug === "resvisa" ? (
+        <ResVisaCaseStudy />
       ) : gallery.length > 0 ? (
         <ProjectGallery slides={gallery} />
       ) : (
