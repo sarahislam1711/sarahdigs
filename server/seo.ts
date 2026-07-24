@@ -735,10 +735,16 @@ export function injectMeta(html: string, meta: ResolvedMeta): string {
   // Inject crawler-facing body content inside the (otherwise empty) #root div.
   // React's createRoot().render() replaces these children on mount, so users
   // get the full app while crawlers/no-JS clients see real article HTML.
+  //
+  // The content is wrapped in a visually-hidden container so human visitors
+  // don't see a flash of unstyled text before React mounts (FOUC). We use the
+  // clip/off-screen technique rather than display:none because some crawlers
+  // ignore display:none content — this stays fully readable to Google/AI bots.
   if (meta.bodyHtml) {
+    const hiddenWrap = `<div data-ssr-body style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">${meta.bodyHtml}</div>`;
     out = out.replace(
       /(<div id="root">)(\s*)(<\/div>)/i,
-      `$1${meta.bodyHtml}$3`,
+      `$1${hiddenWrap}$3`,
     );
   }
 
