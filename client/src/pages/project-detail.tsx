@@ -519,7 +519,7 @@ export default function ProjectDetail() {
               <span className="text-ink-mid">and the </span>
               <span className="text-oxblood italic">payoff.</span>
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-14 lg:gap-x-20 gap-y-12">
               {metrics.map((m, i) => (
                 <motion.div
                   key={i}
@@ -528,7 +528,11 @@ export default function ProjectDetail() {
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
                 >
-                  <span className="block font-display font-semibold text-oxblood text-[clamp(2.75rem,13vw,3.75rem)] md:text-8xl tabular-nums tracking-tight leading-none mb-4 whitespace-nowrap">
+                  <span className={`block font-display font-semibold text-oxblood tabular-nums tracking-tight leading-none mb-4 whitespace-nowrap ${
+                    m.value.length > 5
+                      ? "text-[clamp(2rem,9vw,2.5rem)] md:text-5xl lg:text-6xl"
+                      : "text-[clamp(2.75rem,13vw,3.75rem)] md:text-8xl"
+                  }`}>
                     {renderMetricValue(m.value)}
                   </span>
                   <span className="block text-sm md:text-base text-ink-mid lowercase">{m.label}</span>
