@@ -364,7 +364,7 @@ export default function Terms() {
   return (
     <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-[#F4F1EA]">
       <SEO
-        title="terms | sarahdigs"
+        title="terms"
         description="The terms under which sarahdigs delivers websites, consultations, and ongoing work."
         canonical="/terms"
         noindex

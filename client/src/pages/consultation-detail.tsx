@@ -127,7 +127,7 @@ export default function ConsultationDetail() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title={`${data.title} | sarahdigs`}
+        title={data.title}
         description={data.subtitle}
         canonical={`/dig-in-consultations/${slug}`}
         jsonLd={breadcrumbJsonLd}

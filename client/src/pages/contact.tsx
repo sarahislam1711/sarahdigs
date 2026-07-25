@@ -141,7 +141,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="contact | sarahdigs"
+        title="contact"
         description="start a project or book a dig-in. sarahdigs is a creative website studio designing and building high-performing websites for founders and brands."
         canonical="/contact"
         jsonLd={pageSchema("ContactPage", {

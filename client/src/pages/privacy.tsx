@@ -274,7 +274,7 @@ export default function Privacy() {
   return (
     <div className="min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-[#F4F1EA]">
       <SEO
-        title="privacy | sarahdigs"
+        title="privacy"
         description="How sarahdigs collects, uses, and protects your data."
         canonical="/privacy"
         noindex

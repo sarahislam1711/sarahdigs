@@ -177,7 +177,7 @@ export default function TheFullDig() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="the full dig | sarahdigs"
+        title="the full dig"
         description="Research, design, build, and optimization, done together in the right order. The flagship sarahdigs service for founders who want a website that works."
         canonical="/the-full-dig"
         jsonLd={serviceSchema({

@@ -313,7 +313,7 @@ export default function ProjectDetail() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title={`${project.name} | sarahdigs`}
+        title={project.name}
         description={project.problem || `${project.name}: a case study by sarahdigs.`}
         canonical={`/projects/${project.slug}`}
         ogImage={project.imageUrl || undefined}

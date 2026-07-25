@@ -37,8 +37,8 @@ export default function SEO({
   jsonLd,
 }: SEOProps) {
   const resolvedTitle = title
-    ? exactTitle
-      ? title
+    ? exactTitle || title.toLowerCase().includes(SITE_NAME.toLowerCase())
+      ? title // already branded — don't append a second "| sarahdigs"
       : `${title} | ${SITE_NAME}`
     : DEFAULT_TITLE;
   const resolvedDescription = description || DEFAULT_DESCRIPTION;

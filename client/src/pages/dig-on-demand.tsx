@@ -343,7 +343,7 @@ export default function DigOnDemand() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="custom dig | sarahdigs"
+        title="custom dig"
         description="a custom engagement scoped to your business, goals, and gaps. tell us what you need and we'll build the plan."
         canonical="/dig-on-demand"
         jsonLd={serviceSchema({

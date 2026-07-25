@@ -785,7 +785,7 @@ export default function DigInConsultations() {
   return (
     <div className="min-h-screen bg-bone text-ink">
       <SEO
-        title="dig-in consultations | sarahdigs"
+        title="dig-in consultations"
         description="a focused call with a custom action plan delivered after. you leave with a clear sense of direction for your business."
         canonical="/dig-in-consultations"
         jsonLd={[

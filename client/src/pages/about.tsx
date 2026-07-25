@@ -37,7 +37,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="about | sarahdigs"
+        title="about"
         description="sarahdigs is a creative website studio that designs websites people remember. small studio, fewer clients, deeper work."
         canonical="/about"
         jsonLd={pageSchema("AboutPage", {

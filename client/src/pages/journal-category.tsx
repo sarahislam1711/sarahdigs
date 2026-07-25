@@ -58,7 +58,7 @@ export default function JournalCategory() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title={`${category.name} | journal | sarahdigs`}
+        title={`${category.name} | journal`}
         description={description}
         canonical={`/journal/${category.slug}`}
         jsonLd={breadcrumbJsonLd}

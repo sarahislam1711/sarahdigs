@@ -243,7 +243,7 @@ export default function Journal() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="journal | sarahdigs"
+        title="journal"
         description="essays, frameworks, and field notes on websites, design, and growth from sarahdigs."
         canonical="/journal"
         ogType="website"

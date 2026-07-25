@@ -23,7 +23,7 @@ export default function Projects() {
   return (
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
-        title="projects | sarahdigs"
+        title="projects"
         description="the work. selected websites designed and built by sarahdigs for b2b and lifestyle brands."
         canonical="/projects"
         jsonLd={collectionPageSchema({

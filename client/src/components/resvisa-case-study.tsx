@@ -222,14 +222,14 @@ const slides: CaseSlide[] = [
     tag: "Marketing site",
     name: "A bilingual marketing site, built to convert",
     desc: "A full EN/AR site — homepage, visa guide, life in spain, faq, contact, and blog — positioning resvisa as licensed experts who handle every step from the first question to the residency card.",
-    pills: ["Bilingual EN + AR (RTL)", "4 visa routes explained", "Rich SEO + schema", "Built to convert"],
+    pills: ["Bilingual EN + AR (RTL)", "Visa routes explained", "Rich SEO + schema", "Built to convert"],
   },
   {
     visual: <Quiz />,
     tag: "Eligibility engine",
     name: "A ~15-question quiz that scores every route",
-    desc: "The lead-generation engine: a guided quiz that scores each person against all four visa routes with hard gates, cap flags, and weighted per-route logic — auto-advancing as they go.",
-    pills: ["Scores all 4 routes", "Hard gates + cap flags", "Auto-advance UX", "Green / amber / red result"],
+    desc: "The lead-generation engine: a guided quiz that scores each person against every visa route with hard gates, cap flags, and weighted per-route logic — auto-advancing as they go.",
+    pills: ["Scores every route", "Hard gates + cap flags", "Auto-advance UX", "Green / amber / red result"],
   },
   {
     visual: <Result />,
@@ -255,9 +255,9 @@ const slides: CaseSlide[] = [
   {
     visual: <Chatbot />,
     tag: "AI chatbot",
-    name: "A Claude-powered assistant, grounded in the FAQ",
-    desc: "A genuinely conversational assistant grounded in the 197-entry faq database — multi-message replies like texting, tappable suggestion chips, and a direct 'start the quiz' action.",
-    pills: ["Claude-powered", "Grounded in FAQ database", "Tappable suggestion chips", "Quiz-aware"],
+    name: "An AI-powered assistant, grounded in the FAQ",
+    desc: "A genuinely conversational assistant grounded in the faq database — multi-message replies like texting, tappable suggestion chips, and a direct 'start the quiz' action.",
+    pills: ["AI-powered", "Grounded in FAQ database", "Tappable suggestion chips", "Quiz-aware"],
   },
 ];
 
