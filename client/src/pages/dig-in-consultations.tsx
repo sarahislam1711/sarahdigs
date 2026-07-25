@@ -59,8 +59,8 @@ type LeadMagnetKind = "article" | "sample";
 const LEAD_MAGNETS: Record<LeadMagnetKind, { title: string; description: string; successMessage: string }> = {
   article: {
     title: "get the article",
-    description: "drop your email and i'll send you a short read on how sarahdigs approaches website strategy, design, and growth.",
-    successMessage: "the article is on its way to your inbox.",
+    description: "drop your email and i'll send you a short, data-backed read on what actually decides whether a website converts.",
+    successMessage: "check your inbox — the article is on its way.",
   },
   sample: {
     title: "get the sample plan",
@@ -585,8 +585,7 @@ const StealMyBrain = ({ onOpenLeadMagnet }: { onOpenLeadMagnet: (kind: LeadMagne
         {/* index-style resource rows */}
         <div className="border-t border-ink/15">
           {[
-            { kind: "article" as LeadMagnetKind, num: "01", tag: "article · 5 min read", title: "how i think about websites", body: "a short read on how sarahdigs approaches website strategy, design, and growth.", cta: "read it" },
-            { kind: "sample" as LeadMagnetKind, num: "02", tag: "sample · pdf", title: "sample action plan", body: "a sanitized example of the kind of action plan you'll receive after a dig-in session.", cta: "view sample" },
+            { kind: "article" as LeadMagnetKind, num: "01", tag: "article · 5 min read", title: "why most websites fail to convert", body: "a short, data-backed read on what actually decides whether a website converts — and how sarahdigs fixes it.", cta: "read it" },
           ].map((r) => (
             <button
               key={r.num}

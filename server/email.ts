@@ -93,3 +93,55 @@ export async function sendContactEmail(data: {
     html,
   });
 }
+
+// ── Welcome / resource-delivery email sent TO the subscriber on signup. ──
+const SITE = "https://www.sarahdigs.com";
+
+// Per-asset content: subject + the block that delivers what they asked for.
+function resourceBlock(assetRequested?: string | null): { subject: string; intro: string; cta: string } {
+  switch (assetRequested) {
+    case "article":
+      return {
+        subject: "your read is here — how sarahdigs thinks about websites",
+        intro: "thanks for the interest. here's a short read on how i think about building websites that get found and convert:",
+        cta: `<p><a href="${SITE}/journal/post/why-most-business-websites-fail-to-convert" style="color:#6B1421;font-weight:600;">read it →</a></p>`,
+      };
+    case "sample-plan":
+      return {
+        subject: "your sample action plan (from sarahdigs)",
+        intro: "thanks for the interest. i'm putting the sanitized sample action plan in front of you — i'll follow up with it directly within one business day.",
+        cta: `<p><a href="${SITE}/dig-in-consultations" style="color:#6B1421;font-weight:600;">learn about a dig-in →</a></p>`,
+      };
+    default: // newsletter / anything else
+      return {
+        subject: "you're in — welcome to sarahdigs",
+        intro: "thanks for subscribing. you'll get occasional notes on web design, ai search visibility, and building a brand that gets found — no spam, unsubscribe anytime.",
+        cta: `<p><a href="${SITE}/journal" style="color:#6B1421;font-weight:600;">read the journal →</a></p>`,
+      };
+  }
+}
+
+export async function sendWelcomeEmail(data: { email: string; assetRequested?: string | null }) {
+  if (!smtpUser || !smtpPass) {
+    console.warn("[Email] SMTP not configured — welcome email NOT sent to", data.email);
+    return;
+  }
+  const { subject, intro, cta } = resourceBlock(data.assetRequested);
+  const html = `
+    <div style="font-family:Inter,Arial,sans-serif;color:#181612;max-width:520px;">
+      <p style="font-size:18px;font-weight:600;">hey,</p>
+      <p style="font-size:15px;line-height:1.55;">${intro}</p>
+      ${cta}
+      <p style="font-size:15px;line-height:1.55;">— sarah</p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0;"/>
+      <p style="font-size:12px;color:#888;">sarahdigs · <a href="${SITE}" style="color:#888;">sarahdigs.com</a></p>
+    </div>
+  `;
+  await transporter.sendMail({
+    from: `"sarahdigs" <${smtpUser}>`,
+    to: data.email,
+    replyTo: process.env.CONTACT_EMAIL || smtpUser,
+    subject,
+    html,
+  });
+}

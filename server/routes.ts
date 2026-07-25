@@ -8,7 +8,7 @@ import sharp from "sharp";
 import path from "path";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
-import { sendCustomPlanEmail, sendContactEmail } from "./email";
+import { sendCustomPlanEmail, sendContactEmail, sendWelcomeEmail } from "./email";
 import { 
   insertContactInquirySchema,
   insertCustomPlanInquirySchema,
@@ -628,6 +628,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertSubscriberSchema.parse(req.body);
       const subscriber = await storage.createSubscriber(validatedData);
+      // Send the welcome / resource-delivery email in the background (don't block).
+      sendWelcomeEmail({ email: subscriber.email, assetRequested: subscriber.assetRequested }).catch((err) => {
+        console.error("Failed to send welcome email:", err);
+      });
       res.status(201).json({ ok: true, id: subscriber.id });
     } catch (error) {
       console.error("Error creating subscriber:", error);

@@ -32,6 +32,7 @@ import AdminPosts from "@/pages/admin/posts";
 import PostEditor from "@/pages/admin/post-editor";
 import AdminPreview from "@/pages/admin/preview";
 import AdminInquiries from "@/pages/admin/inquiries";
+import AdminSubscribers from "@/pages/admin/subscribers";
 import AdminProjects from "@/pages/admin/projects";
 import ProjectEditor from "@/pages/admin/project-editor";
 import AdminCategories from "@/pages/admin/categories";
@@ -79,6 +80,7 @@ function Router() {
         <Route path="/admin/categories"><PageTransition><AdminCategories /></PageTransition></Route>
         <Route path="/admin/tags"><PageTransition><AdminTags /></PageTransition></Route>
         <Route path="/admin/inquiries"><PageTransition><AdminInquiries /></PageTransition></Route>
+        <Route path="/admin/subscribers"><PageTransition><AdminSubscribers /></PageTransition></Route>
         <Route path="/admin/projects"><PageTransition><AdminProjects /></PageTransition></Route>
         <Route path="/admin/projects/:id"><PageTransition><ProjectEditor /></PageTransition></Route>
         <Route path="/admin/preview/:slug"><PageTransition><AdminPreview /></PageTransition></Route>

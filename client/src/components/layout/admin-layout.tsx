@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Link, useLocation } from "wouter";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { FileText, Inbox, LogOut, FolderOpen, Folder, Tag } from "lucide-react";
+import { FileText, Inbox, LogOut, FolderOpen, Folder, Tag, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { confirmLeave } from "@/lib/nav-guard";
@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
   { href: "/admin/tags", label: "tags", icon: Tag },
   { href: "/admin/projects", label: "projects", icon: FolderOpen },
   { href: "/admin/inquiries", label: "inquiries", icon: Inbox },
+  { href: "/admin/subscribers", label: "subscribers", icon: Mail },
 ];
 
 export default function AdminLayout({ children, title }: AdminLayoutProps) {
