@@ -72,7 +72,7 @@ export default function Projects() {
                           <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-ink-mid">in progress</span>
                         </div>
                       ) : p.logoUrl ? (
-                        <div className="w-full h-full flex items-center justify-center p-10 md:p-16">
+                        <div className="w-full h-full flex items-center justify-center p-6 md:p-8">
                           <img
                             src={p.logoUrl}
                             alt={p.name}
