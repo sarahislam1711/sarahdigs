@@ -23,7 +23,7 @@ export default function JournalCategory() {
   const [, params] = useRoute("/journal/:category");
   const categorySlug = params?.category;
 
-  const { data: categories, isLoading: categoriesLoading } = useQuery<Category[]>({
+  const { data: categories, isLoading: categoriesLoading, isFetching: categoriesFetching } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
   const { data: posts, isLoading: postsLoading } = useQuery<BlogPost[]>({
@@ -32,14 +32,19 @@ export default function JournalCategory() {
 
   const category = categories?.find((c) => c.slug === categorySlug);
 
-  if (categoriesLoading) {
+  // Show the loader until the categories list has actually resolved. Guarding
+  // only on `categoriesLoading` let a cached-but-refetching or not-yet-arrived
+  // list fall straight through to <NotFound/> for a tick, flashing a 404 before
+  // the real page mounts. Wait until we have data (or the route param) before
+  // deciding the category is genuinely missing.
+  if (!categorySlug || categoriesLoading || (categoriesFetching && !categories)) {
     return (
       <div className="min-h-screen bg-bone flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-oxblood" />
       </div>
     );
   }
-  if (!categorySlug || !category) return <NotFound />;
+  if (!category) return <NotFound />;
 
   const categoryPosts = posts || [];
   const description =
