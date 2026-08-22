@@ -21,7 +21,7 @@ export const organizationSchema = {
   logo: `${SITE}/favicon.png`,
   email: "sarah@sarahdigs.com",
   description:
-    "sarahdigs is a creative website studio that designs and builds high-performing websites for businesses.",
+    "sarahdigs builds the digital infrastructure a business runs on: the online presence that brings work in (websites and AI search visibility) and the internal systems and tools that carry the work once it lands.",
   founder: { "@type": "Person", name: "Sarah Islam" },
   contactPoint: {
     "@type": "ContactPoint",
@@ -34,7 +34,13 @@ export const organizationSchema = {
     "Brand Strategy",
     "UX Design",
     "SEO",
+    "Answer Engine Optimization",
     "Conversion Optimization",
+    "Custom Software Development",
+    "Internal Tools & Dashboards",
+    "Workflow Automation",
+    "Email Marketing",
+    "Growth Strategy",
   ],
   ...(SAME_AS.length ? { sameAs: SAME_AS } : {}),
 };

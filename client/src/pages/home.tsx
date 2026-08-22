@@ -604,10 +604,18 @@ const Hero = () => {
             backgroundImage: `url(${heroBg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center 48%',
-            opacity: 0.32,
+            opacity: 0.4,
           }}
         />
-        <div className="absolute inset-0 bg-[#181612]/10" />
+        {/* Directional wash: bone fades in strongly on the left (behind the
+            text) and clears toward the right so the portrait stays visible. */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(90deg, rgba(244,241,234,0.94) 0%, rgba(244,241,234,0.82) 34%, rgba(244,241,234,0.45) 62%, rgba(244,241,234,0.15) 100%)',
+          }}
+        />
       </motion.div>
 
       <motion.div style={{ y: textY }} className="container mx-auto px-6 relative z-10">
@@ -644,9 +652,14 @@ const Hero = () => {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="flex flex-col md:flex-row justify-between gap-8 md:items-end w-full"
           >
-            <p className="font-display text-2xl md:text-3xl font-medium leading-snug tracking-tight text-[#181612] max-w-3xl lowercase">
-              beautiful websites, built to convert.
-            </p>
+            <div className="max-w-3xl">
+              <p className="font-display text-[1.7rem] md:text-4xl font-semibold leading-[1.1] tracking-tight text-[#181612] lowercase">
+                built to get you found & keep you running
+              </p>
+              <p className="mt-3 text-base md:text-lg text-[#181612]/70 font-medium leading-snug lowercase">
+                the website that brings in the business, and the systems to scale it.
+              </p>
+            </div>
           </motion.div>
         </div>
 
@@ -758,6 +771,127 @@ const Process = () => {
               </p>
             </ScrollReveal>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// What we build — presented as ONE system with TWO sides (get found / get
+// running), each holding two capabilities. Centered composition to sit
+// coherently under the centered Manifesto above it. Calm hover (icon tile only).
+const WhatWeBuild = () => {
+  const sides = [
+    {
+      label: "get found",
+      blurb: "the online presence that brings work in.",
+      items: [
+        { title: "websites", icon: Layout, note: "custom-built to turn visitors into customers." },
+        { title: "discoverability", icon: Search, note: "found on google & ai search." },
+      ],
+    },
+    {
+      label: "get running",
+      blurb: "the internal tools that carry the work once it lands.",
+      items: [
+        { title: "internal systems", icon: Wrench, note: "software that runs the business day to day." },
+        { title: "email & growth", icon: TrendingUp, note: "automated sequences that keep the pipeline moving." },
+      ],
+    },
+  ];
+
+  return (
+    <section className="py-10 md:py-14 bg-[#F4F1EA] relative z-[2]">
+      <div className="container mx-auto px-6 max-w-5xl">
+        <ScrollReveal>
+          <div className="flex flex-col items-center text-center gap-4 mb-10 md:mb-12">
+            {/* contained eyebrow pill — reads as a UI element, not bare text,
+                so it doesn't visually clash with the Manifesto above. */}
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#6B1421]/20 bg-[#6B1421]/[0.06] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#6B1421]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#6B1421]" />
+              what we build
+            </span>
+            <h2 className="font-display font-semibold text-3xl md:text-4xl tracking-tight text-[#181612] lowercase leading-none">
+              two sides of the same <span className="text-[#6B1421]">system.</span>
+            </h2>
+          </div>
+        </ScrollReveal>
+
+        {/* Two panels = the two sides. Side 1 (public) is a light card; side 2
+            (internal) is a dark ink card — the surfaces themselves show the
+            "two sides". A center node links them as one system. */}
+        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+          {/* center connector node (desktop) */}
+          <div aria-hidden className="hidden md:flex absolute inset-y-0 left-1/2 -translate-x-1/2 items-center z-10 pointer-events-none">
+            <div className="w-10 h-10 rounded-full bg-[#F4F1EA] border border-[#6B1421]/30 flex items-center justify-center shadow-sm">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#6B1421]" />
+            </div>
+          </div>
+
+          {sides.map((side, s) => {
+            const dark = s === 1;
+            return (
+            <ScrollReveal key={side.label} delay={s * 0.1}>
+              <div
+                className={cn(
+                  "h-full rounded-xl p-8 md:p-10 border transition-transform duration-300 hover:-translate-y-1",
+                  dark
+                    ? "bg-[#181612] border-[#181612]"
+                    : "bg-white/60 border-[#181612]/10 shadow-[0_1px_20px_rgba(24,22,18,0.04)]"
+                )}
+              >
+                {/* side header */}
+                <div className="flex items-center justify-between mb-2">
+                  <span className={cn("text-[11px] font-medium uppercase tracking-[0.18em]", dark ? "text-[#C58A92]" : "text-[#6B1421]")}>
+                    side {String(s + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <h3 className={cn("font-display font-bold text-2xl md:text-4xl lowercase tracking-tight leading-none", dark ? "text-[#F4F1EA]" : "text-[#181612]")}>
+                  {side.label}
+                </h3>
+                <p className={cn("text-sm leading-snug lowercase mt-3 mb-8 max-w-xs", dark ? "text-[#B8B2A6]" : "text-ink-mid")}>
+                  {side.blurb}
+                </p>
+
+                {/* capabilities */}
+                <div className="flex flex-col">
+                  {side.items.map((it, idx) => {
+                    const Icon = it.icon;
+                    return (
+                      <div
+                        key={it.title}
+                        className={cn(
+                          "group flex items-start gap-4 py-4 border-t",
+                          dark ? "border-white/10" : "border-[#181612]/10",
+                          idx === 0 && "border-t-0 pt-0"
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "w-11 h-11 rounded-md flex items-center justify-center shrink-0 transition-colors duration-300",
+                            dark
+                              ? "bg-white/8 border border-white/15 text-[#C58A92] group-hover:bg-[#C58A92] group-hover:text-[#181612]"
+                              : "bg-[#6B1421]/8 border border-[#6B1421]/15 text-[#6B1421] group-hover:bg-[#6B1421] group-hover:text-[#F4F1EA]"
+                          )}
+                        >
+                          <Icon className="w-5 h-5" strokeWidth={1.75} />
+                        </div>
+                        <div>
+                          <h4 className={cn("font-display font-semibold text-lg md:text-xl lowercase tracking-tight leading-tight", dark ? "text-[#F4F1EA]" : "text-[#181612]")}>
+                            {it.title}
+                          </h4>
+                          <p className={cn("text-sm leading-snug lowercase mt-1", dark ? "text-[#B8B2A6]" : "text-ink-mid")}>
+                            {it.note}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1366,9 +1500,9 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-[#F4F1EA] text-[#181612] font-sans selection:bg-[#6B1421] selection:text-[#F4F1EA]">
       <SEO
-        title="sarahdigs | website studio for the AI search era"
+        title="sarahdigs | websites for the ai search era"
         exactTitle
-        description="sarahdigs is a creative website studio building brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. book a dig-in."
+        description="sarahdigs builds the online presence that brings work in and the internal tools that run it: websites, ai search visibility and custom systems for growth. book a dig-in."
         canonical="/"
         jsonLd={{
           "@context": "https://schema.org",
@@ -1383,6 +1517,12 @@ export default function Home() {
             "UX Design",
             "Brand Strategy",
             "SEO",
+            "Answer Engine Optimization",
+            "Custom Software Development",
+            "Internal Tools & Dashboards",
+            "Workflow Automation",
+            "Email Marketing",
+            "Growth Strategy",
           ],
         }}
       />
@@ -1390,6 +1530,7 @@ export default function Home() {
       <Hero />
       <ProofSection />
       <Manifesto />
+      <WhatWeBuild />
       <MeetSarah />
       <HowWeWork />
       <FullDigTeaser />

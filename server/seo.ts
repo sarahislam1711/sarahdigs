@@ -18,9 +18,9 @@ export type ResolvedMeta = {
 };
 
 const DEFAULTS: ResolvedMeta = {
-  title: "sarahdigs | website studio for the AI search era",
+  title: "sarahdigs | websites for the ai search era",
   description:
-    "sarahdigs is a creative website studio building brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. book a dig-in.",
+    "sarahdigs builds the online presence that brings work in and the internal tools that run it: websites, ai search visibility and custom systems for growth. book a dig-in.",
   canonical: `${SITE_URL}/`,
   ogImage: DEFAULT_OG_IMAGE,
   ogType: "website",
@@ -29,9 +29,9 @@ const DEFAULTS: ResolvedMeta = {
 
 const STATIC_ROUTES: Record<string, Partial<ResolvedMeta>> = {
   "/": {
-    title: "sarahdigs | website studio for the AI search era",
+    title: "sarahdigs | websites for the ai search era",
     description:
-      "sarahdigs is a creative website studio building brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. book a dig-in.",
+      "sarahdigs builds the online presence that brings work in and the internal tools that run it: websites, ai search visibility and custom systems for growth. book a dig-in.",
   },
   "/about": {
     title: "about | sarahdigs",
@@ -75,22 +75,18 @@ const CONTENT_PAGES: Record<
   { h1: string; sections: { heading?: string; body: string }[] }
 > = {
   "/": {
-    h1: "sarahdigs — website studio for the AI search era",
+    h1: "built to get you found & keep you running",
     sections: [
       {
-        body: "sarahdigs is a creative website studio that designs and builds high-performing, brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. beautiful websites, built to convert.",
+        body: "sarahdigs builds the digital infrastructure a business runs on: the online presence that brings work in, and the internal tools that carry that work once it lands. two sides of the same system, built to get you found and keep you running.",
       },
       {
-        heading: "how we work",
-        body: "every website we build runs on four things: dig — we learn your business, audience and market before the project starts; design — immersive, interactive websites that make users feel like they're entering your world; build — fast, clean, and built to grow with you; optimize — every touchpoint tuned so your site consistently brings in business.",
+        heading: "get found: the public side",
+        body: "websites: custom-built to turn visitors into customers, and structured so search engines and AI assistants can read, understand, and recommend the business. discoverability: SEO and AI search built in from the beginning, so you get found on Google, ChatGPT, and AI overviews.",
       },
       {
-        heading: "get found where your customers are searching",
-        body: "your website should show up where your customers are looking — on Google and in AI search engines. we build for discovery (AEO/GEO) so you get found, and for experience so real users stay and convert.",
-      },
-      {
-        heading: "the full dig",
-        body: "our flagship end-to-end engagement: brand-led website design, build, and launch for businesses ready to be remembered.",
+        heading: "get running: the internal side",
+        body: "internal systems: custom software that runs the business day to day: dashboards, client portals, pipeline tracking, workflow automation, owned by you. email & growth: automated sequences tied to real triggers in your business, plus the ongoing work of positioning, offer clarity and messaging.",
       },
     ],
   },
@@ -102,7 +98,7 @@ const CONTENT_PAGES: Record<
       },
       {
         heading: "the philosophy",
-        body: "a website should feel like walking into the business. we spend real time learning your brand, your audience, and your market before a single page is designed — then build sites that get found on Google and AI search and loved by the people who land on them.",
+        body: "a website should feel like walking into the business. we spend real time learning your brand, your audience, and your market before a single page is designed, then build sites that get found on Google and AI search and loved by the people who land on them.",
       },
     ],
   },
@@ -243,7 +239,7 @@ const ORGANIZATION_LD = {
   logo: DEFAULT_OG_IMAGE,
   email: "sarah@sarahdigs.com",
   description:
-    "sarahdigs is a creative website studio that designs and builds high-performing, brand-led websites optimized for Google, AI search, and real user experience.",
+    "sarahdigs builds the digital infrastructure a business runs on: the online presence that brings work in (websites and AI search visibility) and the internal systems and tools that carry the work once it lands.",
   founder: { "@type": "Person", name: "Sarah Islam" },
   contactPoint: {
     "@type": "ContactPoint",
@@ -261,6 +257,12 @@ const ORGANIZATION_LD = {
     "Generative Engine Optimization",
     "AI Search Optimization",
     "Conversion Optimization",
+    "Custom Software Development",
+    "Internal Tools & Dashboards",
+    "Client Portals",
+    "Workflow Automation",
+    "Email Marketing",
+    "Growth Strategy",
   ],
 };
 

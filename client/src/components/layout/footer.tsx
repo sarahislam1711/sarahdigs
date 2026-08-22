@@ -14,7 +14,7 @@ export const Footer = () => {
             sarah<span className="text-[#6B1421]">digs</span>.
           </Link>
           <p className="text-sm text-[#F4F1EA]/55 leading-snug lowercase">
-            beautiful websites, built to convert.
+            built to get you found & keep you running.
           </p>
 
           {/* Social buttons */}

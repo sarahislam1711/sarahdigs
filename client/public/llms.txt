@@ -1,18 +1,25 @@
 # sarahdigs
 
-> sarahdigs is a creative website studio that designs and builds high-performing, brand-led websites optimized for Google, AI search (AEO/GEO), and real user experience. Founded by Sarah Islam.
+> sarahdigs builds the digital infrastructure a business runs on: the online presence that brings work in, and the internal tools that carry the work once it lands. Two sides of the same system. Founded by Sarah Islam.
 
-sarahdigs helps businesses get found on Google and AI search engines while delivering websites real users love. The studio's work spans brand strategy, UX design, custom development, SEO, and answer-engine optimization (AEO/GEO).
+sarahdigs works across four areas: websites, discoverability (SEO + AI search), internal systems and tools, and email + growth systems. The through-line is a business that gets found, wins the work, and runs it, all on infrastructure it owns.
 
-## Services
+## What sarahdigs builds
 
-- [The Full Dig](https://www.sarahdigs.com/the-full-dig): End-to-end engagement — brand-led website design, build, and launch for businesses ready to be remembered.
+- Websites: every site is built from scratch around your business. Research, positioning, messaging, architecture, UX, design, and build, structured so both people and AI assistants can read, understand, and recommend the business.
+- Discoverability: SEO and AI search built in from the first decision. Technical structure, schema, llms.txt, content architecture, keyword strategy. Covers Google, ChatGPT, Perplexity, Gemini, and AI overviews.
+- Internal systems & tools: custom software for how a business runs day to day. Admin dashboards, client portals, proposal and document generation, pipeline tracking, workflow automation. Built around how the business already works, owned and hosted by them.
+- Email & growth: automated sequences tied to real triggers (new lead, unanswered proposal, finished project), plus ongoing positioning, offer clarity, and messaging across channels.
+
+## Ways to work together
+
+- [The Full Dig](https://www.sarahdigs.com/the-full-dig): End-to-end engagement: brand-led website design, build, and launch for businesses ready to be remembered.
 - [Dig on Demand](https://www.sarahdigs.com/dig-on-demand): Ongoing design and development support for businesses with a live site that needs to keep moving.
 - [Dig-in Consultations](https://www.sarahdigs.com/dig-in-consultations): A focused call and written action plan for clarity before committing to a full engagement.
 
 ## Work
 
-- [Selected Work](https://www.sarahdigs.com/projects): Case studies from the studio — brand-led websites built for businesses that want to be remembered.
+- [Selected Work](https://www.sarahdigs.com/projects): Case studies from the studio: brand-led websites built for businesses that want to be remembered.
 
 ## Journal
 
@@ -20,5 +27,5 @@ sarahdigs helps businesses get found on Google and AI search engines while deliv
 
 ## About
 
-- [About](https://www.sarahdigs.com/about): The founder and philosophy behind every build — a website should feel like walking into the business.
+- [About](https://www.sarahdigs.com/about): The founder and philosophy behind every build. a website should feel like walking into the business.
 - [Contact](https://www.sarahdigs.com/contact): Start a project. Replies within one business day.
