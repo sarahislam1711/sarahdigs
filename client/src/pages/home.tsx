@@ -403,9 +403,9 @@ const MeetSarah = () => {
                 i started sarahdigs because too many businesses were paying for
                 websites that didn't do anything for them. my team and i dig
                 into your positioning, audience, and goals, then we design an
-                immersive website that feels like entering your world, build it
-                clean, and optimize it to bring you customers. that's sarahdigs.{" "}
-                <span className="text-[#181612]">strategy first, always.</span>
+                immersive website that feels like entering your world, and
+                optimize it to bring you customers. and when the work lands, we
+                build the systems and tools to run it.
               </p>
               <Link
                 href="/about"
