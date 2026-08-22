@@ -18,7 +18,7 @@ export type ResolvedMeta = {
 };
 
 const DEFAULTS: ResolvedMeta = {
-  title: "sarahdigs | websites for the ai search era",
+  title: "sarahdigs | website studio for the ai search era",
   description:
     "sarahdigs builds the online presence that brings work in and the internal tools that run it: websites, ai search visibility and custom systems for growth. book a dig-in.",
   canonical: `${SITE_URL}/`,
@@ -29,7 +29,7 @@ const DEFAULTS: ResolvedMeta = {
 
 const STATIC_ROUTES: Record<string, Partial<ResolvedMeta>> = {
   "/": {
-    title: "sarahdigs | websites for the ai search era",
+    title: "sarahdigs | website studio for the ai search era",
     description:
       "sarahdigs builds the online presence that brings work in and the internal tools that run it: websites, ai search visibility and custom systems for growth. book a dig-in.",
   },
