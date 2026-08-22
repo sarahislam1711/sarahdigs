@@ -51,7 +51,7 @@ const STATIC_ROUTES: Record<string, Partial<ResolvedMeta>> = {
   "/journal": {
     title: "the journal | sarahdigs",
     description:
-      "essays and field notes from the sarahdigs studio on web design, ai search visibility, and building a brand that gets found.",
+      "essays, frameworks, and notes on websites, design, and growth.",
   },
   // NOTE: /the-full-dig, /dig-on-demand, /dig-in-consultations are handled by
   // SERVICE_PAGES below (body + Service/FAQ schema), not here.

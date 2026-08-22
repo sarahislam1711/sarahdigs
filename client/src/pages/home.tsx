@@ -1534,7 +1534,8 @@ export default function Home() {
       <MeetSarah />
       <HowWeWork />
       <FullDigTeaser />
-      <Testimonials />
+      {/* Testimonials temporarily hidden — resurface by uncommenting. */}
+      {/* <Testimonials /> */}
       <SelectedWork />
       <NotSureWhereToStart />
       <JournalTeaser />

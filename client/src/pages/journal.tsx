@@ -244,12 +244,12 @@ export default function Journal() {
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
         title="journal"
-        description="essays, frameworks, and field notes on websites, design, and growth from sarahdigs."
+        description="essays, frameworks, and notes on websites, design, and growth."
         canonical="/journal"
         ogType="website"
         jsonLd={pageSchema("Blog", {
           name: "the journal",
-          description: "essays, frameworks, and field notes on websites, design, and growth from sarahdigs.",
+          description: "essays, frameworks, and notes on websites, design, and growth.",
           url: "/journal",
         })}
       />
