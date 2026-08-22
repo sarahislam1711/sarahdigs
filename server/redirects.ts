@@ -38,10 +38,24 @@ export const redirects: RedirectRule[] = [
  * Express middleware. Mounted before static serving so it intercepts
  * matching URLs and issues an HTTP redirect.
  */
+// The one canonical host. Everything else (bare domain, Railway subdomain,
+// etc.) 301s here so Google consolidates ranking signals to a single origin.
+const CANONICAL_HOST = "www.sarahdigs.com";
+
 export function redirectsMiddleware(req: Request, res: Response, next: NextFunction) {
   // Only act on GET/HEAD — never redirect form POSTs or API calls.
   if (req.method !== "GET" && req.method !== "HEAD") return next();
   if (req.path.startsWith("/api")) return next();
+
+  // ── Canonical host: 301 non-www (and any other host) → www ──
+  // Skip localhost/dev so local previews aren't redirected.
+  const host = (req.headers.host || "").toLowerCase().split(":")[0];
+  const isLocal =
+    host === "localhost" || host === "127.0.0.1" || host.endsWith(".local");
+  const isSarahdigs = host === "sarahdigs.com" || host === CANONICAL_HOST;
+  if (!isLocal && isSarahdigs && host !== CANONICAL_HOST) {
+    return res.redirect(301, `https://${CANONICAL_HOST}${req.url}`);
+  }
 
   const reqPath = req.path.toLowerCase();
 
