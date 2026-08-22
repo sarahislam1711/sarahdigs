@@ -1,4 +1,17 @@
 import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+// Resend — preferred sender for outbound (welcome / lead-magnet) emails.
+// Set RESEND_API_KEY + RESEND_FROM (e.g. "sarahdigs <hello@sarahdigs.com>")
+// in the environment. Falls back to SMTP if not configured.
+const resendApiKey = process.env.RESEND_API_KEY;
+const resendFrom = process.env.RESEND_FROM || "sarahdigs <onboarding@resend.dev>";
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
+if (resendApiKey) {
+  console.log("[Email] Resend configured — from:", resendFrom);
+} else {
+  console.log("[Email] Resend NOT configured (RESEND_API_KEY unset) — will fall back to SMTP for welcome emails.");
+}
 
 const smtpHost = process.env.SMTP_HOST || "mail.privateemail.com";
 const smtpPort = Number(process.env.SMTP_PORT) || 465;
@@ -122,25 +135,44 @@ function resourceBlock(assetRequested?: string | null): { subject: string; intro
 }
 
 export async function sendWelcomeEmail(data: { email: string; assetRequested?: string | null }) {
-  if (!smtpUser || !smtpPass) {
-    console.warn("[Email] SMTP not configured — welcome email NOT sent to", data.email);
-    return;
-  }
   const { subject, intro, cta } = resourceBlock(data.assetRequested);
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;color:#181612;max-width:520px;">
       <p style="font-size:18px;font-weight:600;">hey,</p>
       <p style="font-size:15px;line-height:1.55;">${intro}</p>
       ${cta}
-      <p style="font-size:15px;line-height:1.55;">— sarah</p>
+      <p style="font-size:15px;line-height:1.55;">sarah</p>
       <hr style="border:none;border-top:1px solid #eee;margin:24px 0;"/>
       <p style="font-size:12px;color:#888;">sarahdigs · <a href="${SITE}" style="color:#888;">sarahdigs.com</a></p>
     </div>
   `;
+  const replyTo = process.env.CONTACT_EMAIL || smtpUser || undefined;
+
+  // Prefer Resend when configured.
+  if (resend) {
+    const { error } = await resend.emails.send({
+      from: resendFrom,
+      to: data.email,
+      subject,
+      html,
+      ...(replyTo ? { replyTo } : {}),
+    });
+    if (error) {
+      console.error("[Email] Resend failed to send welcome email:", error);
+      throw new Error(`Resend error: ${error.message ?? "unknown"}`);
+    }
+    return;
+  }
+
+  // Fallback: SMTP (only if credentials are set).
+  if (!smtpUser || !smtpPass) {
+    console.warn("[Email] Neither Resend nor SMTP configured — welcome email NOT sent to", data.email);
+    return;
+  }
   await transporter.sendMail({
     from: `"sarahdigs" <${smtpUser}>`,
     to: data.email,
-    replyTo: process.env.CONTACT_EMAIL || smtpUser,
+    replyTo,
     subject,
     html,
   });
