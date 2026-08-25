@@ -110,42 +110,106 @@ export async function sendContactEmail(data: {
 // ── Welcome / resource-delivery email sent TO the subscriber on signup. ──
 const SITE = "https://www.sarahdigs.com";
 
-// Per-asset content: subject + the block that delivers what they asked for.
-function resourceBlock(assetRequested?: string | null): { subject: string; intro: string; cta: string } {
+// Per-asset content: subject + the exact resource the person signed up for.
+// `heading` is the big line, `intro` the paragraph, `ctaLabel`/`ctaHref` the button.
+function resourceBlock(assetRequested?: string | null): {
+  subject: string;
+  heading: string;
+  intro: string;
+  ctaLabel: string;
+  ctaHref: string;
+} {
   switch (assetRequested) {
     case "article":
       return {
-        subject: "your read is here — how sarahdigs thinks about websites",
-        intro: "thanks for the interest. here's a short read on how i think about building websites that get found and convert:",
-        cta: `<p><a href="${SITE}/journal/post/why-most-business-websites-fail-to-convert" style="color:#6B1421;font-weight:600;">read it →</a></p>`,
-      };
-    case "sample-plan":
-      return {
-        subject: "your sample action plan (from sarahdigs)",
-        intro: "thanks for the interest. i'm putting the sanitized sample action plan in front of you — i'll follow up with it directly within one business day.",
-        cta: `<p><a href="${SITE}/dig-in-consultations" style="color:#6B1421;font-weight:600;">learn about a dig-in →</a></p>`,
+        subject: "your read is here",
+        heading: "here's your read.",
+        intro:
+          "thanks for the interest. this is a short, data-backed look at what actually decides whether a website converts, and how sarahdigs fixes it.",
+        ctaLabel: "read the article",
+        ctaHref: `${SITE}/journal/post/why-most-business-websites-fail-to-convert`,
       };
     default: // newsletter / anything else
       return {
-        subject: "you're in — welcome to sarahdigs",
-        intro: "thanks for subscribing. you'll get occasional notes on web design, ai search visibility, and building a brand that gets found — no spam, unsubscribe anytime.",
-        cta: `<p><a href="${SITE}/journal" style="color:#6B1421;font-weight:600;">read the journal →</a></p>`,
+        subject: "you're in.",
+        heading: "you're in.",
+        intro:
+          "thanks for subscribing. you'll get occasional notes on websites, ai search visibility, and building a brand that gets found. no spam, unsubscribe anytime.",
+        ctaLabel: "read the journal",
+        ctaHref: `${SITE}/journal`,
       };
   }
 }
 
+// Fully branded, email-client-safe welcome template (table layout, inline
+// styles). Brand: bone canvas #F4F1EA, ink #181612, oxblood #6B1421, Syne-ish
+// heading via a bold serif/sans fallback (webfonts don't load in most clients).
+function welcomeEmailHtml(opts: {
+  heading: string;
+  intro: string;
+  ctaLabel: string;
+  ctaHref: string;
+}): string {
+  const { heading, intro, ctaLabel, ctaHref } = opts;
+  return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"></head>
+<body style="margin:0;padding:0;background:#E7E2D6;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#E7E2D6;padding:32px 12px;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#F4F1EA;border-radius:16px;overflow:hidden;border:1px solid rgba(24,22,18,0.08);">
+
+        <!-- header / wordmark -->
+        <tr><td style="padding:28px 36px 0 36px;">
+          <div style="font-family:'Syne',Georgia,serif;font-weight:800;font-size:22px;letter-spacing:-0.02em;color:#181612;">
+            sarah<span style="color:#6B1421;">digs</span>.
+          </div>
+        </td></tr>
+
+        <!-- body -->
+        <tr><td style="padding:24px 36px 8px 36px;">
+          <h1 style="margin:0 0 14px 0;font-family:'Syne',Georgia,serif;font-weight:800;font-size:30px;line-height:1.05;letter-spacing:-0.02em;color:#181612;text-transform:lowercase;">
+            ${heading}
+          </h1>
+          <p style="margin:0 0 24px 0;font-family:Inter,Arial,sans-serif;font-size:15px;line-height:1.6;color:#4A463E;">
+            ${intro}
+          </p>
+
+          <!-- button -->
+          <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:10px;background:#6B1421;">
+            <a href="${ctaHref}" style="display:inline-block;padding:13px 26px;font-family:Inter,Arial,sans-serif;font-size:15px;font-weight:600;color:#F4F1EA;text-decoration:none;border-radius:10px;">
+              ${ctaLabel} &nbsp;&rarr;
+            </a>
+          </td></tr></table>
+
+          <p style="margin:28px 0 0 0;font-family:Inter,Arial,sans-serif;font-size:15px;line-height:1.6;color:#181612;">
+            sarah
+          </p>
+        </td></tr>
+
+        <!-- divider -->
+        <tr><td style="padding:24px 36px 0 36px;">
+          <div style="border-top:1px solid rgba(24,22,18,0.1);"></div>
+        </td></tr>
+
+        <!-- footer -->
+        <tr><td style="padding:16px 36px 28px 36px;">
+          <p style="margin:0;font-family:Inter,Arial,sans-serif;font-size:12px;line-height:1.6;color:#8A8579;">
+            sarahdigs &middot; websites, ai search &amp; systems<br>
+            <a href="${SITE}" style="color:#8A8579;text-decoration:underline;">sarahdigs.com</a>
+            &nbsp;&middot;&nbsp;
+            <a href="mailto:${process.env.CONTACT_EMAIL || "hello@sarahdigs.com"}?subject=unsubscribe" style="color:#8A8579;text-decoration:underline;">unsubscribe</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+}
+
 export async function sendWelcomeEmail(data: { email: string; assetRequested?: string | null }) {
-  const { subject, intro, cta } = resourceBlock(data.assetRequested);
-  const html = `
-    <div style="font-family:Inter,Arial,sans-serif;color:#181612;max-width:520px;">
-      <p style="font-size:18px;font-weight:600;">hey,</p>
-      <p style="font-size:15px;line-height:1.55;">${intro}</p>
-      ${cta}
-      <p style="font-size:15px;line-height:1.55;">sarah</p>
-      <hr style="border:none;border-top:1px solid #eee;margin:24px 0;"/>
-      <p style="font-size:12px;color:#888;">sarahdigs · <a href="${SITE}" style="color:#888;">sarahdigs.com</a></p>
-    </div>
-  `;
+  const { subject, heading, intro, ctaLabel, ctaHref } = resourceBlock(data.assetRequested);
+  const html = welcomeEmailHtml({ heading, intro, ctaLabel, ctaHref });
   const replyTo = process.env.CONTACT_EMAIL || smtpUser || undefined;
 
   // Prefer Resend when configured.
