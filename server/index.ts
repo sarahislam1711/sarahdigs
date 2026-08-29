@@ -5,6 +5,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 import { redirectsMiddleware } from "./redirects";
+import { startNurtureScheduler } from "./nurture";
 
 const app = express();
 app.disable("x-powered-by");
@@ -123,5 +124,7 @@ app.use((req, res, next) => {
   }
   server.listen(listenOpts, () => {
     log(`serving on port ${port}`);
+    // Start the daily nurture-sequence scheduler.
+    startNurtureScheduler();
   });
 })();

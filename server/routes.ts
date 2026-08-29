@@ -649,6 +649,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // One-click unsubscribe (link in every sequence email). ?t = base64url(email).
+  app.get("/api/unsubscribe", async (req, res) => {
+    const page = (title: string, msg: string) =>
+      `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title></head>
+       <body style="margin:0;background:#E7E2D6;font-family:Inter,Arial,sans-serif;color:#181612;">
+         <div style="max-width:460px;margin:12vh auto;background:#F4F1EA;border:1px solid rgba(24,22,18,.08);border-radius:16px;padding:40px 36px;text-align:center;">
+           <div style="font-weight:800;font-size:20px;letter-spacing:-.02em;">sarah<span style="color:#6B1421;">digs</span>.</div>
+           <h1 style="font-size:24px;margin:20px 0 10px;text-transform:lowercase;">${title}</h1>
+           <p style="font-size:15px;line-height:1.6;color:#4A463E;margin:0;">${msg}</p>
+           <a href="https://www.sarahdigs.com" style="display:inline-block;margin-top:24px;color:#6B1421;font-weight:600;text-decoration:none;">back to sarahdigs.com &rarr;</a>
+         </div>
+       </body></html>`;
+    res.setHeader("Content-Type", "text/html; charset=UTF-8");
+    try {
+      const token = String(req.query.t || "");
+      if (!token) return res.status(400).send(page("invalid link", "this unsubscribe link is missing its token."));
+      const email = Buffer.from(token, "base64url").toString("utf-8");
+      await storage.unsubscribeByEmail(email);
+      // Always show success (don't reveal whether the email was on the list).
+      res.status(200).send(page("you're unsubscribed", "you won't get any more emails from us. no hard feelings, and you're welcome back anytime."));
+    } catch (error) {
+      console.error("Error processing unsubscribe:", error);
+      res.status(200).send(page("you're unsubscribed", "you won't get any more emails from us."));
+    }
+  });
+
   app.get("/api/projects", async (req, res) => {
     try {
       res.setHeader("Cache-Control", "no-store, must-revalidate");

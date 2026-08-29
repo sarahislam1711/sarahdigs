@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { eq, desc, like, or, asc, and } from "drizzle-orm";
+import { eq, desc, like, or, asc, and, lte, isNull, sql } from "drizzle-orm";
 import { 
   users,
   blogPosts,
@@ -89,6 +89,9 @@ export interface IStorage {
   createCustomPlanInquiry(inquiry: InsertCustomPlanInquiry): Promise<CustomPlanInquiry>;
   createSubscriber(sub: InsertSubscriber): Promise<Subscriber>;
   getSubscribers(): Promise<Subscriber[]>;
+  getSubscribersDueForStep(step: number, days: number): Promise<Subscriber[]>;
+  advanceSubscriberStep(id: string, step: number): Promise<void>;
+  unsubscribeByEmail(email: string): Promise<boolean>;
   getContactInquiries(): Promise<ContactInquiry[]>;
   getCustomPlanInquiries(): Promise<CustomPlanInquiry[]>;
   updateContactInquiryStatus(id: string, status: string): Promise<ContactInquiry>;
@@ -357,11 +360,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createSubscriber(sub: InsertSubscriber): Promise<Subscriber> {
-    // Upsert on email so a repeat signup updates (source/asset) instead of
-    // failing the unique constraint.
+    // Upsert on email. A NEW subscriber starts the sequence at step 1 (the
+    // welcome email, sent right after this) with lastEmailedAt = now, so the
+    // scheduler sends step 2 after the configured delay. A repeat signup just
+    // updates source/asset — it does NOT reset their sequence progress.
     const [result] = await db
       .insert(subscribers)
-      .values(sub)
+      .values({ ...sub, sequenceStep: 1, lastEmailedAt: new Date() })
       .onConflictDoUpdate({
         target: subscribers.email,
         set: { source: sub.source, assetRequested: sub.assetRequested },
@@ -372,6 +377,40 @@ export class DatabaseStorage implements IStorage {
 
   async getSubscribers(): Promise<Subscriber[]> {
     return await db.select().from(subscribers).orderBy(desc(subscribers.createdAt));
+  }
+
+  // Subscribers whose next sequence email is due: at the given step, not
+  // unsubscribed, and last emailed at least `days` ago.
+  async getSubscribersDueForStep(step: number, days: number): Promise<Subscriber[]> {
+    const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+    return await db
+      .select()
+      .from(subscribers)
+      .where(
+        and(
+          eq(subscribers.sequenceStep, step - 1),
+          isNull(subscribers.unsubscribedAt),
+          lte(subscribers.lastEmailedAt, cutoff),
+        ),
+      );
+  }
+
+  // Advance a subscriber to the given step and stamp lastEmailedAt.
+  async advanceSubscriberStep(id: string, step: number): Promise<void> {
+    await db
+      .update(subscribers)
+      .set({ sequenceStep: step, lastEmailedAt: new Date() })
+      .where(eq(subscribers.id, id));
+  }
+
+  // Mark unsubscribed (stops all further sends).
+  async unsubscribeByEmail(email: string): Promise<boolean> {
+    const result = await db
+      .update(subscribers)
+      .set({ unsubscribedAt: new Date(), status: "unsubscribed" })
+      .where(eq(subscribers.email, email))
+      .returning();
+    return result.length > 0;
   }
 
   async getContactInquiries(): Promise<ContactInquiry[]> {

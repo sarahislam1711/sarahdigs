@@ -140,6 +140,13 @@ export const subscribers = pgTable("subscribers", {
   // what they wanted to unlock: "article", "sample-plan", "newsletter", etc.
   assetRequested: varchar("asset_requested"),
   status: varchar("status").default("new"),
+  // ── nurture sequence tracking ──
+  // which sequence email they've received (0 = none, 1 = welcome, 2..4 = nurture).
+  sequenceStep: integer("sequence_step").default(0).notNull(),
+  // when the last sequence email went out (drives the day-based cadence).
+  lastEmailedAt: timestamp("last_emailed_at"),
+  // set when they unsubscribe — stops all further sends.
+  unsubscribedAt: timestamp("unsubscribed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

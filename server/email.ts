@@ -149,8 +149,12 @@ function welcomeEmailHtml(opts: {
   intro: string;
   ctaLabel: string;
   ctaHref: string;
+  unsubscribeUrl?: string;
 }): string {
   const { heading, intro, ctaLabel, ctaHref } = opts;
+  const unsubscribeUrl =
+    opts.unsubscribeUrl ||
+    `mailto:${process.env.CONTACT_EMAIL || "hello@sarahdigs.com"}?subject=unsubscribe`;
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"></head>
 <body style="margin:0;padding:0;background:#E7E2D6;">
@@ -197,7 +201,7 @@ function welcomeEmailHtml(opts: {
             sarahdigs &middot; websites, ai search &amp; systems<br>
             <a href="${SITE}" style="color:#8A8579;text-decoration:underline;">sarahdigs.com</a>
             &nbsp;&middot;&nbsp;
-            <a href="mailto:${process.env.CONTACT_EMAIL || "hello@sarahdigs.com"}?subject=unsubscribe" style="color:#8A8579;text-decoration:underline;">unsubscribe</a>
+            <a href="${unsubscribeUrl}" style="color:#8A8579;text-decoration:underline;">unsubscribe</a>
           </p>
         </td></tr>
 
@@ -207,37 +211,97 @@ function welcomeEmailHtml(opts: {
 </body></html>`;
 }
 
-export async function sendWelcomeEmail(data: { email: string; assetRequested?: string | null }) {
-  const { subject, heading, intro, ctaLabel, ctaHref } = resourceBlock(data.assetRequested);
-  const html = welcomeEmailHtml({ heading, intro, ctaLabel, ctaHref });
+// Shared delivery: prefer Resend, fall back to SMTP, no-op if neither set.
+// Returns true if an email was actually sent.
+async function deliver(to: string, subject: string, html: string): Promise<boolean> {
   const replyTo = process.env.CONTACT_EMAIL || smtpUser || undefined;
-
-  // Prefer Resend when configured.
   if (resend) {
     const { error } = await resend.emails.send({
       from: resendFrom,
-      to: data.email,
+      to,
       subject,
       html,
       ...(replyTo ? { replyTo } : {}),
     });
     if (error) {
-      console.error("[Email] Resend failed to send welcome email:", error);
+      console.error("[Email] Resend failed:", error);
       throw new Error(`Resend error: ${error.message ?? "unknown"}`);
     }
-    return;
+    return true;
   }
-
-  // Fallback: SMTP (only if credentials are set).
   if (!smtpUser || !smtpPass) {
-    console.warn("[Email] Neither Resend nor SMTP configured — welcome email NOT sent to", data.email);
-    return;
+    console.warn("[Email] Neither Resend nor SMTP configured — email NOT sent to", to);
+    return false;
   }
-  await transporter.sendMail({
-    from: `"sarahdigs" <${smtpUser}>`,
-    to: data.email,
-    replyTo,
-    subject,
-    html,
+  await transporter.sendMail({ from: `"sarahdigs" <${smtpUser}>`, to, replyTo, subject, html });
+  return true;
+}
+
+export async function sendWelcomeEmail(data: { email: string; assetRequested?: string | null }) {
+  const { subject, heading, intro, ctaLabel, ctaHref } = resourceBlock(data.assetRequested);
+  const html = welcomeEmailHtml({ heading, intro, ctaLabel, ctaHref, unsubscribeUrl: unsubUrl(data.email) });
+  await deliver(data.email, subject, html);
+}
+
+// ── Nurture sequence ──────────────────────────────────────────────────────
+// Step 1 is the welcome (sent on signup). Steps 2-4 are the nurture emails,
+// sent by the scheduler on a day-based cadence after the previous step.
+export const SEQUENCE = [
+  // step 1 handled by sendWelcomeEmail on signup — listed here for reference only.
+  { step: 1, daysAfterPrev: 0 },
+  {
+    step: 2,
+    daysAfterPrev: 3,
+    subject: "the thing most sites get wrong",
+    heading: "most sites lose people in seconds.",
+    intro:
+      "the median site converts under 7% of its visitors. usually it's not the offer, it's that the site is slow, unclear, or invisible to search. here's the breakdown of where it leaks, and what to fix first.",
+    ctaLabel: "see what actually converts",
+    ctaHref: `${SITE}/journal/post/why-most-business-websites-fail-to-convert`,
+  },
+  {
+    step: 3,
+    daysAfterPrev: 4,
+    subject: "found by google isn't found by ai",
+    heading: "two ways to get found now.",
+    intro:
+      "ranking on google and getting recommended by chatgpt or perplexity are not the same thing, and most sites are set up for one, not both. sarahdigs builds for both from the first decision, so you show up wherever your customers are looking.",
+    ctaLabel: "how it works",
+    ctaHref: `${SITE}/the-full-dig`,
+  },
+  {
+    step: 4,
+    daysAfterPrev: 5,
+    subject: "when you're ready to dig in",
+    heading: "no pressure, just an offer.",
+    intro:
+      "if getting found and building the systems behind your site is on your mind, a dig-in is the easiest place to start: a focused call and a clear plan, no commitment. and if now's not the time, you'll keep getting the useful stuff regardless.",
+    ctaLabel: "book a dig-in",
+    ctaHref: `${SITE}/dig-in-consultations`,
+  },
+] as const;
+
+export const LAST_SEQUENCE_STEP = SEQUENCE[SEQUENCE.length - 1].step;
+
+// Send a specific nurture step to one subscriber. Returns true if sent.
+export async function sendSequenceEmail(
+  data: { email: string },
+  step: number,
+): Promise<boolean> {
+  const entry = SEQUENCE.find((s) => s.step === step);
+  if (!entry || !("subject" in entry)) return false;
+  const html = welcomeEmailHtml({
+    heading: entry.heading,
+    intro: entry.intro,
+    ctaLabel: entry.ctaLabel,
+    ctaHref: entry.ctaHref,
+    unsubscribeUrl: unsubUrl(data.email),
   });
+  return deliver(data.email, entry.subject, html);
+}
+
+// Signed unsubscribe URL so one-click opt-out works without auth.
+function unsubUrl(email: string): string {
+  const token = Buffer.from(email).toString("base64url");
+  return `${SITE}/api/unsubscribe?t=${token}`;
 }
