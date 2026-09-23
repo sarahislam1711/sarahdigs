@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Mail, Linkedin } from "lucide-react";
 
-const LINKEDIN_URL = "https://www.linkedin.com/in/sarahislamm/";
+const LINKEDIN_URL = "https://www.linkedin.com/company/sarahdigs/";
 const EMAIL = "sarah@sarahdigs.com";
 
 export const Footer = () => {

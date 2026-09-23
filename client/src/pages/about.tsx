@@ -159,23 +159,23 @@ export default function About() {
               </div>
 
               <h2 className="font-display font-semibold tracking-tighter text-4xl md:text-5xl leading-[1.05] lowercase mb-10 text-bone">
-                a website should feel like<br />
-                <span className="italic text-oxblood-tint">walking into the business.</span>
+                a website should<br />
+                <span className="italic text-oxblood-tint">bring you business.</span>
               </h2>
 
               {/* Body copy with editorial sub-leads */}
               <div className="space-y-6 text-base md:text-lg leading-relaxed text-bone lowercase max-w-xl">
                 <p>
-                  i spent years watching businesses pour money into websites that looked like everyone else's. clean enough. functional enough. forgettable.
+                  i spent years watching businesses pour money into websites that looked fine and did nothing. no new customers, no calls, no reason for anyone to remember them.
                 </p>
                 <p>
-                  the problem was never the technology. it was that nobody stopped to ask what the website should actually make people feel.
+                  a website should do real work for you. it should help the right people find you, make them trust you the moment they land, and turn that trust into customers.
                 </p>
                 <p>
-                  i started sarahdigs because i believe a website should communicate who you are, what you stand for, and why someone should choose you. without saying a word.
+                  i started sarahdigs to build websites that actually earn their keep. sites that get found, whether someone is searching on google or asking an ai assistant who to hire, and that make people want to choose you before they ever get on a call.
                 </p>
                 <p>
-                  my team and i dig into your brand, your audience, and your vision. then we design something that makes people stay, explore, and trust you before they ever get on a call.
+                  my team and i dig into your brand, your audience, and your goals, then build something that looks like you, speaks for you, and brings you the business you built it for.
                 </p>
               </div>
 

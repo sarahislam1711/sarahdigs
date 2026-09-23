@@ -5,7 +5,7 @@ const SITE = "https://www.sarahdigs.com";
 
 // Social / external profiles that represent the sarahdigs entity.
 const SAME_AS: string[] = [
-  "https://www.linkedin.com/in/sarahislamm/",
+  "https://www.linkedin.com/company/sarahdigs/",
 ];
 
 const abs = (path: string) => (path.startsWith("http") ? path : `${SITE}${path.startsWith("/") ? "" : "/"}${path}`);
