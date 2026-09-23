@@ -12,18 +12,18 @@ import sarahPhoto from "@/assets/Sarah - about.png";
 const beliefs = [
   {
     num: "i.",
-    title: "a website is not a brochure.",
-    body: "it's an experience. every scroll, every interaction, every page should feel intentional. like your brand walked into the room.",
+    title: "your website should sell for you.",
+    body: "every scroll and every page should move someone closer to choosing you. the work of the site is to turn a visitor into a customer, even while you sleep.",
   },
   {
     num: "ii.",
-    title: "design without strategy is decoration.",
-    body: "we don't design to impress other designers. we design to make your audience understand your business and want to be part of it.",
+    title: "design should serve the business.",
+    body: "we design to help the right people find you, understand what you do, and want to work with you. good-looking is the baseline, results are the point.",
   },
   {
     num: "iii.",
-    title: "the details are the design.",
-    body: "the way a page loads. the way text breathes. the way a hover feels. these things are invisible when done right, and obvious when they're not.",
+    title: "a great site has to be found.",
+    body: "a beautiful site nobody can find does nothing for you. we build so people and ai assistants can read your business and recommend it, from the very first decision.",
   },
 ];
 
