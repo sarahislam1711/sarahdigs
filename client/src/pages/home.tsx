@@ -1162,49 +1162,43 @@ const NotSureWhereToStart = () => {
           </h2>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Dig-In Consultation — OXBLOOD TINT WASH (primary) */}
-          <ScrollReveal delay={0.08}>
-            <div className="group h-full flex flex-col bg-[#6B1421]/[0.06] border border-[#6B1421]/20 rounded-md p-6 md:p-8 transition-all hover:bg-[#6B1421]/[0.1] hover:border-[#6B1421]/40 hover:-translate-y-0.5">
-              <div className="mb-5 inline-flex items-center justify-center w-11 h-11 rounded-md bg-[#6B1421]/10 border border-[#6B1421]/25 text-[#6B1421] transition-colors group-hover:bg-[#6B1421] group-hover:text-[#F4F1EA]">
-                <MessageCircle className="w-5 h-5" strokeWidth={2} />
-              </div>
-              <h3 className="font-display font-bold text-2xl md:text-[28px] leading-tight tracking-tight text-[#181612] mb-3 lowercase">
-                dig-in consultation
-              </h3>
-              <p className="text-sm text-ink-mid leading-relaxed mb-8 lowercase">
-                a focused call + written action plan. for when you need clarity
-                before committing to anything.
-              </p>
-              <Link href="/dig-in-consultations" className="mt-auto w-fit">
-                <span className="inline-flex items-center gap-2 text-sm font-medium lowercase bg-[#6B1421] text-[#F4F1EA] rounded-md px-4 py-2.5 hover:bg-[#8C2331] transition-colors group/cta">
-                  book a consultation call
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-1" />
-                </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 border-t border-[#181612]/15">
+          {[
+            {
+              num: "01",
+              title: "dig-in consultation",
+              body: "a focused call and a written action plan. for when you need clarity before committing to anything.",
+              cta: "book a consultation call",
+              href: "/dig-in-consultations",
+            },
+            {
+              num: "02",
+              title: "custom dig",
+              body: "a custom plan built around your business, goals, and gaps.",
+              cta: "explore custom plans",
+              href: "/dig-on-demand",
+            },
+          ].map((o, i) => (
+            <ScrollReveal key={o.num} delay={0.08 + i * 0.06}>
+              <Link href={o.href} className="group block h-full">
+                <div className={`h-full flex flex-col py-8 md:py-10 md:pr-10 border-b border-[#181612]/15 ${i === 0 ? "md:border-r md:pl-0 md:pr-12" : "md:pl-12 md:pr-0"}`}>
+                  <span className="font-display font-bold text-sm text-[#6B1421]/60 tabular-nums mb-5">
+                    {o.num}
+                  </span>
+                  <h3 className="font-display font-semibold text-2xl md:text-3xl leading-tight tracking-tight text-[#181612] mb-3 lowercase group-hover:text-[#6B1421] transition-colors duration-300">
+                    {o.title}
+                  </h3>
+                  <p className="text-sm md:text-[15px] text-ink-mid leading-relaxed mb-7 lowercase max-w-sm">
+                    {o.body}
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-2 text-sm font-medium lowercase text-[#181612] group-hover:text-[#6B1421] transition-colors">
+                    <span className="border-b border-[#181612]/30 group-hover:border-[#6B1421] pb-0.5 transition-colors">{o.cta}</span>
+                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                  </span>
+                </div>
               </Link>
-            </div>
-          </ScrollReveal>
-
-          {/* Custom Dig — LIGHT OUTLINE (alternative) */}
-          <ScrollReveal delay={0.14}>
-            <div className="group h-full flex flex-col bg-[#F4F1EA] border border-[#181612]/[0.14] rounded-md p-6 md:p-8 transition-all hover:border-[#6B1421]/40 hover:-translate-y-0.5">
-              <div className="mb-5 inline-flex items-center justify-center w-11 h-11 rounded-md bg-[#6B1421]/8 border border-[#6B1421]/20 text-[#6B1421] transition-colors group-hover:bg-[#6B1421] group-hover:text-[#F4F1EA]">
-                <Wrench className="w-5 h-5" strokeWidth={2} />
-              </div>
-              <h3 className="font-display font-bold text-2xl md:text-[28px] leading-tight tracking-tight text-[#181612] mb-3 lowercase">
-                custom dig
-              </h3>
-              <p className="text-sm text-ink-mid leading-relaxed mb-8 lowercase">
-                a custom plan built around your business, goals, and gaps.
-              </p>
-              <Link href="/dig-on-demand" className="mt-auto w-fit">
-                <span className="inline-flex items-center gap-2 text-sm font-medium lowercase border border-[#181612] text-[#181612] rounded-md px-4 py-2.5 hover:bg-[#181612] hover:text-[#F4F1EA] transition-colors group/cta">
-                  explore custom plans
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-1" />
-                </span>
-              </Link>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>
@@ -1382,8 +1376,7 @@ const Contact = () => {
               can they find you?
             </h2>
             <p className="text-xl md:text-2xl text-[#181612]/80 mb-12 max-w-md lowercase">
-              let's dig & find out. tell us about your business goals &
-              aspirations & watch us turn them into reality.
+              let's dig & find out.
             </p>
           </div>
           <div className="bg-[#FBF9F3] p-8 md:p-10 border border-[#181612]/10 rounded-md text-[#181612] shadow-[0_2px_12px_rgba(24,22,18,0.04)]">
