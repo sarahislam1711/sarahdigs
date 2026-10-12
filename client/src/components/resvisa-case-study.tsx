@@ -222,7 +222,7 @@ const slides: CaseSlide[] = [
     tag: "Marketing site",
     name: "A bilingual marketing site, built to convert",
     desc: "A full EN/AR site — homepage, visa guide, life in spain, faq, contact, and blog — positioning resvisa as licensed experts who handle every step from the first question to the residency card.",
-    pills: ["Bilingual EN + AR (RTL)", "Visa routes explained", "Rich SEO + schema", "Built to convert"],
+    pills: ["Bilingual EN + AR (RTL)", "Visa routes explained", "SEO + AEO/GEO + schema", "Built to convert"],
   },
   {
     visual: <Quiz />,

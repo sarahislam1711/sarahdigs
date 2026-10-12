@@ -37,6 +37,12 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg-opt.jpg";
 import sarahPhoto from "@/assets/sarah-home-opt.jpg";
+import logoChatgpt from "@/assets/chatgpt-logo.webp";
+import logoPerplexity from "@/assets/perplexity-logo.png";
+import logoGemini from "@/assets/gemini-logo.webp";
+import logoClaude from "@/assets/claude-logo.png";
+import logoReddit from "@/assets/reddit-logo.jpeg";
+import logoGoogle from "@/assets/google-logo.png";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Search,
@@ -356,6 +362,15 @@ const TheShift = () => {
   );
 };
 
+const AI_TOOLS = [
+  { name: "Google", src: logoGoogle, fit: "glyph" },
+  { name: "ChatGPT", src: logoChatgpt, fit: "glyph" },
+  { name: "Perplexity", src: logoPerplexity, fit: "tile", scale: "scale-[1.25]" },
+  { name: "Gemini", src: logoGemini, fit: "glyph" },
+  { name: "Claude", src: logoClaude, fit: "tile", scale: "scale-[1.02]" },
+  { name: "Reddit", src: logoReddit, fit: "tile", scale: "scale-[1.02]" },
+];
+
 const Manifesto = () => {
   return (
     <section className="py-16 md:py-20 bg-[#F4F1EA] relative z-[2]">
@@ -366,11 +381,39 @@ const Manifesto = () => {
             <span className="text-[#6B1421]">customers</span> are looking.
           </h2>
         </ScrollReveal>
-        <ScrollReveal delay={0.15}>
-          <p className="mt-6 text-lg md:text-xl leading-relaxed text-ink-mid max-w-2xl mx-auto text-center lowercase">
-            that's not just google anymore.
-          </p>
-        </ScrollReveal>
+        {/* the logos ARE the point: proof that search isn't just google */}
+        <div className="mt-10 md:mt-12 flex flex-col items-center">
+          <ScrollReveal delay={0.18}>
+            <ul className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+              {AI_TOOLS.map((tool) => (
+                <li key={tool.name}>
+                  <div
+                    className="h-12 w-12 md:h-14 md:w-14 rounded-full overflow-hidden bg-[#FBFAF6] ring-1 ring-ink/[0.08] shadow-[0_14px_30px_-6px_rgba(24,22,18,0.32),0_6px_12px_-3px_rgba(24,22,18,0.2),inset_0_1.5px_1px_rgba(255,255,255,0.95),inset_0_-2px_3px_rgba(24,22,18,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-8px_rgba(24,22,18,0.4),0_8px_16px_-4px_rgba(24,22,18,0.24),inset_0_1.5px_1px_rgba(255,255,255,0.95),inset_0_-2px_3px_rgba(24,22,18,0.06)]"
+                    title={tool.name}
+                  >
+                    <img
+                      src={tool.src}
+                      alt={`${tool.name} logo`}
+                      className={
+                        tool.fit === "tile"
+                          ? `h-full w-full object-cover ${tool.scale ?? "scale-[1.08]"}`
+                          : "h-full w-full object-contain p-2.5"
+                      }
+                      loading="lazy"
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.26}>
+            <p className="mt-8 text-lg md:text-2xl leading-snug text-ink max-w-2xl mx-auto text-center lowercase font-display font-semibold tracking-tight">
+              your customers search all of them.{" "}
+              <span className="text-[#6B1421]">sarahdigs makes sure you show up.</span>
+            </p>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
@@ -787,7 +830,7 @@ const WhatWeBuild = () => {
       blurb: "the online presence that brings work in.",
       items: [
         { title: "websites", icon: Layout, note: "custom-built to turn visitors into customers." },
-        { title: "discoverability", icon: Search, note: "found on google & ai search." },
+        { title: "discoverability", icon: Search, note: "seo & answer engine optimization (aeo/geo), so you're found on google and ai search." },
       ],
     },
     {

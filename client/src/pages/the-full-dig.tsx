@@ -146,7 +146,7 @@ const tiers = [
     name: "the deep dig",
     tagline: "the full system.",
     inherits: "everything in the dig, plus:",
-    includes: ["seo structure", "ai search optimization", "conversion optimization"],
+    includes: ["seo + aeo/geo structure", "ai search optimization", "conversion optimization"],
     forWho: "businesses ready to be found and convert",
     outcomes: ["a website built to be found", "a system that converts", "analytics that prove it"],
     popular: true,
@@ -178,11 +178,11 @@ export default function TheFullDig() {
     <div className="min-h-screen bg-bone text-ink font-sans selection:bg-oxblood selection:text-white">
       <SEO
         title="the full dig"
-        description="Research, design, build, and optimization, done together in the right order. The flagship sarahdigs service for founders who want a website that works."
+        description="Research, design, build, and optimization, done together in the right order, so you're found on google and ai search (aeo/geo). The flagship sarahdigs service for founders who want a website that works."
         canonical="/the-full-dig"
         jsonLd={serviceSchema({
           name: "the full dig",
-          description: "the flagship sarahdigs engagement: research, design, build, and optimization done together in the right order. a website that works.",
+          description: "the flagship sarahdigs engagement: research, design, build, and optimization done together in the right order, so you're found on google and ai search (aeo/geo). a website that works.",
           url: "/the-full-dig",
           serviceType: "Website design and development",
         })}

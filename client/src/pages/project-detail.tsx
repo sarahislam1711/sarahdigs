@@ -15,6 +15,7 @@ import { renderMetricValue } from "@/lib/metric-value";
 import { PlacesCaseStudy } from "@/components/places-case-study";
 import { The20sEditCaseStudy } from "@/components/the-20s-edit-case-study";
 import { ResVisaCaseStudy } from "@/components/resvisa-case-study";
+import { HalaJapanCaseStudy } from "@/components/halajapan-case-study";
 import type { Project } from "@shared/schema";
 
 type Step = { title: string; description: string };
@@ -455,6 +456,8 @@ export default function ProjectDetail() {
         <The20sEditCaseStudy />
       ) : project.slug === "resvisa" ? (
         <ResVisaCaseStudy />
+      ) : project.slug === "halajapan" ? (
+        <HalaJapanCaseStudy />
       ) : gallery.length > 0 ? (
         <ProjectGallery slides={gallery} />
       ) : (

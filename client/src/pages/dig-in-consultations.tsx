@@ -249,7 +249,7 @@ const Hero = () => {
           </h1>
 
           <p className="font-display text-xl md:text-2xl lg:text-[26px] text-ink font-medium italic lowercase leading-snug max-w-2xl mx-auto mb-12">
-            a focused call. a custom <span className="text-oxblood">action plan</span> after. clear direction for your business.
+            a focused call. a custom <span className="text-oxblood">action plan</span> after. clear direction on your website, your growth, and getting found on google and ai search.
           </p>
 
           {/* CTA + secondary scroll link */}
@@ -420,7 +420,7 @@ const WHAT_YOU_GET = [
   {
     num: "01",
     title: "the call",
-    body: "a focused session where we dig into your business, audience, and current online presence. no fluff. no pitch. just diagnosis.",
+    body: "a focused session where we dig into your business, audience, and how you show up on google and ai search today.",
   },
   {
     num: "02",
